@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitsmackGTAPI", "BitsmackGTAPI\BitsmackGTAPI.csproj", "{FB320233-BFD4-4662-BCD5-88D7A88C2C28}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitsmackGTAPI", "BitsmackGTAPI\BitsmackGTAPI.csproj", "{52A5FFB3-A1F5-4D0E-9C79-BFAE71F69F4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitsmackGTAPI.Tests", "BitsmackGTAPI.Tests\BitsmackGTAPI.Tests.csproj", "{0E743018-FD5A-4A06-918C-1F65720DD3B1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitsmackGTAPI.Tests", "BitsmackGTAPI.Tests\BitsmackGTAPI.Tests.csproj", "{1274B2E7-E340-4E7E-9833-F1A67B0B128C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,14 +11,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FB320233-BFD4-4662-BCD5-88D7A88C2C28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FB320233-BFD4-4662-BCD5-88D7A88C2C28}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FB320233-BFD4-4662-BCD5-88D7A88C2C28}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FB320233-BFD4-4662-BCD5-88D7A88C2C28}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0E743018-FD5A-4A06-918C-1F65720DD3B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0E743018-FD5A-4A06-918C-1F65720DD3B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0E743018-FD5A-4A06-918C-1F65720DD3B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0E743018-FD5A-4A06-918C-1F65720DD3B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52A5FFB3-A1F5-4D0E-9C79-BFAE71F69F4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52A5FFB3-A1F5-4D0E-9C79-BFAE71F69F4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52A5FFB3-A1F5-4D0E-9C79-BFAE71F69F4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52A5FFB3-A1F5-4D0E-9C79-BFAE71F69F4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1274B2E7-E340-4E7E-9833-F1A67B0B128C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1274B2E7-E340-4E7E-9833-F1A67B0B128C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1274B2E7-E340-4E7E-9833-F1A67B0B128C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1274B2E7-E340-4E7E-9833-F1A67B0B128C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
