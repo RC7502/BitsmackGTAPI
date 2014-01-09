@@ -11,8 +11,11 @@ namespace BitsmackGTAPI.Controllers
         public ActionResult Index()
         {
             ViewBag.Message = "Welcome to ASP.NET MVC!";
+            var dbContext = new BSGTEntities();
+            var testdata = dbContext.Pedometer.FirstOrDefault().steps;
 
-            return View();
+
+            return Json(testdata, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult About()

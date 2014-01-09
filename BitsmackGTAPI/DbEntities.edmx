@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="BSGTModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="BSGTModelStoreContainer">
+          <EntitySet Name="Cardio" EntityType="BSGTModel.Store.Cardio" store:Type="Tables" store:Schema="dbo" store:Name="Cardio">
+            <DefiningQuery>SELECT 
+      [Cardio].[id] AS [id], 
+      [Cardio].[userid] AS [userid], 
+      [Cardio].[trandate] AS [trandate], 
+      [Cardio].[activity] AS [activity], 
+      [Cardio].[distance] AS [distance], 
+      [Cardio].[time] AS [time]
+      FROM [dbo].[Cardio] AS [Cardio]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Pedometer" EntityType="BSGTModel.Store.Pedometer" store:Type="Tables" store:Schema="dbo" store:Name="Pedometer">
+            <DefiningQuery>SELECT 
+      [Pedometer].[id] AS [id], 
+      [Pedometer].[steps] AS [steps], 
+      [Pedometer].[sleep] AS [sleep], 
+      [Pedometer].[trandate] AS [trandate], 
+      [Pedometer].[weight] AS [weight], 
+      [Pedometer].[bodyfat] AS [bodyfat]
+      FROM [dbo].[Pedometer] AS [Pedometer]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'BSGT.dbo.Cardio' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="Cardio">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="userid" />
+            <PropertyRef Name="trandate" />
+            <PropertyRef Name="activity" />
+            <PropertyRef Name="distance" />
+            <PropertyRef Name="time" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="userid" Type="int" Nullable="false" />
+          <Property Name="trandate" Type="smalldatetime" Nullable="false" />
+          <Property Name="activity" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="distance" Type="float" Nullable="false" />
+          <Property Name="time" Type="float" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'BSGT.dbo.Pedometer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="Pedometer">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="steps" />
+            <PropertyRef Name="sleep" />
+            <PropertyRef Name="trandate" />
+            <PropertyRef Name="weight" />
+            <PropertyRef Name="bodyfat" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="steps" Type="int" Nullable="false" />
+          <Property Name="sleep" Type="int" Nullable="false" />
+          <Property Name="trandate" Type="smalldatetime" Nullable="false" />
+          <Property Name="weight" Type="float" Nullable="false" />
+          <Property Name="bodyfat" Type="float" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BSGTModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="BSGTEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Cardio" EntityType="BSGTModel.Cardio" />
+          <EntitySet Name="Pedometer" EntityType="BSGTModel.Pedometer" />
+        </EntityContainer>
+        <EntityType Name="Cardio">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="userid" />
+            <PropertyRef Name="trandate" />
+            <PropertyRef Name="activity" />
+            <PropertyRef Name="distance" />
+            <PropertyRef Name="time" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="userid" Type="Int32" Nullable="false" />
+          <Property Name="trandate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="activity" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="distance" Type="Double" Nullable="false" />
+          <Property Name="time" Type="Double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Pedometer">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="steps" />
+            <PropertyRef Name="sleep" />
+            <PropertyRef Name="trandate" />
+            <PropertyRef Name="weight" />
+            <PropertyRef Name="bodyfat" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="steps" Type="Int32" Nullable="false" />
+          <Property Name="sleep" Type="Int32" Nullable="false" />
+          <Property Name="trandate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="weight" Type="Double" Nullable="false" />
+          <Property Name="bodyfat" Type="Double" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BSGTModelStoreContainer" CdmEntityContainer="BSGTEntities">
+          <EntitySetMapping Name="Cardio">
+            <EntityTypeMapping TypeName="BSGTModel.Cardio">
+              <MappingFragment StoreEntitySet="Cardio">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="userid" ColumnName="userid" />
+                <ScalarProperty Name="trandate" ColumnName="trandate" />
+                <ScalarProperty Name="activity" ColumnName="activity" />
+                <ScalarProperty Name="distance" ColumnName="distance" />
+                <ScalarProperty Name="time" ColumnName="time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pedometer">
+            <EntityTypeMapping TypeName="BSGTModel.Pedometer">
+              <MappingFragment StoreEntitySet="Pedometer">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="steps" ColumnName="steps" />
+                <ScalarProperty Name="sleep" ColumnName="sleep" />
+                <ScalarProperty Name="trandate" ColumnName="trandate" />
+                <ScalarProperty Name="weight" ColumnName="weight" />
+                <ScalarProperty Name="bodyfat" ColumnName="bodyfat" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
