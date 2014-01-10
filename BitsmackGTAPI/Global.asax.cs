@@ -6,6 +6,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using BitsmackGTAPI.Interfaces;
+using BitsmackGTAPI.Models;
+using StructureMap;
 
 namespace BitsmackGTAPI
 {
@@ -40,6 +43,13 @@ namespace BitsmackGTAPI
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+            ObjectFactory.Initialize(x =>
+            {
+                x.For<IPedometerService>().Use<PedometerService>();
+                x.For<IBSGTEntities>().Use<BSGTEntities>();
+                x.For<IPedometerRepository>().Use<PedometerRepository>();
+            });
+
         }
     }
 }

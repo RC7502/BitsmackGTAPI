@@ -13,7 +13,7 @@ namespace BitsmackGTAPI
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class BSGTEntities : DbContext
+    public partial class BSGTEntities : DbContext, IBSGTEntities
     {
         public BSGTEntities()
             : base("name=BSGTEntities")

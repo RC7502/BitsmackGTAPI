@@ -40,6 +40,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.2.1312.1622\lib\net40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.Entity" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -102,6 +108,7 @@
     </Compile>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PedometerController.cs" />
     <Compile Include="DbEntities.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -120,7 +127,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\IBSGTEntities.cs" />
+    <Compile Include="Interfaces\IPedometerRepository.cs" />
+    <Compile Include="Models\PedometerRepository.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Interfaces\IPedometerService.cs" />
+    <Compile Include="Models\PedometerService.cs" />
+    <Compile Include="Models\PedometerSummaryViewModel.cs" />
     <Compile Include="Pedometer.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
