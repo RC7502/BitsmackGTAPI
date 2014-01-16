@@ -20,6 +20,8 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -103,9 +105,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APIKeys.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Cardio.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Constants\EventLogSeverity.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PedometerController.cs" />
@@ -124,11 +130,20 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DbEntities.edmx</DependentUpon>
     </Compile>
+    <Compile Include="EventLog.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="GTRepository.cs" />
+    <Compile Include="Helpers\MathHelper.cs" />
+    <Compile Include="IGTRepository.cs" />
     <Compile Include="Interfaces\IBSGTEntities.cs" />
     <Compile Include="Interfaces\IPedometerRepository.cs" />
+    <Compile Include="Models\CommonService.cs" />
+    <Compile Include="Interfaces\ICommonService.cs" />
+    <Compile Include="Helpers\Logger.cs" />
     <Compile Include="Models\PedometerRepository.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Interfaces\IPedometerService.cs" />
@@ -260,6 +275,12 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Fitbit.NET\Fitbit\Fitbit.csproj">
+      <Project>{d2c08c58-269f-45de-8a25-c5492bc625f8}</Project>
+      <Name>Fitbit</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -288,6 +309,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

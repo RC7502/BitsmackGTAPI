@@ -46,8 +46,8 @@ namespace BitsmackGTAPI
             ObjectFactory.Initialize(x =>
             {
                 x.For<IPedometerService>().Use<PedometerService>();
-                x.For<IBSGTEntities>().Use<BSGTEntities>();
-                x.For<IPedometerRepository>().Use<PedometerRepository>();
+                x.For<ICommonService>().Use<CommonService>();
+                x.For(typeof(IGTRepository<>)).Use(typeof(GTRepository<>));
             });
 
         }

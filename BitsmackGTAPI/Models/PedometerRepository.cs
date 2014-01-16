@@ -6,7 +6,7 @@ namespace BitsmackGTAPI.Models
     public class PedometerRepository : IPedometerRepository
     {
         readonly BSGTEntities _context = new BSGTEntities();
-        public IQueryable<Pedometer> All 
+        public IQueryable<Pedometer> AllForRead
         {
             get { return _context.Pedometer; } 
         }

@@ -7,6 +7,6 @@ namespace BitsmackGTAPI.Interfaces
 {
     public interface IPedometerRepository
     {
-        IQueryable<Pedometer> All { get; }
+        IQueryable<Pedometer> AllForRead { get; }
     }
 }

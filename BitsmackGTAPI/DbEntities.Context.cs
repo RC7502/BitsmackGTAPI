@@ -13,7 +13,7 @@ namespace BitsmackGTAPI
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class BSGTEntities : DbContext, IBSGTEntities
+    public partial class BSGTEntities : DbContext
     {
         public BSGTEntities()
             : base("name=BSGTEntities")
@@ -27,5 +27,7 @@ namespace BitsmackGTAPI
     
         public DbSet<Cardio> Cardio { get; set; }
         public DbSet<Pedometer> Pedometer { get; set; }
+        public DbSet<APIKeys> APIKeys { get; set; }
+        public DbSet<EventLog> EventLog { get; set; }
     }
 }

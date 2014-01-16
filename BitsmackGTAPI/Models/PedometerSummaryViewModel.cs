@@ -8,6 +8,7 @@ namespace BitsmackGTAPI.Models
     public class PedometerSummaryViewModel
     {
         public int NumOfDays;
+        public int TrendSteps;
         public int AverageSteps { get; set; }
     }
 }
