@@ -11,10 +11,11 @@ namespace BitsmackGTAPI.Models
     {
         public static void WriteLog(EventLogSeverity severity, string message)
         {
-            var _logRepo = ObjectFactory.GetInstance<GTRepository<EventLog>>();
+            var logRepo = ObjectFactory.GetInstance<GTRepository<EventLog>>();
 
             var log = new EventLog { severity = (int)severity, message = message };
-            _logRepo.Insert(log);
+            logRepo.Insert(log);
+            logRepo.Save();
         }
     }
 }

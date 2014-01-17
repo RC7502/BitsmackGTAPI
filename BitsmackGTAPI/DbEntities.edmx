@@ -6,55 +6,14 @@
     <edmx:StorageModels>
     <Schema Namespace="BSGTModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="BSGTModelStoreContainer">
-          <EntitySet Name="APIKeys" EntityType="BSGTModel.Store.APIKeys" store:Type="Tables" store:Schema="dbo" store:Name="APIKeys">
-            <DefiningQuery>SELECT 
-      [APIKeys].[id] AS [id], 
-      [APIKeys].[service_name] AS [service_name], 
-      [APIKeys].[consumer_key] AS [consumer_key], 
-      [APIKeys].[consumer_secret] AS [consumer_secret], 
-      [APIKeys].[user_token] AS [user_token], 
-      [APIKeys].[user_secret] AS [user_secret], 
-      [APIKeys].[last_update] AS [last_update], 
-      [APIKeys].[start_date] AS [start_date]
-      FROM [dbo].[APIKeys] AS [APIKeys]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="Cardio" EntityType="BSGTModel.Store.Cardio" store:Type="Tables" store:Schema="dbo" store:Name="Cardio">
-            <DefiningQuery>SELECT 
-      [Cardio].[id] AS [id], 
-      [Cardio].[userid] AS [userid], 
-      [Cardio].[trandate] AS [trandate], 
-      [Cardio].[activity] AS [activity], 
-      [Cardio].[distance] AS [distance], 
-      [Cardio].[time] AS [time]
-      FROM [dbo].[Cardio] AS [Cardio]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="EventLog" EntityType="BSGTModel.Store.EventLog" store:Type="Tables" store:Schema="dbo" store:Name="EventLog">
-            <DefiningQuery>SELECT 
-      [EventLog].[id] AS [id], 
-      [EventLog].[severity] AS [severity], 
-      [EventLog].[message] AS [message]
-      FROM [dbo].[EventLog] AS [EventLog]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="Pedometer" EntityType="BSGTModel.Store.Pedometer" store:Type="Tables" store:Schema="dbo" store:Name="Pedometer">
-            <DefiningQuery>SELECT 
-      [Pedometer].[id] AS [id], 
-      [Pedometer].[steps] AS [steps], 
-      [Pedometer].[sleep] AS [sleep], 
-      [Pedometer].[trandate] AS [trandate], 
-      [Pedometer].[weight] AS [weight], 
-      [Pedometer].[bodyfat] AS [bodyfat]
-      FROM [dbo].[Pedometer] AS [Pedometer]</DefiningQuery>
-          </EntitySet>
+          <EntitySet Name="APIKeys" EntityType="BSGTModel.Store.APIKeys" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Cardio" EntityType="BSGTModel.Store.Cardio" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="EventLog" EntityType="BSGTModel.Store.EventLog" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Pedometer" EntityType="BSGTModel.Store.Pedometer" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
-        <!--Errors Found During Generation:
-      warning 6002: The table/view 'BSGT.dbo.APIKeys' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
-      -->
         <EntityType Name="APIKeys">
           <Key>
             <PropertyRef Name="id" />
-            <PropertyRef Name="service_name" />
-            
-            
           </Key>
           <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="service_name" Type="varchar" Nullable="false" MaxLength="50" />
@@ -65,17 +24,9 @@
           <Property Name="last_update" Type="smalldatetime" Nullable="false" />
           <Property Name="start_date" Type="smalldatetime" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-      warning 6002: The table/view 'BSGT.dbo.Cardio' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
-      -->
         <EntityType Name="Cardio">
           <Key>
             <PropertyRef Name="id" />
-            <PropertyRef Name="userid" />
-            <PropertyRef Name="trandate" />
-            <PropertyRef Name="activity" />
-            <PropertyRef Name="distance" />
-            <PropertyRef Name="time" />
           </Key>
           <Property Name="id" Type="int" Nullable="false" />
           <Property Name="userid" Type="int" Nullable="false" />
@@ -84,30 +35,17 @@
           <Property Name="distance" Type="float" Nullable="false" />
           <Property Name="time" Type="float" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-      warning 6002: The table/view 'BSGT.dbo.EventLog' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
-      -->
         <EntityType Name="EventLog">
           <Key>
             <PropertyRef Name="id" />
-            <PropertyRef Name="severity" />
-            <PropertyRef Name="message" />
           </Key>
           <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="severity" Type="int" Nullable="false" />
           <Property Name="message" Type="varchar" Nullable="false" MaxLength="500" />
         </EntityType>
-        <!--Errors Found During Generation:
-      warning 6002: The table/view 'BSGT.dbo.Pedometer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
-      -->
         <EntityType Name="Pedometer">
           <Key>
             <PropertyRef Name="id" />
-            <PropertyRef Name="steps" />
-            <PropertyRef Name="sleep" />
-            <PropertyRef Name="trandate" />
-            <PropertyRef Name="weight" />
-            <PropertyRef Name="bodyfat" />
           </Key>
           <Property Name="id" Type="int" Nullable="false" />
           <Property Name="steps" Type="int" Nullable="false" />
@@ -129,11 +67,6 @@
         <EntityType Name="Cardio">
           <Key>
             <PropertyRef Name="id" />
-            <PropertyRef Name="userid" />
-            <PropertyRef Name="trandate" />
-            <PropertyRef Name="activity" />
-            <PropertyRef Name="distance" />
-            <PropertyRef Name="time" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="userid" Type="Int32" Nullable="false" />
@@ -145,11 +78,6 @@
         <EntityType Name="Pedometer">
           <Key>
             <PropertyRef Name="id" />
-            <PropertyRef Name="steps" />
-            <PropertyRef Name="sleep" />
-            <PropertyRef Name="trandate" />
-            <PropertyRef Name="weight" />
-            <PropertyRef Name="bodyfat" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="steps" Type="Int32" Nullable="false" />
@@ -161,7 +89,6 @@
         <EntityType Name="APIKeys">
           <Key>
             <PropertyRef Name="id" />
-            <PropertyRef Name="service_name" />
           </Key>
           <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="service_name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -175,8 +102,6 @@
         <EntityType Name="EventLog">
           <Key>
             <PropertyRef Name="id" />
-            <PropertyRef Name="severity" />
-            <PropertyRef Name="message" />
           </Key>
           <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="Int32" Name="severity" Nullable="false" />

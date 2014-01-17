@@ -26,12 +26,8 @@ namespace BitsmackGTAPI.Models
         public void UpdateAPIKey(APIKeys key)
         {
             _apiKeysRepo.Update(key);
+            _apiKeysRepo.Save();
         }
 
-        public void WriteLog(EventLogSeverity severity, string message)
-        {
-            var log = new EventLog {severity = (int) severity, message = message};
-            _logRepo.Insert(log);
-        }
     }
 }

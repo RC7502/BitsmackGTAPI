@@ -18,12 +18,13 @@ namespace BitsmackGTAPI.Tests.Controllers
     public class PedometerServiceTest
     {
         private PedometerService _service; 
-        private readonly Mock<IPedometerRepository> _repo;
+        private readonly Mock<IGTRepository<Pedometer>> _repo;
+        private readonly Mock<ICommonService> _commonService;
 
         public PedometerServiceTest()
         {
-            _repo = new Mock<IPedometerRepository>();
-            _service = new PedometerService(_repo.Object);
+            _repo = new Mock<IGTRepository<Pedometer>>();
+            _service = new PedometerService(_repo.Object, _commonService.Object);
         }
 
         [TestMethod]
@@ -36,7 +37,7 @@ namespace BitsmackGTAPI.Tests.Controllers
                 };
             var expectedAvg = (int)Math.Round(steps.Average(), 0);
             var pedList = steps.Select(step => PedometerHelper.Create(steps: step)).ToList();
-            _repo.Setup(x => x.All).Returns(pedList.AsQueryable);
+            _repo.Setup(x => x.AllForRead()).Returns(pedList.AsQueryable);
 
             //Act
             var result = _service.GetSummary();

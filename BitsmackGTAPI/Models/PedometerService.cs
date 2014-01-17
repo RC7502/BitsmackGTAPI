@@ -28,26 +28,43 @@ namespace BitsmackGTAPI.Models
                 var existingRecs = GetPedometerRecords().ToList();
                 var startDate = existingRecs.Any() ? existingRecs.Max(x => x.trandate) : key.start_date;
                 RefreshData(false, startDate, DateTime.Today.AddDays(-1));
+                key.last_update = DateTime.Now;
+                _commonService.UpdateAPIKey(key);
             }
 
             var pedometerRecs = GetPedometerRecords().ToList();
+            var stepList = pedometerRecs.Select(x => x.steps).ToList();
             var model = new PedometerSummaryViewModel()
                 {
-                    AverageSteps = MathHelper.Average(pedometerRecs.Select(x=>x.steps)),
+                    AverageSteps = MathHelper.Average(stepList),
                     NumOfDays = pedometerRecs.Count,
-                    TrendSteps = MathHelper.TrendAverage(pedometerRecs.Select(x=>x.steps))
+                    TrendSteps = MathHelper.TrendAverage(stepList),
                 };
+            model.NewStepGoal = (int) Math.Round(model.AverageSteps*1.05, 0);         
             return model;
         }
 
         private void RefreshData(bool overwrite, DateTime startDate, DateTime endDate)
         {
+            var list = GetFitBitData(overwrite, startDate, endDate);
+            foreach (var pedometer in list)
+            {
+                var existingTran = _pedometerRepo.AllForRead().FirstOrDefault(x => x.trandate == pedometer.trandate);
+                if (existingTran != null)
+                    _pedometerRepo.Delete(existingTran);
+                _pedometerRepo.Insert(pedometer);
+            }
+            _pedometerRepo.Save();
+        }
+
+        private IEnumerable<Pedometer> GetFitBitData(bool overwrite, DateTime startDate, DateTime endDate)
+        {
             var key = _commonService.GetAPIKeys().FirstOrDefault(x => x.service_name == "Fitbit");
+            var list = new List<Pedometer>();
             try
             {           
                 var fbClient = GetFitbitClient(key);
-                var existingRecs = !overwrite ? GetPedometerRecords().ToList() : new List<Pedometer>();
-                var list = new List<Pedometer>();
+                var existingRecs = !overwrite ? GetPedometerRecords().ToList() : new List<Pedometer>();        
                 for (var d = startDate; d <= endDate; d = d.AddDays(1))
                 {
                     if (existingRecs.Any(x => x.trandate == d)) continue;
@@ -60,15 +77,6 @@ namespace BitsmackGTAPI.Models
                     newrec.weight = GetWeight(fbClient, d);
                     list.Add(newrec);
                 }
-
-                foreach (var pedometer in list)
-                {
-                    var existingTran = _pedometerRepo.AllForRead().FirstOrDefault(x => x.trandate == pedometer.trandate);
-                    if (existingTran != null)
-                        _pedometerRepo.Delete(existingTran);
-                    _pedometerRepo.Insert(pedometer);
-                }
-                
             }
             catch (Exception ex)
             {
@@ -76,11 +84,13 @@ namespace BitsmackGTAPI.Models
                 Logger.WriteLog(EventLogSeverity.Error, ex.Message);
 
                 //Update Last Modified Date
-                if (key == null) return;
-                key.last_update = DateTime.Now;
-                _commonService.UpdateAPIKey(key);
+                if (key != null)
+                {
+                    key.last_update = DateTime.Now;
+                    _commonService.UpdateAPIKey(key);
+                }
             }
-
+            return list;
         }
 
         private IEnumerable<Pedometer> GetPedometerRecords()

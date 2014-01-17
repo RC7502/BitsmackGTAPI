@@ -7,24 +7,29 @@ namespace BitsmackGTAPI.Helpers
 {
     public class MathHelper
     {
-        public static int Average(IEnumerable<int> list)
+        public static int Average(List<int> list)
         {
-            return (int) Math.Round(list.Average(), 0);
+            return list.Any() ? (int) Math.Round(list.Average(), 0) : 0;
         }
 
-        public static int TrendAverage(IEnumerable<int> list)
+        public static int TrendAverage(List<int> list)
         {
-            double trend = 0;
-            foreach (var item in list)
+            if (list.Any())
             {
-                if (trend.Equals(0))
-                    trend = item;
-                else
+                double trend = 0;
+                foreach (var item in list)
                 {
-                    trend = trend + (0.1*(item - trend));
+                    if (trend.Equals(0))
+                        trend = item;
+                    else
+                    {
+                        trend = trend + (0.1*(item - trend));
+                    }
                 }
+
+                return (int) Math.Round(trend, 0);
             }
-            return (int)Math.Round(trend, 0);
+            return 0;
         }
     }
 }

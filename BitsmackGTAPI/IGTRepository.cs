@@ -8,5 +8,6 @@ namespace BitsmackGTAPI
         void Update(T key);
         void Insert(T log);
         void Delete(T existingTran);
+        void Save();
     }
 }

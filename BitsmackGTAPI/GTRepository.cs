@@ -49,5 +49,10 @@ namespace BitsmackGTAPI
             }
             dbSet.Remove(entityToDelete);
         }
+
+        public virtual void Save()
+        {
+            context.SaveChanges();
+        }
     }
 }
