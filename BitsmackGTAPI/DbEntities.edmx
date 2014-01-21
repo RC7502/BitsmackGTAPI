@@ -42,12 +42,13 @@
           <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="severity" Type="int" Nullable="false" />
           <Property Name="message" Type="varchar" Nullable="false" MaxLength="500" />
+          <Property Name="eventdate" Type="smalldatetime" />
         </EntityType>
         <EntityType Name="Pedometer">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="steps" Type="int" Nullable="false" />
           <Property Name="sleep" Type="int" Nullable="false" />
           <Property Name="trandate" Type="smalldatetime" Nullable="false" />
@@ -106,6 +107,7 @@
           <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="Int32" Name="severity" Nullable="false" />
           <Property Type="String" Name="message" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="eventdate" Precision="0" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -154,6 +156,7 @@
           <EntitySetMapping Name="EventLog">
             <EntityTypeMapping TypeName="BSGTModel.EventLog">
               <MappingFragment StoreEntitySet="EventLog">
+                <ScalarProperty Name="eventdate" ColumnName="eventdate" />
                 <ScalarProperty Name="message" ColumnName="message" />
                 <ScalarProperty Name="severity" ColumnName="severity" />
                 <ScalarProperty Name="id" ColumnName="id" />

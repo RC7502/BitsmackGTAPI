@@ -23,7 +23,7 @@ namespace BitsmackGTAPI.Models
         public PedometerSummaryViewModel GetSummary()
         {
             var key = _commonService.GetAPIKeys().FirstOrDefault(x => x.service_name == "Fitbit");
-            if (key != null && (DateTime.Now - key.last_update).Hours > 1)
+            if (key != null && (DateTime.Now - key.last_update).TotalHours > 1)
             {
                 var existingRecs = GetPedometerRecords().ToList();
                 var startDate = existingRecs.Any() ? existingRecs.Max(x => x.trandate) : key.start_date;
@@ -65,7 +65,7 @@ namespace BitsmackGTAPI.Models
             {           
                 var fbClient = GetFitbitClient(key);
                 var existingRecs = !overwrite ? GetPedometerRecords().ToList() : new List<Pedometer>();        
-                for (var d = startDate; d <= endDate; d = d.AddDays(1))
+                for (var d = startDate; d <= endDate && list.Count < 50; d = d.AddDays(1))
                 {
                     if (existingRecs.Any(x => x.trandate == d)) continue;
                     var newrec = new Pedometer();

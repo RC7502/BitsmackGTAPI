@@ -17,5 +17,6 @@ namespace BitsmackGTAPI
         public int id { get; set; }
         public int severity { get; set; }
         public string message { get; set; }
+        public Nullable<System.DateTime> eventdate { get; set; }
     }
 }

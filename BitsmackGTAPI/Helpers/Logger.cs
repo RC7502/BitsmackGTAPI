@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using BitsmackGTAPI.Constants;
 using StructureMap;
 
-namespace BitsmackGTAPI.Models
+namespace BitsmackGTAPI.Helpers
 {
     public class Logger
     {
@@ -13,7 +10,12 @@ namespace BitsmackGTAPI.Models
         {
             var logRepo = ObjectFactory.GetInstance<GTRepository<EventLog>>();
 
-            var log = new EventLog { severity = (int)severity, message = message };
+            var log = new EventLog
+                {
+                    severity = (int)severity, 
+                    message = message,
+                    eventdate = DateTime.Now
+                };
             logRepo.Insert(log);
             logRepo.Save();
         }
