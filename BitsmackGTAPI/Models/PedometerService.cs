@@ -6,6 +6,7 @@ using BitsmackGTAPI.Constants;
 using BitsmackGTAPI.Helpers;
 using BitsmackGTAPI.Interfaces;
 using Fitbit.Api;
+using Fitbit.Models;
 
 namespace BitsmackGTAPI.Models
 {
@@ -47,8 +48,27 @@ namespace BitsmackGTAPI.Models
                     };
                 var stepsToBeat = Math.Max(model.AverageSteps, model.TrendSteps);
                 model.NewStepGoal = (int) Math.Round(stepsToBeat*1.05, 0);
+
+                SetFitbitNewGoal(key, model.NewStepGoal);
             }
             return model;
+        }
+
+        private void SetFitbitNewGoal(APIKeys key, int newStepGoal)
+        {
+            try
+            {
+                if ((DateTime.UtcNow - key.last_update).TotalHours > 1)
+                { 
+                var fbClient = GetFitbitClient(key);
+                fbClient.SetStepGoal(newStepGoal);
+                    }
+
+            }
+            catch (Exception ex)
+            {      
+                Logger.WriteLog(EventLogSeverity.Error, ex.Message);
+            }
         }
 
         private void RefreshData(bool overwrite, DateTime startDate, DateTime endDate)
@@ -71,7 +91,8 @@ namespace BitsmackGTAPI.Models
             try
             {           
                 var fbClient = GetFitbitClient(key);
-                var existingRecs = !overwrite ? GetPedometerRecords().ToList() : new List<Pedometer>();        
+                var existingRecs = !overwrite ? GetPedometerRecords().ToList() : new List<Pedometer>();
+                var weightlog = fbClient.GetWeight(startDate, endDate);
                 for (var d = startDate; d <= endDate && list.Count < 50; d = d.AddDays(1))
                 {
                     if (existingRecs.Any(x => x.trandate == d)) continue;
@@ -81,7 +102,8 @@ namespace BitsmackGTAPI.Models
                     newrec.trandate = d;
                     newrec.steps = activity.Steps;
                     newrec.sleep = sleep.Summary.TotalMinutesAsleep;
-                    newrec.weight = GetWeight(fbClient, d);
+                    var dayWeight = weightlog.Weights.FirstOrDefault(x => x.Date == d);
+                    newrec.weight = dayWeight != null ? dayWeight.Weight*2.20462 : 0;
                     list.Add(newrec);
                 }
             }
