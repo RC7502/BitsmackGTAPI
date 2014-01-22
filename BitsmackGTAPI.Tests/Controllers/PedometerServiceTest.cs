@@ -28,25 +28,6 @@ namespace BitsmackGTAPI.Tests.Controllers
             _service = new PedometerService(_repo.Object, _commonService.Object);
         }
 
-        [TestMethod]
-        public void GetSummaryReturnsValidModel()
-        {
-            //Arrange
-            var steps = new List<int>()
-                {
-                    2548, 2039, 2319, 4592, 1029
-                };
-            var expectedAvg = (int)Math.Round(steps.Average(), 0);
-            var pedList = steps.Select(step => PedometerHelper.Create(steps: step)).ToList();
-            _repo.Setup(x => x.AllForRead()).Returns(pedList.AsQueryable);
 
-            //Act
-            var result = _service.GetSummary();
-
-            //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(expectedAvg, result.AverageSteps);
-            Assert.AreEqual(steps.Count, result.NumOfDays);
-        }
     }
 }
