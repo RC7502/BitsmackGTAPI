@@ -22,25 +22,32 @@ namespace BitsmackGTAPI.Models
 
         public PedometerSummaryViewModel GetSummary()
         {
+            var model = new PedometerSummaryViewModel();
             var key = _commonService.GetAPIKeys().FirstOrDefault(x => x.service_name == "Fitbit");
-            if (key != null && (DateTime.UtcNow - key.last_update).TotalHours > 1)
+            if (key != null)
             {
-                var existingRecs = GetPedometerRecords().ToList();
-                var startDate = existingRecs.Any() ? existingRecs.Max(x => x.trandate) : key.start_date;
-                RefreshData(false, startDate, DateTime.Today.AddDays(-1));
-                key.last_update = DateTime.UtcNow;
-                _commonService.UpdateAPIKey(key);
-            }
-
-            var pedometerRecs = GetPedometerRecords().ToList();
-            var stepList = pedometerRecs.Select(x => x.steps).ToList();
-            var model = new PedometerSummaryViewModel()
+                if((DateTime.UtcNow - key.last_update).TotalHours > 1)
                 {
-                    AverageSteps = MathHelper.Average(stepList),
-                    NumOfDays = pedometerRecs.Count,
-                    TrendSteps = MathHelper.TrendAverage(stepList),
-                };
-            model.NewStepGoal = (int) Math.Round(model.AverageSteps*1.05, 0);         
+                    var existingRecs = GetPedometerRecords().ToList();
+                    var startDate = existingRecs.Any() ? existingRecs.Max(x => x.trandate) : key.start_date;
+                    RefreshData(false, startDate, DateTime.Today.AddDays(-1));
+                    key.last_update = DateTime.UtcNow;
+                    _commonService.UpdateAPIKey(key);
+                }
+
+
+                var pedometerRecs = GetPedometerRecords().ToList();
+                var stepList = pedometerRecs.Select(x => x.steps).ToList();
+                model = new PedometerSummaryViewModel()
+                    {
+                        AverageSteps = MathHelper.Average(stepList),
+                        NumOfDays = pedometerRecs.Count,
+                        TrendSteps = MathHelper.TrendAverage(stepList),
+                        NextUpdate = Convert.ToInt32((key.last_update.AddHours(1) - DateTime.UtcNow).TotalMinutes)
+                    };
+                var stepsToBeat = Math.Max(model.AverageSteps, model.TrendSteps);
+                model.NewStepGoal = (int) Math.Round(stepsToBeat*1.05, 0);
+            }
             return model;
         }
 

@@ -10,6 +10,7 @@ namespace BitsmackGTAPI.Models
         public int NumOfDays;
         public int TrendSteps;
         public int NewStepGoal;
+        public double NextUpdate;
         public int AverageSteps { get; set; }
     }
 }
