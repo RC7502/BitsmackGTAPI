@@ -17,7 +17,7 @@ namespace BitsmackGTAPI.Tests.Helpers{
 	/// </summary>
 	public static class DateSequencer
 	{
-	    private static DateTime NEXT_VALUE = DateTime.Now.Date;
+	    private static DateTime NEXT_VALUE = DateTime.UtcNow.Date;
 
 		public static DateTime Next()
 		{

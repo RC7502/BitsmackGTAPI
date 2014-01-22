@@ -23,12 +23,12 @@ namespace BitsmackGTAPI.Models
         public PedometerSummaryViewModel GetSummary()
         {
             var key = _commonService.GetAPIKeys().FirstOrDefault(x => x.service_name == "Fitbit");
-            if (key != null && (DateTime.Now - key.last_update).TotalHours > 1)
+            if (key != null && (DateTime.UtcNow - key.last_update).TotalHours > 1)
             {
                 var existingRecs = GetPedometerRecords().ToList();
                 var startDate = existingRecs.Any() ? existingRecs.Max(x => x.trandate) : key.start_date;
                 RefreshData(false, startDate, DateTime.Today.AddDays(-1));
-                key.last_update = DateTime.Now;
+                key.last_update = DateTime.UtcNow;
                 _commonService.UpdateAPIKey(key);
             }
 
@@ -86,7 +86,7 @@ namespace BitsmackGTAPI.Models
                 //Update Last Modified Date
                 if (key != null)
                 {
-                    key.last_update = DateTime.Now;
+                    key.last_update = DateTime.UtcNow;
                     _commonService.UpdateAPIKey(key);
                 }
             }

@@ -14,7 +14,7 @@ namespace BitsmackGTAPI.Helpers
                 {
                     severity = (int)severity, 
                     message = message,
-                    eventdate = DateTime.Now
+                    eventdate = DateTime.UtcNow
                 };
             logRepo.Insert(log);
             logRepo.Save();
