@@ -105,7 +105,7 @@ namespace Fitbit.Api
 
             RestRequest request = new RestRequest(apiCall);
             request.RootElement = "goals";
-            request.Method = Method.POST;
+            request.Method = Method.POST;           
 
             var response = restClient.Execute<Fitbit.Models.ActivityGoals>(request);
 
