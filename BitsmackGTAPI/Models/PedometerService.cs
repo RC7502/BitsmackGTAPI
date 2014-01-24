@@ -27,7 +27,7 @@ namespace BitsmackGTAPI.Models
             var key = _commonService.GetAPIKeys().FirstOrDefault(x => x.service_name == "Fitbit");
             if (key != null)
             {
-                if((DateTime.UtcNow - key.last_update).TotalHours > 1)
+                if((DateTime.UtcNow - key.last_update).TotalMinutes > 20)
                 {
                     var existingRecs = GetPedometerRecords().ToList();
                     var startDate = existingRecs.Any() ? existingRecs.Max(x => x.trandate) : key.start_date;
@@ -44,7 +44,7 @@ namespace BitsmackGTAPI.Models
                         AverageSteps = MathHelper.Average(stepList),
                         NumOfDays = pedometerRecs.Count,
                         TrendSteps = MathHelper.TrendAverage(stepList),
-                        NextUpdate = Convert.ToInt32((key.last_update.AddHours(1) - DateTime.UtcNow).TotalMinutes)
+                        NextUpdate = Convert.ToInt32((key.last_update.AddMinutes(20) - DateTime.UtcNow).TotalMinutes)
                     };
                 var stepsToBeat = Math.Max(model.AverageSteps, model.TrendSteps);
                 model.NewStepGoal = (int) Math.Round(stepsToBeat*1.05, 0);
