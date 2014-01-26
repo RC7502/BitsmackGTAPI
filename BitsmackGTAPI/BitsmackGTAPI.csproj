@@ -145,6 +145,8 @@
     <Compile Include="IGTRepository.cs" />
     <Compile Include="Interfaces\IBSGTEntities.cs" />
     <Compile Include="Interfaces\IPedometerRepository.cs" />
+    <Compile Include="Models\CardioService.cs" />
+    <Compile Include="Models\CardioSummaryViewModel.cs" />
     <Compile Include="Models\CommonService.cs" />
     <Compile Include="Interfaces\ICommonService.cs" />
     <Compile Include="Helpers\Logger.cs" />

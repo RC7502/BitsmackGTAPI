@@ -19,11 +19,14 @@ namespace BitsmackGTAPI.Helpers
                 double trend = 0;
                 foreach (var item in list)
                 {
-                    if (trend.Equals(0))
-                        trend = item;
-                    else
+                    if (item > 0)
                     {
-                        trend = trend + (0.1*(item - trend));
+                        if (trend.Equals(0))
+                            trend = item;
+                        else
+                        {
+                            trend = trend + (0.1*(item - trend));
+                        }
                     }
                 }
 

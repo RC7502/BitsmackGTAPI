@@ -47,7 +47,7 @@ namespace BitsmackGTAPI.Models
                         NextUpdate = Convert.ToInt32((key.last_update.AddMinutes(20) - DateTime.UtcNow).TotalMinutes)
                     };
                 var stepsToBeat = Math.Max(model.AverageSteps, model.TrendSteps);
-                model.NewStepGoal = (int) Math.Round(stepsToBeat*1.05, 0);
+                model.NewStepGoal = (int) Math.Round(stepsToBeat*1.02, 0);
 
                 //SetFitbitNewGoal(key, model.NewStepGoal);
             }
