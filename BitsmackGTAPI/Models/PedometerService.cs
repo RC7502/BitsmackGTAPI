@@ -30,8 +30,8 @@ namespace BitsmackGTAPI.Models
                 if((DateTime.UtcNow - key.last_update).TotalMinutes > 20)
                 {
                     var existingRecs = GetPedometerRecords().ToList();
-                    var startDate = existingRecs.Any() ? existingRecs.Max(x => x.trandate) : key.start_date;
-                    RefreshData(false, startDate, DateTime.Today.AddDays(-1));
+                    var startDate = existingRecs.Any() ? existingRecs.Max(x => x.trandate).AddDays(-5) : key.start_date;
+                    RefreshData(true, startDate, DateTime.Today.AddDays(-1));
                     key.last_update = DateTime.UtcNow;
                     _commonService.UpdateAPIKey(key);
                 }
