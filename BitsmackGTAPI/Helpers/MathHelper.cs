@@ -9,11 +9,13 @@ namespace BitsmackGTAPI.Helpers
     {
         public static int Average(List<int> list)
         {
-            return list.Any() ? (int) Math.Round(list.Average(), 0) : 0;
+            //only average records that are not 0
+            return list.Any() ? (int) Math.Round(list.Where(x=>x>0).Average(), 0) : 0;
         }
 
         public static int TrendAverage(List<int> list)
         {
+            //only average records that are not 0
             if (list.Any())
             {
                 double trend = 0;
@@ -33,6 +35,11 @@ namespace BitsmackGTAPI.Helpers
                 return (int) Math.Round(trend, 0);
             }
             return 0;
+        }
+
+        public static double MetersToMiles(double average)
+        {
+            return Math.Round(average/1609.34, 2);
         }
     }
 }

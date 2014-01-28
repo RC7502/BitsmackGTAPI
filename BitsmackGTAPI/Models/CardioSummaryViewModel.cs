@@ -7,6 +7,8 @@ namespace BitsmackGTAPI.Models
 {
     public class CardioSummaryViewModel
     {
-        
+        public int TotalRuns;
+        public double AvgMilesPerRun;
+        public int AvgAdj5KPace;
     }
 }

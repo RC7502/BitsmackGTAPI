@@ -28,7 +28,7 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="userid" Type="int" Nullable="false" />
           <Property Name="trandate" Type="smalldatetime" Nullable="false" />
           <Property Name="activity" Type="varchar" Nullable="false" MaxLength="50" />

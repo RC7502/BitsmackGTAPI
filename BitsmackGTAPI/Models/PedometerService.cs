@@ -39,15 +39,21 @@ namespace BitsmackGTAPI.Models
 
                 var pedometerRecs = GetPedometerRecords().ToList();
                 var stepList = pedometerRecs.Select(x => x.steps).ToList();
+                //store this in a table
+                var wakeuptime = TimeHelper.ConvertUtcToLocal(DateTime.UtcNow.Date).Date.AddDays(1).AddHours(5).AddMinutes(50);
+
                 model = new PedometerSummaryViewModel()
                     {
                         AverageSteps = MathHelper.Average(stepList),
                         NumOfDays = pedometerRecs.Count,
                         TrendSteps = MathHelper.TrendAverage(stepList),
-                        NextUpdate = Convert.ToInt32((key.last_update.AddMinutes(20) - DateTime.UtcNow).TotalMinutes)
+                        NextUpdate = Convert.ToInt32((key.last_update.AddMinutes(20) - DateTime.UtcNow).TotalMinutes),
+                        AvgSleep = MathHelper.Average(pedometerRecs.Select(x=>x.sleep).ToList())
                     };
                 var stepsToBeat = Math.Max(model.AverageSteps, model.TrendSteps);
                 model.NewStepGoal = (int) Math.Round(stepsToBeat*1.02, 0);
+                model.SleepStartTime = wakeuptime.AddHours(-8).ToShortTimeString();
+                model.SleepEndTime = wakeuptime.AddMinutes(-1*model.AvgSleep*1.02).ToShortTimeString();
 
                 //SetFitbitNewGoal(key, model.NewStepGoal);
             }
