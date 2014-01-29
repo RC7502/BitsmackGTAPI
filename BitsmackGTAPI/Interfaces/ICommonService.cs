@@ -7,5 +7,6 @@ namespace BitsmackGTAPI.Interfaces
     {
         IEnumerable<APIKeys> GetAPIKeys();
         void UpdateAPIKey(APIKeys key);
+        APIKeys GetAPIKeyByName(string name);
     }
 }

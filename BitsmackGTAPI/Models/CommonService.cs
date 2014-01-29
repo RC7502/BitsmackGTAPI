@@ -29,5 +29,9 @@ namespace BitsmackGTAPI.Models
             _apiKeysRepo.Save();
         }
 
+        public APIKeys GetAPIKeyByName(string name)
+        {
+            return _apiKeysRepo.AllForRead().FirstOrDefault(x => x.service_name == name);
+        }
     }
 }

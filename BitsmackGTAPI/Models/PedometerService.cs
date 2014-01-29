@@ -23,41 +23,32 @@ namespace BitsmackGTAPI.Models
 
         public PedometerSummaryViewModel GetSummary()
         {
-            var model = new PedometerSummaryViewModel();
-            var key = _commonService.GetAPIKeys().FirstOrDefault(x => x.service_name == "Fitbit");
-            if (key != null)
-            {
-                if((DateTime.UtcNow - key.last_update).TotalMinutes > 20)
+            RefreshData(true, DateTime.Today.AddDays(-14), DateTime.Today.AddDays(-1));
+            var pedometerRecs = GetPedometerRecords().ToList();
+            var stepList = pedometerRecs.Select(x => x.steps).ToList();
+            //store this in a table
+            var wakeuptime = TimeHelper.ConvertUtcToLocal(DateTime.UtcNow.Date).Date.AddDays(1).AddHours(5).AddMinutes(50);
+
+            var model = new PedometerSummaryViewModel()
                 {
-                    var existingRecs = GetPedometerRecords().ToList();
-                    var startDate = existingRecs.Any() ? existingRecs.Max(x => x.trandate).AddDays(-5) : key.start_date;
-                    RefreshData(true, startDate, DateTime.Today.AddDays(-1));
-                    key.last_update = DateTime.UtcNow;
-                    _commonService.UpdateAPIKey(key);
-                }
+                    AverageSteps = MathHelper.Average(stepList),
+                    NumOfDays = pedometerRecs.Count,
+                    TrendSteps = MathHelper.TrendAverage(stepList),                 
+                    AvgSleep = MathHelper.Average(pedometerRecs.Select(x=>x.sleep).ToList())
+                };
+            var stepsToBeat = Math.Max(model.AverageSteps, model.TrendSteps);
+            model.NewStepGoal = (int) Math.Round(stepsToBeat*1.02, 0);
+            model.SleepStartTime = wakeuptime.AddHours(-8).ToShortTimeString();
+            model.SleepEndTime = wakeuptime.AddMinutes(-1*model.AvgSleep*1.02).ToShortTimeString();
 
-
-                var pedometerRecs = GetPedometerRecords().ToList();
-                var stepList = pedometerRecs.Select(x => x.steps).ToList();
-                //store this in a table
-                var wakeuptime = TimeHelper.ConvertUtcToLocal(DateTime.UtcNow.Date).Date.AddDays(1).AddHours(5).AddMinutes(50);
-
-                model = new PedometerSummaryViewModel()
-                    {
-                        AverageSteps = MathHelper.Average(stepList),
-                        NumOfDays = pedometerRecs.Count,
-                        TrendSteps = MathHelper.TrendAverage(stepList),
-                        NextUpdate = Convert.ToInt32((key.last_update.AddMinutes(20) - DateTime.UtcNow).TotalMinutes),
-                        AvgSleep = MathHelper.Average(pedometerRecs.Select(x=>x.sleep).ToList())
-                    };
-                var stepsToBeat = Math.Max(model.AverageSteps, model.TrendSteps);
-                model.NewStepGoal = (int) Math.Round(stepsToBeat*1.02, 0);
-                model.SleepStartTime = wakeuptime.AddHours(-8).ToShortTimeString();
-                model.SleepEndTime = wakeuptime.AddMinutes(-1*model.AvgSleep*1.02).ToShortTimeString();
-
-                //SetFitbitNewGoal(key, model.NewStepGoal);
-            }
+            //SetFitbitNewGoal(key, model.NewStepGoal);
+            
             return model;
+        }
+
+        public PedometerDetailViewModel GetDetail(DateTime start, DateTime end)
+        {
+            throw new NotImplementedException();
         }
 
         private void SetFitbitNewGoal(APIKeys key, int newStepGoal)
@@ -78,29 +69,48 @@ namespace BitsmackGTAPI.Models
 
         private void RefreshData(bool overwrite, DateTime startDate, DateTime endDate)
         {
-            var list = GetFitBitData(overwrite, startDate, endDate);
+            var key = _commonService.GetAPIKeyByName("Fitbit");
+            if (key == null || ((DateTime.UtcNow - key.last_update).TotalMinutes < 60)) return;
+            var list = GetFitBitData(key, startDate, endDate);
             foreach (var pedometer in list)
             {
-                var existingTran = _pedometerRepo.AllForRead().FirstOrDefault(x => x.trandate == pedometer.trandate);
-                if (existingTran != null)
-                    _pedometerRepo.Delete(existingTran);
-                _pedometerRepo.Insert(pedometer);
+                var existingTran =
+                    _pedometerRepo.AllForRead().FirstOrDefault(x => x.trandate == pedometer.trandate);
+                if (existingTran != null && overwrite)
+                {
+                    Copy(pedometer, existingTran);
+                    _pedometerRepo.Update(existingTran);
+                }
+                else if (existingTran == null)
+                {
+                    _pedometerRepo.Insert(pedometer);
+                }
             }
             _pedometerRepo.Save();
+
+            key.last_update = DateTime.UtcNow;
+            _commonService.UpdateAPIKey(key);
         }
 
-        private IEnumerable<Pedometer> GetFitBitData(bool overwrite, DateTime startDate, DateTime endDate)
+        private void Copy(Pedometer from, Pedometer to)
         {
-            var key = _commonService.GetAPIKeys().FirstOrDefault(x => x.service_name == "Fitbit");
+            to.bodyfat = from.bodyfat;
+            to.sleep = from.sleep;
+            to.steps = from.steps;
+            to.trandate = from.trandate;
+            to.weight = from.weight;
+        }
+
+        private IEnumerable<Pedometer> GetFitBitData(APIKeys key, DateTime startDate, DateTime endDate)
+        {          
             var list = new List<Pedometer>();
             try
             {           
                 var fbClient = GetFitbitClient(key);
-                var existingRecs = !overwrite ? GetPedometerRecords().ToList() : new List<Pedometer>();
+                
                 var weightlog = fbClient.GetWeight(startDate, startDate.AddDays(30));
                 for (var d = startDate; d <= endDate && list.Count < 30; d = d.AddDays(1))
-                {
-                    if (existingRecs.Any(x => x.trandate == d)) continue;
+                {                   
                     var newrec = new Pedometer();
                     var activity = fbClient.GetDayActivitySummary(d);
                     var sleep = fbClient.GetSleep(d);

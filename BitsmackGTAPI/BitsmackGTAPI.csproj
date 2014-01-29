@@ -158,7 +158,8 @@
     <Compile Include="Models\CommonService.cs" />
     <Compile Include="Interfaces\ICommonService.cs" />
     <Compile Include="Helpers\Logger.cs" />
-    <Compile Include="Models\ICardioService.cs" />
+    <Compile Include="Interfaces\ICardioService.cs" />
+    <Compile Include="Models\PedometerDetailViewModel.cs" />
     <Compile Include="Models\PedometerRepository.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Interfaces\IPedometerService.cs" />
