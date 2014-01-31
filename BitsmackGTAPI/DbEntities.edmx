@@ -54,6 +54,8 @@
           <Property Name="trandate" Type="smalldatetime" Nullable="false" />
           <Property Name="weight" Type="float" Nullable="false" />
           <Property Name="bodyfat" Type="float" Nullable="false" />
+          <Property Name="createddate" Type="smalldatetime" />
+          <Property Name="lastupdateddate" Type="smalldatetime" />
         </EntityType>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -86,6 +88,8 @@
           <Property Name="trandate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="weight" Type="Double" Nullable="false" />
           <Property Name="bodyfat" Type="Double" Nullable="false" />
+          <Property Type="DateTime" Name="createddate" Precision="0" />
+          <Property Type="DateTime" Name="lastupdateddate" Precision="0" />
         </EntityType>
         <EntityType Name="APIKeys">
           <Key>
@@ -130,6 +134,8 @@
           <EntitySetMapping Name="Pedometer">
             <EntityTypeMapping TypeName="BSGTModel.Pedometer">
               <MappingFragment StoreEntitySet="Pedometer">
+                <ScalarProperty Name="lastupdateddate" ColumnName="lastupdateddate" />
+                <ScalarProperty Name="createddate" ColumnName="createddate" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="steps" ColumnName="steps" />
                 <ScalarProperty Name="sleep" ColumnName="sleep" />

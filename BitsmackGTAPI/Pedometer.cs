@@ -20,5 +20,7 @@ namespace BitsmackGTAPI
         public System.DateTime trandate { get; set; }
         public double weight { get; set; }
         public double bodyfat { get; set; }
+        public Nullable<System.DateTime> createddate { get; set; }
+        public Nullable<System.DateTime> lastupdateddate { get; set; }
     }
 }

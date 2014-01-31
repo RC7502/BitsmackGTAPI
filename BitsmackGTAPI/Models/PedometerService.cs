@@ -48,7 +48,19 @@ namespace BitsmackGTAPI.Models
 
         public PedometerDetailViewModel GetDetail(DateTime start, DateTime end)
         {
-            throw new NotImplementedException();
+            var model = new PedometerDetailViewModel();
+            RefreshData(true, start, end);
+            var pedometerRecs = GetPedometerRecords(start, end);
+            foreach (var rec in pedometerRecs)
+            {
+                model.Details.Add(new PedometerViewModel(rec));
+            }
+            return model;
+        }
+
+        private IEnumerable<Pedometer> GetPedometerRecords(DateTime start, DateTime end)
+        {
+            return _pedometerRepo.AllForRead().Where(x => x.trandate >= start && x.trandate <= end);
         }
 
         private void SetFitbitNewGoal(APIKeys key, int newStepGoal)
@@ -99,6 +111,7 @@ namespace BitsmackGTAPI.Models
             to.steps = from.steps;
             to.trandate = from.trandate;
             to.weight = from.weight;
+            to.lastupdateddate = DateTime.UtcNow;
         }
 
         private IEnumerable<Pedometer> GetFitBitData(APIKeys key, DateTime startDate, DateTime endDate)
@@ -110,15 +123,19 @@ namespace BitsmackGTAPI.Models
                 
                 var weightlog = fbClient.GetWeight(startDate, startDate.AddDays(30));
                 for (var d = startDate; d <= endDate && list.Count < 30; d = d.AddDays(1))
-                {                   
-                    var newrec = new Pedometer();
+                {                                       
                     var activity = fbClient.GetDayActivitySummary(d);
                     var sleep = fbClient.GetSleep(d);
-                    newrec.trandate = d;
-                    newrec.steps = activity.Steps;
-                    newrec.sleep = sleep.Summary.TotalMinutesAsleep;
+                    var newrec = new Pedometer
+                        {
+                            trandate = d,
+                            steps = activity.Steps,
+                            sleep = sleep.Summary.TotalMinutesAsleep,
+                            createddate = DateTime.UtcNow
+                        };
                     var dayWeight = weightlog.Weights.FirstOrDefault(x => x.Date == d);
                     newrec.weight = dayWeight != null ? dayWeight.Weight*2.20462 : 0;
+
                     list.Add(newrec);
                 }
             }
