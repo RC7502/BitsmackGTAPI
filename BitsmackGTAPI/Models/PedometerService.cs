@@ -41,7 +41,7 @@ namespace BitsmackGTAPI.Models
             model.SleepStartTime = wakeuptime.AddHours(-8).ToShortTimeString();
             model.SleepEndTime = wakeuptime.AddMinutes(-1*model.AvgSleep*1.02).ToShortTimeString();
 
-            //SetFitbitNewGoal(key, model.NewStepGoal);
+            SetFitbitNewGoal(model.NewStepGoal);
             
             return model;
         }
@@ -63,11 +63,11 @@ namespace BitsmackGTAPI.Models
             return _pedometerRepo.AllForRead().Where(x => x.trandate >= start && x.trandate <= end);
         }
 
-        private void SetFitbitNewGoal(APIKeys key, int newStepGoal)
+        private void SetFitbitNewGoal(int newStepGoal)
         {
             try
             {
-
+                var key = _commonService.GetAPIKeyByName("Fitbit");
                 var fbClient = GetFitbitClient(key);
                 fbClient.SetStepGoal(newStepGoal);
 
