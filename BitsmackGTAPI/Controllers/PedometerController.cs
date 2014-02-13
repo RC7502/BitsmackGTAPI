@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -28,16 +29,19 @@ namespace BitsmackGTAPI.Controllers
 
         public ActionResult Summary()
         {
-            //refresh data
             return Json(_service.GetSummary(), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Detail(string startDate, string endDate)
+        public ActionResult Detail()
         {
-            var start = DateTime.Parse(startDate);
-            var end = DateTime.Parse(endDate);
+            var start = (DateTime)SqlDateTime.MinValue;
+            var end = (DateTime)SqlDateTime.MaxValue;
 
-            return Json(_service.GetDetail(start, end), JsonRequestBehavior.AllowGet);
+            var model = _service.GetDetail(start, end);
+            var list = model.Details.Select(item => new[] { item.trandate,item.steps.ToString(), item.sleep.ToString(), item.createddate, item.lastupdateddate  }).ToList();
+
+            return Json(new {aaData = list}, JsonRequestBehavior.AllowGet);
+
         }
 
     }

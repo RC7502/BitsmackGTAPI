@@ -9,6 +9,8 @@
           <EntitySet Name="APIKeys" EntityType="BSGTModel.Store.APIKeys" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Cardio" EntityType="BSGTModel.Store.Cardio" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="EventLog" EntityType="BSGTModel.Store.EventLog" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Goals" EntityType="BSGTModel.Store.Goals" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="GoalTran" EntityType="BSGTModel.Store.GoalTran" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Pedometer" EntityType="BSGTModel.Store.Pedometer" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="APIKeys">
@@ -44,6 +46,24 @@
           <Property Name="message" Type="varchar" Nullable="false" MaxLength="500" />
           <Property Name="eventdate" Type="smalldatetime" />
         </EntityType>
+        <EntityType Name="Goals">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="type" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="positive" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="GoalTran">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="goalid" Type="int" Nullable="false" />
+          <Property Name="trandate" Type="smalldatetime" Nullable="false" />
+          <Property Name="amount" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Pedometer">
           <Key>
             <PropertyRef Name="id" />
@@ -66,6 +86,8 @@
           <EntitySet Name="Pedometer" EntityType="BSGTModel.Pedometer" />
           <EntitySet Name="APIKeys" EntityType="BSGTModel.APIKeys" />
           <EntitySet Name="EventLog" EntityType="BSGTModel.EventLog" />
+          <EntitySet Name="Goals" EntityType="BSGTModel.Goals" />
+          <EntitySet Name="GoalTran" EntityType="BSGTModel.GoalTran" />
         </EntityContainer>
         <EntityType Name="Cardio">
           <Key>
@@ -112,6 +134,24 @@
           <Property Type="Int32" Name="severity" Nullable="false" />
           <Property Type="String" Name="message" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="eventdate" Precision="0" />
+        </EntityType>
+        <EntityType Name="Goals">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="title" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="type" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Byte" Name="positive" Nullable="false" />
+        </EntityType>
+        <EntityType Name="GoalTran">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="goalid" Nullable="false" />
+          <Property Type="DateTime" Name="trandate" Nullable="false" Precision="0" />
+          <Property Type="Int32" Name="amount" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -165,6 +205,26 @@
                 <ScalarProperty Name="eventdate" ColumnName="eventdate" />
                 <ScalarProperty Name="message" ColumnName="message" />
                 <ScalarProperty Name="severity" ColumnName="severity" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Goals">
+            <EntityTypeMapping TypeName="BSGTModel.Goals">
+              <MappingFragment StoreEntitySet="Goals">
+                <ScalarProperty Name="positive" ColumnName="positive" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GoalTran">
+            <EntityTypeMapping TypeName="BSGTModel.GoalTran">
+              <MappingFragment StoreEntitySet="GoalTran">
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="trandate" ColumnName="trandate" />
+                <ScalarProperty Name="goalid" ColumnName="goalid" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

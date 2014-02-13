@@ -29,5 +29,7 @@ namespace BitsmackGTAPI
         public DbSet<Pedometer> Pedometer { get; set; }
         public DbSet<APIKeys> APIKeys { get; set; }
         public DbSet<EventLog> EventLog { get; set; }
+        public DbSet<Goals> Goals { get; set; }
+        public DbSet<GoalTran> GoalTran { get; set; }
     }
 }

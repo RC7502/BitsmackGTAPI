@@ -128,6 +128,7 @@
     <Compile Include="Constants\EventLogSeverity.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CardioController.cs" />
+    <Compile Include="Controllers\GoalController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PedometerController.cs" />
     <Compile Include="DbEntities.Context.cs">
@@ -151,11 +152,18 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Goals.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GoalTran.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="GTRepository.cs" />
     <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Helpers\TimeHelper.cs" />
     <Compile Include="IGTRepository.cs" />
     <Compile Include="Interfaces\IBSGTEntities.cs" />
+    <Compile Include="Interfaces\IGoalService.cs" />
     <Compile Include="Interfaces\IPedometerRepository.cs" />
     <Compile Include="Models\CardioService.cs" />
     <Compile Include="Models\CardioSummaryViewModel.cs" />
@@ -163,6 +171,7 @@
     <Compile Include="Interfaces\ICommonService.cs" />
     <Compile Include="Helpers\Logger.cs" />
     <Compile Include="Interfaces\ICardioService.cs" />
+    <Compile Include="Models\GoalsSummaryViewModel.cs" />
     <Compile Include="Models\PedometerDetailViewModel.cs" />
     <Compile Include="Models\PedometerRepository.cs" />
     <Compile Include="Models\AccountModels.cs" />

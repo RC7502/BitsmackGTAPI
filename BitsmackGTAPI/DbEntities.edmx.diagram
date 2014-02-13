@@ -9,6 +9,8 @@
         <EntityTypeShape EntityType="BSGTModel.Pedometer" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="BSGTModel.APIKeys" Width="1.5" PointX="0.75" PointY="3.75" />
         <EntityTypeShape EntityType="BSGTModel.EventLog" Width="1.5" PointX="2.75" PointY="3.75" />
+        <EntityTypeShape EntityType="BSGTModel.Goals" Width="1.5" PointX="7.8319718836955605" PointY="1.0913216923788756" />
+        <EntityTypeShape EntityType="BSGTModel.GoalTran" Width="1.5" PointX="2.3970721431062891" PointY="25.295941215611968" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
