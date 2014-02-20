@@ -48,6 +48,7 @@ namespace BitsmackGTAPI
                 x.For<IPedometerService>().Use<PedometerService>();
                 x.For<ICardioService>().Use<CardioService>();
                 x.For<ICommonService>().Use<CommonService>();
+                x.For<IGoalService>().Use<GoalService>();
                 x.For(typeof(IGTRepository<>)).Use(typeof(GTRepository<>));
             });
 

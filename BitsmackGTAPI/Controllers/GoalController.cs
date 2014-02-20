@@ -11,6 +11,11 @@ namespace BitsmackGTAPI.Controllers
     {
         private readonly IGoalService _service;
 
+        public GoalController()
+        {
+            _service = StructureMap.ObjectFactory.GetInstance<IGoalService>();
+        }
+
         public ActionResult Summary()
         {
             return Json(_service.GetSummary(), JsonRequestBehavior.AllowGet);

@@ -117,6 +117,9 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.1.0.20105.408\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="TogglApi">
+      <HintPath>..\packages\togglnet\TogglApi.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="APIKeys.cs">
@@ -171,6 +174,7 @@
     <Compile Include="Interfaces\ICommonService.cs" />
     <Compile Include="Helpers\Logger.cs" />
     <Compile Include="Interfaces\ICardioService.cs" />
+    <Compile Include="Models\GoalService.cs" />
     <Compile Include="Models\GoalsSummaryViewModel.cs" />
     <Compile Include="Models\PedometerDetailViewModel.cs" />
     <Compile Include="Models\PedometerRepository.cs" />
@@ -178,6 +182,7 @@
     <Compile Include="Interfaces\IPedometerService.cs" />
     <Compile Include="Models\PedometerService.cs" />
     <Compile Include="Models\PedometerSummaryViewModel.cs" />
+    <Compile Include="Models\TogglData.cs" />
     <Compile Include="Pedometer.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
