@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using BitsmackGTAPI.Constants;
@@ -27,7 +28,8 @@ namespace BitsmackGTAPI.Models
             var pedometerRecs = GetPedometerRecords().ToList();
             var stepList = pedometerRecs.Select(x => x.steps).ToList();
             //store this in a table
-            var wakeuptime = TimeHelper.ConvertUtcToLocal(DateTime.UtcNow.Date).Date.AddDays(1).AddHours(5).AddMinutes(50);
+            //var wakeuptime = TimeHelper.ConvertUtcToLocal(DateTime.UtcNow.Date).Date.AddDays(1).AddHours(5).AddMinutes(50);
+            var wakeuptime = GetNextAlarm();
 
             var model = new PedometerSummaryViewModel()
                 {
@@ -44,6 +46,60 @@ namespace BitsmackGTAPI.Models
             SetFitbitNewGoal(model.NewStepGoal);
             
             return model;
+        }
+
+        private DateTime GetNextAlarm()
+        {
+            try
+            {
+                var key = _commonService.GetAPIKeyByName("Fitbit");
+                var fbClient = GetFitbitClient(key);
+                var device = fbClient.GetDevices().FirstOrDefault();
+                TextInfo myTI = new CultureInfo("en-US", false).TextInfo;
+                if (device != null)
+                {
+                    var alarms = fbClient.GetAlarms(device.Id).Where(x=>x.Enabled);
+                    //build a list of all upcoming alarms then sort it to find the next alarm
+                    var upcomingalarms = new List<DateTime>();
+                    var currentDay = TimeHelper.ConvertUtcToLocal(DateTime.UtcNow);
+                    foreach (var alarm in alarms)
+                    {
+                        var alarmTime = TimeHelper.StringPlusTZToTimeSpan(alarm.Time);
+                        if (!alarm.Recurring)
+                        {      
+                            upcomingalarms.Add(alarmTime > currentDay.TimeOfDay
+                                                   ? currentDay.Date.AddDays(1).AddSeconds(alarmTime.TotalSeconds)
+                                                   : currentDay.Date.AddSeconds(alarmTime.TotalSeconds));
+                        }
+                        else
+                        {
+                            foreach (var weekDay in alarm.WeekDays)
+                            {
+
+                                var titleDay = myTI.ToTitleCase(weekDay.ToLower());
+                                //adding the next 2 weeks of alarms to be safe
+                                var nextOccurence = TimeHelper.GetNextDayOfWeek(currentDay.Date,
+                                                                                (DayOfWeek) Enum.Parse(typeof (DayOfWeek), titleDay)).AddSeconds(alarmTime.TotalSeconds);
+                                upcomingalarms.Add(nextOccurence);
+                                upcomingalarms.Add(nextOccurence.AddDays(7));                    
+                            }
+
+                        }
+                    }
+
+                    upcomingalarms.RemoveAll(x => x < currentDay);
+                    if(upcomingalarms.Any())
+                        return upcomingalarms.OrderBy(x => x).FirstOrDefault();       
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(EventLogSeverity.Error, ex.Message);
+            }
+
+            return TimeHelper.ConvertUtcToLocal(DateTime.UtcNow.Date).Date.AddDays(1).AddHours(5);
         }
 
         public PedometerDetailViewModel GetDetail(DateTime start, DateTime end)

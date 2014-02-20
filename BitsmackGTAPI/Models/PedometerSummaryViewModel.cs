@@ -10,7 +10,6 @@ namespace BitsmackGTAPI.Models
         public int NumOfDays;
         public int TrendSteps;
         public int NewStepGoal;
-        public double NextUpdate;
         public int AvgSleep;
         public string SleepStartTime;
         public string SleepEndTime;
