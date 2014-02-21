@@ -18,7 +18,15 @@ namespace BitsmackGTAPI.Controllers
 
         public ActionResult Summary()
         {
-            return Json(_service.GetSummary(), JsonRequestBehavior.AllowGet);
+            var model = _service.GetSummary();
+            var list = model.Items.Select(item => new[]
+                {
+                    item.Name,
+                    item.AvgValue.ToString(),
+                    item.NewGoalValue.ToString()
+                });
+
+            return Json(new {aaData = list}, JsonRequestBehavior.AllowGet);
         }
 
     }

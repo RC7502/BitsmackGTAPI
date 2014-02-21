@@ -15,23 +15,39 @@ namespace BitsmackGTAPI.Models
 {
     public class GoalService : IGoalService
     {
-        private readonly IGTRepository<Goals> _goalsRepo;
-        private readonly IGTRepository<GoalTran> _goalTranRepo; 
+        private readonly IGTRepository<TimedActivities> _timedRepo; 
         private readonly ICommonService _commonService;
 
-        public GoalService(IGTRepository<Goals> goals, 
-            IGTRepository<GoalTran> goaltran,
+        public GoalService(IGTRepository<TimedActivities> timedActvities,
             ICommonService commonService)
         {
-            _goalsRepo = goals;
-            _goalTranRepo = goaltran;
+            _timedRepo = timedActvities;
             _commonService = commonService;
         }
 
-        public GoalSummaryViewModel GetSummary()
+        public GoalsSummaryViewModel GetSummary()
         {
-            var model = new GoalSummaryViewModel();
-            RefreshToggl(true, DateTime.Now.AddYears(-1), DateTime.Now.AddDays(-1));
+            var model = new GoalsSummaryViewModel();
+            RefreshToggl(false, DateTime.Now.AddYears(-1), DateTime.Now.AddDays(-1));
+            model.Items.Add(CalcStandingDeskGoal());
+            
+            return model;
+        }
+
+        private GoalSummaryViewModel CalcStandingDeskGoal()
+        {
+            var recs = _timedRepo.AllForRead().Where(x => x.description == "Standing Desk").OrderBy(x=>x.startdate);
+            var firstRec = recs.FirstOrDefault();
+            var model = new GoalSummaryViewModel()
+                {
+                    Name = "Standing Goal"
+                };
+            if (firstRec != null)
+            {
+                model.AvgValue = recs.Sum(x => x.duration)/
+                                 TimeHelper.GetBusinessDays(firstRec.startdate, DateTime.UtcNow.AddDays(-1));
+                model.NewGoalValue = model.AvgValue*1.10;
+            }
 
             return model;
         }
@@ -41,21 +57,36 @@ namespace BitsmackGTAPI.Models
             var key = _commonService.GetAPIKeyByName("Toggl");
             if (key == null || ((DateTime.UtcNow - key.last_update).TotalMinutes < 60)) return;
             var list = GetTogglData(key, start, end);
+            var existingRecs = _timedRepo.AllForRead().ToList();
+            foreach (var entry in list)
+            {
+                var existingAct = existingRecs.FirstOrDefault(x => x.description == entry.description
+                                                                              && x.startdate == DateTime.Parse(entry.start));
+                if (existingAct == null)
+                {
+                    var newRec = new TimedActivities()
+                        {
+                            description = entry.description,
+                            duration = entry.duration,
+                            startdate = DateTime.Parse(entry.start),
+                            enddate = DateTime.Parse(entry.stop)
+                        };
+                    _timedRepo.Insert(newRec);
+                }
+            }
+
+            _timedRepo.Save();
+            key.last_update = DateTime.UtcNow;
+            _commonService.UpdateAPIKey(key);
 
         }
 
-        private Task[] GetTogglData(APIKeys key, DateTime start, DateTime end)
+        private IEnumerable<TimeEntry> GetTogglData(APIKeys key, DateTime start, DateTime end)
         {
-            var tasks = new Task[] {};
             var auth = new TogglAuthRequest() {ApiToken = key.user_token};
             var api = new TogglApi.TogglApi(auth);
-            var user = api.Users.GetCurrentDetailed();
-            var projects = user.projects;
-            var entries = user.time_entries;
-
-
-
-            return tasks;
+            var entries = api.Users.GetAllTimeEntries(start, end);
+            return entries;
         }
     }
 }

@@ -8,6 +8,6 @@ namespace BitsmackGTAPI.Interfaces
 {
     public interface IGoalService
     {
-        GoalSummaryViewModel GetSummary();
+        GoalsSummaryViewModel GetSummary();
     }
 }

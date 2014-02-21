@@ -12,6 +12,7 @@
           <EntitySet Name="Goals" EntityType="BSGTModel.Store.Goals" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="GoalTran" EntityType="BSGTModel.Store.GoalTran" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Pedometer" EntityType="BSGTModel.Store.Pedometer" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="TimedActivities" EntityType="BSGTModel.Store.TimedActivities" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="APIKeys">
           <Key>
@@ -77,6 +78,16 @@
           <Property Name="createddate" Type="smalldatetime" />
           <Property Name="lastupdateddate" Type="smalldatetime" />
         </EntityType>
+        <EntityType Name="TimedActivities">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="description" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="duration" Type="int" Nullable="false" />
+          <Property Name="startdate" Type="smalldatetime" Nullable="false" />
+          <Property Name="enddate" Type="smalldatetime" Nullable="false" />
+        </EntityType>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -88,6 +99,7 @@
           <EntitySet Name="EventLog" EntityType="BSGTModel.EventLog" />
           <EntitySet Name="Goals" EntityType="BSGTModel.Goals" />
           <EntitySet Name="GoalTran" EntityType="BSGTModel.GoalTran" />
+          <EntitySet Name="TimedActivities" EntityType="BSGTModel.TimedActivities" />
         </EntityContainer>
         <EntityType Name="Cardio">
           <Key>
@@ -152,6 +164,16 @@
           <Property Type="Int32" Name="goalid" Nullable="false" />
           <Property Type="DateTime" Name="trandate" Nullable="false" Precision="0" />
           <Property Type="Int32" Name="amount" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TimedActivities">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="description" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="duration" Nullable="false" />
+          <Property Type="DateTime" Name="startdate" Nullable="false" Precision="0" />
+          <Property Type="DateTime" Name="enddate" Nullable="false" Precision="0" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -225,6 +247,17 @@
                 <ScalarProperty Name="amount" ColumnName="amount" />
                 <ScalarProperty Name="trandate" ColumnName="trandate" />
                 <ScalarProperty Name="goalid" ColumnName="goalid" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TimedActivities">
+            <EntityTypeMapping TypeName="BSGTModel.TimedActivities">
+              <MappingFragment StoreEntitySet="TimedActivities">
+                <ScalarProperty Name="enddate" ColumnName="enddate" />
+                <ScalarProperty Name="startdate" ColumnName="startdate" />
+                <ScalarProperty Name="duration" ColumnName="duration" />
+                <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
