@@ -117,7 +117,8 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.1.0.20105.408\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="TogglApi">
+    <Reference Include="TogglApi, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\togglnet\TogglApi.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -130,6 +131,7 @@
     </Compile>
     <Compile Include="Constants\EventLogSeverity.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BudgetController.cs" />
     <Compile Include="Controllers\CardioController.cs" />
     <Compile Include="Controllers\GoalController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -168,6 +170,12 @@
     <Compile Include="Interfaces\IBSGTEntities.cs" />
     <Compile Include="Interfaces\IGoalService.cs" />
     <Compile Include="Interfaces\IPedometerRepository.cs" />
+    <Compile Include="Mint.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BudgetCategoryViewModel.cs" />
+    <Compile Include="Models\BudgetMonthCategoryViewModel.cs" />
+    <Compile Include="Models\BudgetService.cs" />
     <Compile Include="Models\CardioService.cs" />
     <Compile Include="Models\CardioSummaryViewModel.cs" />
     <Compile Include="Models\CommonService.cs" />
@@ -176,6 +184,7 @@
     <Compile Include="Interfaces\ICardioService.cs" />
     <Compile Include="Models\GoalService.cs" />
     <Compile Include="Models\GoalsSummaryViewModel.cs" />
+    <Compile Include="Interfaces\IBudgetService.cs" />
     <Compile Include="Models\PedometerDetailViewModel.cs" />
     <Compile Include="Models\PedometerRepository.cs" />
     <Compile Include="Models\AccountModels.cs" />

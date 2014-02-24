@@ -40,13 +40,13 @@ namespace BitsmackGTAPI.Models
             var firstRec = recs.FirstOrDefault();
             var model = new GoalSummaryViewModel()
                 {
-                    Name = "Standing Goal"
+                    Name = "Standing Desk"
                 };
             if (firstRec != null)
             {
                 model.AvgValue = recs.Sum(x => x.duration)/
                                  TimeHelper.GetBusinessDays(firstRec.startdate, DateTime.UtcNow.AddDays(-1));
-                model.NewGoalValue = model.AvgValue*1.10;
+                model.NewGoalValue = model.AvgValue*1.01;
             }
 
             return model;

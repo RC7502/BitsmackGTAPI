@@ -41,5 +41,10 @@ namespace BitsmackGTAPI.Helpers
 
             return calcBusinessDays;
         }
+
+        public static string DateToMonthYear(DateTime parmDate)
+        {
+            return string.Format(parmDate.Month < 10 ? "{0}0{1}" : "{0}{1}", parmDate.Year, parmDate.Month);
+        }
     }
 }

@@ -32,5 +32,6 @@ namespace BitsmackGTAPI
         public DbSet<Goals> Goals { get; set; }
         public DbSet<GoalTran> GoalTran { get; set; }
         public DbSet<TimedActivities> TimedActivities { get; set; }
+        public DbSet<Mint> Mint { get; set; }
     }
 }

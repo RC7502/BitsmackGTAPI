@@ -11,6 +11,7 @@
           <EntitySet Name="EventLog" EntityType="BSGTModel.Store.EventLog" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Goals" EntityType="BSGTModel.Store.Goals" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="GoalTran" EntityType="BSGTModel.Store.GoalTran" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Mint" EntityType="BSGTModel.Store.Mint" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Pedometer" EntityType="BSGTModel.Store.Pedometer" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="TimedActivities" EntityType="BSGTModel.Store.TimedActivities" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
@@ -65,6 +66,21 @@
           <Property Name="trandate" Type="smalldatetime" Nullable="false" />
           <Property Name="amount" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="Mint">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="Description" Type="varchar" MaxLength="78" />
+          <Property Name="Original Description" Type="varchar" MaxLength="124" />
+          <Property Name="Amount" Type="real" />
+          <Property Name="Transaction Type" Type="varchar" MaxLength="6" />
+          <Property Name="Category" Type="varchar" MaxLength="22" />
+          <Property Name="Account Name" Type="varchar" MaxLength="29" />
+          <Property Name="Labels" Type="varchar" MaxLength="5" />
+          <Property Name="Notes" Type="varchar(max)" />
+        </EntityType>
         <EntityType Name="Pedometer">
           <Key>
             <PropertyRef Name="id" />
@@ -100,6 +116,7 @@
           <EntitySet Name="Goals" EntityType="BSGTModel.Goals" />
           <EntitySet Name="GoalTran" EntityType="BSGTModel.GoalTran" />
           <EntitySet Name="TimedActivities" EntityType="BSGTModel.TimedActivities" />
+          <EntitySet Name="Mint" EntityType="BSGTModel.Mint" />
         </EntityContainer>
         <EntityType Name="Cardio">
           <Key>
@@ -174,6 +191,21 @@
           <Property Type="Int32" Name="duration" Nullable="false" />
           <Property Type="DateTime" Name="startdate" Nullable="false" Precision="0" />
           <Property Type="DateTime" Name="enddate" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="Mint">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="DateTime" Name="Date" Precision="3" />
+          <Property Type="String" Name="Description" MaxLength="78" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Original_Description" MaxLength="124" FixedLength="false" Unicode="false" />
+          <Property Type="Single" Name="Amount" />
+          <Property Type="String" Name="Transaction_Type" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Category" MaxLength="22" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Account_Name" MaxLength="29" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Labels" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Notes" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -258,6 +290,22 @@
                 <ScalarProperty Name="startdate" ColumnName="startdate" />
                 <ScalarProperty Name="duration" ColumnName="duration" />
                 <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mint">
+            <EntityTypeMapping TypeName="BSGTModel.Mint">
+              <MappingFragment StoreEntitySet="Mint">
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Labels" ColumnName="Labels" />
+                <ScalarProperty Name="Account_Name" ColumnName="Account Name" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Transaction_Type" ColumnName="Transaction Type" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Original_Description" ColumnName="Original Description" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
