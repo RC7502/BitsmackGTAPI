@@ -28,7 +28,7 @@ namespace BitsmackGTAPI.Models
         public GoalsSummaryViewModel GetSummary()
         {
             var model = new GoalsSummaryViewModel();
-            RefreshToggl(false, DateTime.Now.AddYears(-1), DateTime.Now.AddDays(-1));
+            RefreshToggl(false, DateTime.Now.AddDays(-14), DateTime.Now.AddDays(-1));
             model.Items.Add(CalcStandingDeskGoal());
             
             return model;
@@ -55,13 +55,14 @@ namespace BitsmackGTAPI.Models
         private void RefreshToggl(bool overwrite, DateTime start, DateTime end)
         {
             var key = _commonService.GetAPIKeyByName("Toggl");
-            if (key == null || ((DateTime.UtcNow - key.last_update).TotalMinutes < 60)) return;
+            if (key == null || ((DateTime.UtcNow - key.last_update).TotalMinutes < 60)) return;           
             var list = GetTogglData(key, start, end);
             var existingRecs = _timedRepo.AllForRead().ToList();
             foreach (var entry in list)
             {
                 var existingAct = existingRecs.FirstOrDefault(x => x.description == entry.description
-                                                                              && x.startdate == DateTime.Parse(entry.start));
+                                                                              && x.duration == entry.duration
+                                                                              && x.startdate.Date == DateTime.Parse(entry.start).Date);
                 if (existingAct == null)
                 {
                     var newRec = new TimedActivities()
