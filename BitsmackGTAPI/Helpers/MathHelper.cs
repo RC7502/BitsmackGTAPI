@@ -41,5 +41,30 @@ namespace BitsmackGTAPI.Helpers
         {
             return Math.Round(average/1609.34, 2);
         }
+
+        public static decimal TrendAverage(List<decimal> list, int decimals)
+        {
+            //only average records that are not 0
+            if (list.Any())
+            {
+                decimal trend = 0;
+                foreach (var item in list)
+                {
+
+                    if (item > 0)
+                    {
+                        if (trend.Equals(0))
+                            trend = item;
+                        else
+                        {
+                            trend = trend + (0.1m * (item - trend));
+                        }
+                    }
+                }
+
+                return Math.Round(trend, decimals);
+            }
+            return 0;
+        }
     }
 }

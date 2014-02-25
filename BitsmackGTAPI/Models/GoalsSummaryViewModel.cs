@@ -17,8 +17,9 @@ namespace BitsmackGTAPI.Models
 
     public class GoalSummaryViewModel
     {
+        public decimal TrendAvg;
         public string Name { get; set; }
-        public double AvgValue { get; set; }
-        public double NewGoalValue { get; set; }
+        public decimal AvgValue { get; set; }
+        public decimal NewGoalValue { get; set; }
     }
 }

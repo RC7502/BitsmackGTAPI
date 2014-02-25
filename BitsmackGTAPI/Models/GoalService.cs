@@ -15,13 +15,15 @@ namespace BitsmackGTAPI.Models
 {
     public class GoalService : IGoalService
     {
-        private readonly IGTRepository<TimedActivities> _timedRepo; 
+        private readonly IGTRepository<TimedActivities> _timedRepo;
+        private readonly IGTRepository<Pedometer> _pedometerRepo;
         private readonly ICommonService _commonService;
 
-        public GoalService(IGTRepository<TimedActivities> timedActvities,
+        public GoalService(IGTRepository<TimedActivities> timedActvities, IGTRepository<Pedometer> pedometerRepo,
             ICommonService commonService)
         {
             _timedRepo = timedActvities;
+            _pedometerRepo = pedometerRepo;
             _commonService = commonService;
         }
 
@@ -30,7 +32,21 @@ namespace BitsmackGTAPI.Models
             var model = new GoalsSummaryViewModel();
             RefreshToggl(false, DateTime.Now.AddDays(-14), DateTime.Now.AddDays(-1));
             model.Items.Add(CalcStandingDeskGoal());
+            model.Items.Add(CalcWeightGoal());
             
+            return model;
+        }
+
+        private GoalSummaryViewModel CalcWeightGoal()
+        {
+            var recs = _pedometerRepo.AllForRead().OrderBy(x => x.trandate).Select(x=>(decimal)x.weight).ToList();
+            var model = new GoalSummaryViewModel()
+            {
+                Name = "Weight"
+            };
+            model.AvgValue = Math.Round(recs.Where(x=>x>0).Average(), 1);
+            model.TrendAvg = MathHelper.TrendAverage(recs, 1);
+            model.NewGoalValue = Math.Round(Math.Max(model.AvgValue, model.TrendAvg) - 0.2m, 1);
             return model;
         }
 
@@ -44,9 +60,10 @@ namespace BitsmackGTAPI.Models
                 };
             if (firstRec != null)
             {
-                model.AvgValue = recs.Sum(x => x.duration)/
-                                 TimeHelper.GetBusinessDays(firstRec.startdate, DateTime.UtcNow.AddDays(-1));
-                model.NewGoalValue = model.AvgValue*1.01;
+                model.AvgValue = new decimal(recs.Sum(x => x.duration)/
+                                             TimeHelper.GetBusinessDays(firstRec.startdate, DateTime.UtcNow.AddDays(-1)));
+                model.TrendAvg = MathHelper.TrendAverage(recs.Select(x => x.duration).ToList());
+                model.NewGoalValue = Math.Max(model.AvgValue, model.TrendAvg)*1.01m;
             }
 
             return model;

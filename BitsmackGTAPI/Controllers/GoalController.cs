@@ -23,7 +23,8 @@ namespace BitsmackGTAPI.Controllers
                 {
                     item.Name,
                     item.AvgValue.ToString(),
-                    item.NewGoalValue.ToString()
+                    item.TrendAvg.ToString(),
+                    item.NewGoalValue.ToString(),             
                 });
 
             return Json(new {aaData = list}, JsonRequestBehavior.AllowGet);

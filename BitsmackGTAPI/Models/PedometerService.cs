@@ -191,7 +191,7 @@ namespace BitsmackGTAPI.Models
                         };
                     var dayWeight = weightlog.Weights.FirstOrDefault(x => x.Date == d);
                     newrec.weight = dayWeight != null ? dayWeight.Weight*2.20462 : 0;
-
+                    
                     list.Add(newrec);
                 }
             }
