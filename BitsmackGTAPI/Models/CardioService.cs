@@ -24,34 +24,39 @@ namespace BitsmackGTAPI.Models
         public CardioSummaryViewModel GetSummary()
         {
             var model = new CardioSummaryViewModel();
-            var key = _commonService.GetAPIKeys().FirstOrDefault(x => x.service_name == "RunKeeper");
-            if (key != null)
+            try
             {
-                if ((DateTime.UtcNow - key.last_update).TotalMinutes > 20)
+                var key = _commonService.GetAPIKeys().FirstOrDefault(x => x.service_name == "RunKeeper");
+                if (key != null)
                 {
-                    var existingRecs = GetCardioRecords().ToList();
-                    var startDate = existingRecs.Any() ? existingRecs.Max(x => x.trandate) : key.start_date;
-                    RefreshData(false, startDate, DateTime.UtcNow);
-                    key.last_update = DateTime.UtcNow;
-                    _commonService.UpdateAPIKey(key);
-                }
-
-                var cardioRecs = GetCardioRecords().Where(x=>x.activity == "Running").ToList();
-                model = new CardioSummaryViewModel()
+                    if ((DateTime.UtcNow - key.last_update).TotalMinutes > 20)
                     {
-                        TotalRuns = cardioRecs.Count,
-                        AvgMilesPerRun = MathHelper.MetersToMiles(cardioRecs.Average(x=>x.distance)),
-                        AvgAdj5KPace = CalcAvgAdj5KPace(cardioRecs)
-                    };
+                        var existingRecs = GetCardioRecords().ToList();
+                        var startDate = existingRecs.Any() ? existingRecs.Max(x => x.trandate) : key.start_date;
+                        RefreshData(false, startDate, DateTime.UtcNow);
+                        key.last_update = DateTime.UtcNow;
+                        _commonService.UpdateAPIKey(key);
+                    }
 
-
+                    var cardioRecs = GetCardioRecords().Where(x => x.activity == "Running").ToList();
+                    model = new CardioSummaryViewModel()
+                        {
+                            TotalRuns = cardioRecs.Count,
+                            AvgMilesPerRun = MathHelper.MetersToMiles(cardioRecs.Average(x => x.distance)),
+                            AvgAdj5KPace = CalcAvgAdj5KPace(cardioRecs)
+                        };
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(EventLogSeverity.Error, ex.Message);
             }
             return model;
         }
 
         private int CalcAvgAdj5KPace(IEnumerable<Cardio> cardioRecs)
         {
-            var adj5KPaces = cardioRecs.Select(cardio => cardio.time*(Math.Pow(3.1/MathHelper.MetersToMiles(cardio.distance), 1.06))).ToList();
+            var adj5KPaces = cardioRecs.Where(x=>x.distance > 0).Select(cardio => cardio.time*(Math.Pow(3.1/MathHelper.MetersToMiles(cardio.distance), 1.06))).ToList();
             return (int) Math.Round(adj5KPaces.Average(), 0);
         }
 

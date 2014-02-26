@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Web;
 using BitsmackGTAPI.Constants;
@@ -71,40 +72,57 @@ namespace BitsmackGTAPI.Models
 
         private void RefreshToggl(bool overwrite, DateTime start, DateTime end)
         {
-            var key = _commonService.GetAPIKeyByName("Toggl");
-            if (key == null || ((DateTime.UtcNow - key.last_update).TotalMinutes < 60)) return;           
-            var list = GetTogglData(key, start, end);
-            var existingRecs = _timedRepo.AllForRead().ToList();
-            foreach (var entry in list)
+            try
             {
-                var existingAct = existingRecs.FirstOrDefault(x => x.description == entry.description
-                                                                              && x.duration == entry.duration
-                                                                              && x.startdate.Date == DateTime.Parse(entry.start).Date);
-                if (existingAct == null)
+                var key = _commonService.GetAPIKeyByName("Toggl");
+                if (key == null || ((DateTime.UtcNow - key.last_update).TotalMinutes < 60)) return;
+                var list = GetTogglData(key, start, end);
+                var existingRecs = _timedRepo.AllForRead().ToList();
+                foreach (var entry in list)
                 {
-                    var newRec = new TimedActivities()
-                        {
-                            description = entry.description,
-                            duration = entry.duration,
-                            startdate = DateTime.Parse(entry.start),
-                            enddate = DateTime.Parse(entry.stop)
-                        };
-                    _timedRepo.Insert(newRec);
+                    var existingAct = existingRecs.FirstOrDefault(x => x.description == entry.description
+                                                                       && x.duration == entry.duration
+                                                                       &&
+                                                                       x.startdate.Date ==
+                                                                       DateTime.Parse(entry.start).Date);
+                    if (existingAct == null)
+                    {
+                        var newRec = new TimedActivities()
+                            {
+                                description = entry.description,
+                                duration = entry.duration,
+                                startdate = DateTime.Parse(entry.start),
+                                enddate = DateTime.Parse(entry.stop)
+                            };
+                        _timedRepo.Insert(newRec);
+                    }
                 }
-            }
 
-            _timedRepo.Save();
-            key.last_update = DateTime.UtcNow;
-            _commonService.UpdateAPIKey(key);
+                _timedRepo.Save();
+                key.last_update = DateTime.UtcNow;
+                _commonService.UpdateAPIKey(key);
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(EventLogSeverity.Error, string.Format("{0}: {1}", MethodBase.GetCurrentMethod().Name, ex.Message));
+            }
 
         }
 
         private IEnumerable<TimeEntry> GetTogglData(APIKeys key, DateTime start, DateTime end)
         {
-            var auth = new TogglAuthRequest() {ApiToken = key.user_token};
-            var api = new TogglApi.TogglApi(auth);
-            var entries = api.Users.GetAllTimeEntries(start, end);
-            return entries;
+            try
+            {
+                var auth = new TogglAuthRequest() {ApiToken = key.user_token};
+                var api = new TogglApi.TogglApi(auth);
+                var entries = api.Users.GetAllTimeEntries(start, end);
+                return entries;
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(EventLogSeverity.Error, string.Format("{0}: {1}", MethodBase.GetCurrentMethod().Name, ex.Message));
+            }
+            return new List<TimeEntry>();
         }
     }
 }
