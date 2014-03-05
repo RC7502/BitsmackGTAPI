@@ -21,8 +21,7 @@ namespace BitsmackGTAPI.Tests.Models
             _dal = new Mock<IDAL>();
             _commonService = new Mock<ICommonService>();
             _fitbitClient = new Mock<IFitbitClient>();
-            _service = new PedometerService(_commonService.Object, _dal.Object, 
-                _fitbitClient.Object);
+            _service = new PedometerService(_commonService.Object, _dal.Object);
         }
 
         [TestMethod]
