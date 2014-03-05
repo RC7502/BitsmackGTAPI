@@ -52,15 +52,27 @@ namespace BitsmackGTAPI.Models
         {
             var recs = _dal.GetTimedActivityRecords().Where(x => x.description == "Standing Desk").OrderBy(x=>x.startdate);
             var firstRec = recs.FirstOrDefault();
+                 
             var model = new GoalSummaryViewModel()
                 {
                     Name = "Standing Desk"
                 };
             if (firstRec != null)
             {
-                model.AvgValue = new decimal(recs.Sum(x => x.duration)/
-                                             TimeHelper.GetBusinessDays(firstRec.startdate, DateTime.UtcNow.AddDays(-1)));
-                model.TrendAvg = MathHelper.TrendAverage(recs.Select(x => x.duration).ToList());
+                var durationPerDay = new Dictionary<DateTime, int>();
+                for (var counterDay = firstRec.startdate.Date;
+                     counterDay < DateTime.UtcNow.Date;
+                     counterDay = counterDay.AddDays(1))
+                {
+                    if (counterDay.DayOfWeek == DayOfWeek.Saturday || counterDay.DayOfWeek == DayOfWeek.Sunday)
+                        continue;
+                    var sumDuration = recs.Where(x => x.startdate.Date == counterDay.Date).Sum(x => x.duration);
+                    durationPerDay.Add(counterDay.Date, sumDuration);
+                }
+
+                model.AvgValue = new decimal(recs.Sum(x => x.duration) /
+                                                 TimeHelper.GetBusinessDays(firstRec.startdate, DateTime.UtcNow.AddDays(-1)));
+                model.TrendAvg = MathHelper.TrendAverage(durationPerDay.Select(x => x.Value).ToList(), true);
                 model.NewGoalValue = Math.Max(model.AvgValue, model.TrendAvg)*1.01m;
             }
 

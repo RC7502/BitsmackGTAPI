@@ -13,22 +13,18 @@ namespace BitsmackGTAPI.Helpers
             return list.Any() ? (int) Math.Round(list.Where(x=>x>0).Average(), 0) : 0;
         }
 
-        public static int TrendAverage(List<int> list)
+        public static int TrendAverage(List<int> list, bool includeZeros = false)
         {
-            //only average records that are not 0
             if (list.Any())
             {
                 double trend = 0;
-                foreach (var item in list)
+                foreach (var item in list.Where(item => item > 0 || includeZeros))
                 {
-                    if (item > 0)
+                    if (trend.Equals(0))
+                        trend = item;
+                    else
                     {
-                        if (trend.Equals(0))
-                            trend = item;
-                        else
-                        {
-                            trend = trend + (0.1*(item - trend));
-                        }
+                        trend = trend + (0.1*(item - trend));
                     }
                 }
 
