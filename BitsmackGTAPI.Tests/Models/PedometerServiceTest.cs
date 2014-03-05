@@ -24,19 +24,19 @@ namespace BitsmackGTAPI.Tests.Models
             _service = new PedometerService(_commonService.Object, _dal.Object);
         }
 
-        [TestMethod]
-        public void GetFitbitDataReturnsList()
-        {
-            //Arrange
-            var key = CommonHelper.CreateAPIKey();
-            var start = DateTime.UtcNow.AddDays(-14);
-            var end = DateTime.UtcNow.Date;
+        //[TestMethod]
+        //public void GetFitbitDataReturnsList()
+        //{
+        //    //Arrange
+        //    var key = CommonHelper.CreateAPIKey();
+        //    var start = DateTime.UtcNow.AddDays(-14);
+        //    var end = DateTime.UtcNow.Date;
 
-            _fitbitClient.Setup(x=>x.GetWeight(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(PedometerHelper.CreateWeight());
+        //    _fitbitClient.Setup(x=>x.GetWeight(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(PedometerHelper.CreateWeight());
 
-            //Act
+        //    //Act
 
-            //Assert
-        }
+        //    //Assert
+        //}
     }
 }
