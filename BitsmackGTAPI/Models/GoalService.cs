@@ -16,22 +16,19 @@ namespace BitsmackGTAPI.Models
 {
     public class GoalService : IGoalService
     {
-        private readonly IGTRepository<TimedActivities> _timedRepo;
-        private readonly IGTRepository<Pedometer> _pedometerRepo;
+        private readonly IDAL _dal;
         private readonly ICommonService _commonService;
 
-        public GoalService(IGTRepository<TimedActivities> timedActvities, IGTRepository<Pedometer> pedometerRepo,
-            ICommonService commonService)
+        public GoalService(IDAL dal, ICommonService commonService)
         {
-            _timedRepo = timedActvities;
-            _pedometerRepo = pedometerRepo;
+            _dal = dal;
             _commonService = commonService;
         }
 
         public GoalsSummaryViewModel GetSummary()
         {
             var model = new GoalsSummaryViewModel();
-            RefreshToggl(false, DateTime.Now.AddDays(-14), DateTime.Now.AddDays(-1));
+            RefreshToggl(false, DateTime.Now.Date.AddDays(-14), DateTime.Now.Date);
             model.Items.Add(CalcStandingDeskGoal());
             model.Items.Add(CalcWeightGoal());
             
@@ -40,20 +37,20 @@ namespace BitsmackGTAPI.Models
 
         private GoalSummaryViewModel CalcWeightGoal()
         {
-            var recs = _pedometerRepo.AllForRead().OrderBy(x => x.trandate).Select(x=>(decimal)x.weight).ToList();
-            var model = new GoalSummaryViewModel()
-            {
-                Name = "Weight"
-            };
-            model.AvgValue = Math.Round(recs.Where(x=>x>0).Average(), 1);
-            model.TrendAvg = MathHelper.TrendAverage(recs, 1);
+            var recs = _dal.GetPedometerRecords().OrderBy(x => x.trandate).Select(x=>(decimal)x.weight).ToList();
+            var model = new GoalSummaryViewModel
+                {
+                    Name = "Weight",
+                    AvgValue = Math.Round(recs.Where(x => x > 0).Average(), 1),
+                    TrendAvg = MathHelper.TrendAverage(recs, 1)
+                };
             model.NewGoalValue = Math.Round(Math.Max(model.AvgValue, model.TrendAvg) - 0.2m, 1);
             return model;
         }
 
         private GoalSummaryViewModel CalcStandingDeskGoal()
         {
-            var recs = _timedRepo.AllForRead().Where(x => x.description == "Standing Desk").OrderBy(x=>x.startdate);
+            var recs = _dal.GetTimedActivityRecords().Where(x => x.description == "Standing Desk").OrderBy(x=>x.startdate);
             var firstRec = recs.FirstOrDefault();
             var model = new GoalSummaryViewModel()
                 {
@@ -74,37 +71,34 @@ namespace BitsmackGTAPI.Models
         {
             try
             {
-                var key = _commonService.GetAPIKeyByName("Toggl");
+                var key = _commonService.GetAPIKeyByName(APINames.TOGGL);
                 if (key == null || ((DateTime.UtcNow - key.last_update).TotalMinutes < 60)) return;
                 var list = GetTogglData(key, start, end);
-                var existingRecs = _timedRepo.AllForRead().ToList();
+                var existingRecs = _dal.GetTimedActivityRecords().ToList();
                 foreach (var entry in list)
                 {
                     var existingAct = existingRecs.FirstOrDefault(x => x.description == entry.description
                                                                        && x.duration == entry.duration
-                                                                       &&
-                                                                       x.startdate.Date ==
-                                                                       DateTime.Parse(entry.start).Date);
-                    if (existingAct == null)
-                    {
-                        var newRec = new TimedActivities()
-                            {
-                                description = entry.description,
-                                duration = entry.duration,
-                                startdate = DateTime.Parse(entry.start),
-                                enddate = DateTime.Parse(entry.stop)
-                            };
-                        _timedRepo.Insert(newRec);
-                    }
+                                                                       && x.startdate.Date == DateTime.Parse(entry.start).Date);
+                    if (existingAct != null) continue;
+                    var newRec = new TimedActivities()
+                        {
+                            description = entry.description,
+                            duration = entry.duration,
+                            startdate = DateTime.Parse(entry.start),
+                            enddate = DateTime.Parse(entry.stop)
+                        };
+                    _dal.Insert(newRec);
+                    _commonService.LogActivity(newRec);
                 }
 
-                _timedRepo.Save();
+                _dal.SaveTimedActivities();
                 key.last_update = DateTime.UtcNow;
                 _commonService.UpdateAPIKey(key);
             }
             catch (Exception ex)
             {
-                Logger.WriteLog(EventLogSeverity.Error, string.Format("{0}: {1}", MethodBase.GetCurrentMethod().Name, ex.Message));
+                _commonService.WriteLog(EventLogSeverity.Error, MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
         }
@@ -120,7 +114,7 @@ namespace BitsmackGTAPI.Models
             }
             catch (Exception ex)
             {
-                Logger.WriteLog(EventLogSeverity.Error, string.Format("{0}: {1}", MethodBase.GetCurrentMethod().Name, ex.Message));
+                _commonService.WriteLog(EventLogSeverity.Error, MethodBase.GetCurrentMethod().Name, ex.Message);
             }
             return new List<TimeEntry>();
         }

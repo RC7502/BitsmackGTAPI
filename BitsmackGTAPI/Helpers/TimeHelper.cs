@@ -46,5 +46,15 @@ namespace BitsmackGTAPI.Helpers
         {
             return string.Format(parmDate.Month < 10 ? "{0}0{1}" : "{0}{1}", parmDate.Year, parmDate.Month);
         }
+
+        public static string MinutesToHours(int minutes)
+        {
+            return TimeSpan.FromMinutes(minutes).ToString(@"hh\:mm");
+        }
+
+        public static string SecondsToTime(double seconds)
+        {
+            return TimeSpan.FromSeconds(seconds).ToString(@"hh\:mm\:ss");
+        }
     }
 }

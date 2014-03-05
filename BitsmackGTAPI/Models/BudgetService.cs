@@ -3,24 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using BitsmackGTAPI.Helpers;
+using BitsmackGTAPI.Interfaces;
 
 namespace BitsmackGTAPI.Models
 {
     public class BudgetService : IBudgetService
     {
         public static readonly DateTime StartDate = new DateTime(2008, 1, 1);
-        private readonly IGTRepository<Mint> _mintRepo;
+        public readonly IDAL _dal;
 
-        public BudgetService(IGTRepository<Mint> mintRepo)
+        public BudgetService(IDAL dal)
         {
-            _mintRepo = mintRepo;
+            _dal = dal;
         }
 
 
         public List<BudgetCategoryViewModel> GetMonthCategories()
         {
             var list = new List<BudgetCategoryViewModel>();
-            var allTran = _mintRepo.AllForRead().OrderBy(x => x.Date);
+            var allTran = _dal.GetMintRecords().OrderBy(x => x.Date);
 
 
             for (var counter = StartDate; counter < DateTime.Now.Date; counter = counter.AddMonths(1))

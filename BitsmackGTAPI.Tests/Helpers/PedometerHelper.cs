@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Fitbit.Models;
 
 namespace BitsmackGTAPI.Tests.Helpers
 {
@@ -19,10 +20,28 @@ namespace BitsmackGTAPI.Tests.Helpers
                     steps = steps ?? 3000,
                     sleep = sleep ?? 8*60,
                     trandate = trandate ?? DateSequencer.Next(),
-                    weight = 172.2,
-                    bodyfat = 19.1
+                    weight = weight ?? 172.2,
+                    bodyfat = weight ?? 19.1
                 };
 
+        }
+
+        public static Weight CreateWeight(List<WeightLog> weights = null)
+        {
+            return new Weight()
+                {
+                    Weights = weights ?? new List<WeightLog>()
+                        {
+                            CreateWeightLog(),
+                            CreateWeightLog(),
+                            CreateWeightLog(),
+                        }
+                };
+        }
+
+        public static WeightLog CreateWeightLog()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -9,6 +9,7 @@ namespace BitsmackGTAPI.Constants
     {
         Debug = 0,
         Information = 1,
-        Error = 2
+        Error = 2,
+        Activity = 3
     }
 }

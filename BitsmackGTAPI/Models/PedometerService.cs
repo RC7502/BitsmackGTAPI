@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using BitsmackGTAPI.Constants;
 using BitsmackGTAPI.Helpers;
@@ -13,19 +14,19 @@ namespace BitsmackGTAPI.Models
 {
     public class PedometerService : IPedometerService
     {
-        private readonly IGTRepository<Pedometer> _pedometerRepo;
         private readonly ICommonService _commonService;
+        private readonly IDAL _dal;
 
-        public PedometerService(IGTRepository<Pedometer> db, ICommonService commonService)
+        public PedometerService(ICommonService commonService, IDAL dal)
         {
-            _pedometerRepo = db;
             _commonService = commonService;
+            _dal = dal;
         }
 
         public PedometerSummaryViewModel GetSummary()
         {
             RefreshData(true, DateTime.Today.AddDays(-14), DateTime.Today.AddDays(-1));
-            var pedometerRecs = GetPedometerRecords().ToList();
+            var pedometerRecs = _dal.GetPedometerRecords().ToList();
             var stepList = pedometerRecs.Select(x => x.steps).ToList();
             //store this in a table
             //var wakeuptime = TimeHelper.ConvertUtcToLocal(DateTime.UtcNow.Date).Date.AddDays(1).AddHours(5).AddMinutes(50);
@@ -48,11 +49,11 @@ namespace BitsmackGTAPI.Models
             return model;
         }
 
-        private DateTime GetNextAlarm()
+        public DateTime GetNextAlarm()
         {
             try
             {
-                var key = _commonService.GetAPIKeyByName("Fitbit");
+                var key = _commonService.GetAPIKeyByName(APINames.FITBIT);
                 var fbClient = GetFitbitClient(key);
                 var device = fbClient.GetDevices().FirstOrDefault();
                 TextInfo myTI = new CultureInfo("en-US", false).TextInfo;
@@ -96,7 +97,7 @@ namespace BitsmackGTAPI.Models
             }
             catch (Exception ex)
             {
-                Logger.WriteLog(EventLogSeverity.Error, ex.Message);
+                _commonService.WriteLog(EventLogSeverity.Error,MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return TimeHelper.ConvertUtcToLocal(DateTime.UtcNow.Date).Date.AddDays(1).AddHours(5);
@@ -106,7 +107,7 @@ namespace BitsmackGTAPI.Models
         {
             var model = new PedometerDetailViewModel();
             RefreshData(true, start, end);
-            var pedometerRecs = GetPedometerRecords(start, end);
+            var pedometerRecs = _dal.GetPedometerRecords(start, end);
             foreach (var rec in pedometerRecs)
             {
                 model.Details.Add(new PedometerViewModel(rec));
@@ -114,53 +115,46 @@ namespace BitsmackGTAPI.Models
             return model;
         }
 
-        private IEnumerable<Pedometer> GetPedometerRecords(DateTime start, DateTime end)
-        {
-            return _pedometerRepo.AllForRead().Where(x => x.trandate >= start && x.trandate <= end);
-        }
-
-        private void SetFitbitNewGoal(int newStepGoal)
+        public void SetFitbitNewGoal(int newStepGoal)
         {
             try
             {
-                var key = _commonService.GetAPIKeyByName("Fitbit");
+                var key = _commonService.GetAPIKeyByName(APINames.FITBIT);
                 var fbClient = GetFitbitClient(key);
                 fbClient.SetStepGoal(newStepGoal);
-
-
             }
             catch (Exception ex)
-            {      
-                Logger.WriteLog(EventLogSeverity.Error, ex.Message);
+            {
+                _commonService.WriteLog(EventLogSeverity.Error, MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
-        private void RefreshData(bool overwrite, DateTime startDate, DateTime endDate)
+        public void RefreshData(bool overwrite, DateTime startDate, DateTime endDate)
         {
-            var key = _commonService.GetAPIKeyByName("Fitbit");
+            var key = _commonService.GetAPIKeyByName(APINames.FITBIT);
             if (key == null || ((DateTime.UtcNow - key.last_update).TotalMinutes < 60)) return;
             var list = GetFitBitData(key, startDate, endDate);
             foreach (var pedometer in list)
             {
-                var existingTran =
-                    _pedometerRepo.AllForRead().FirstOrDefault(x => x.trandate == pedometer.trandate);
+                var existingTran = _dal.GetPedometerRecords().FirstOrDefault(x => x.trandate == pedometer.trandate);
                 if (existingTran != null && overwrite)
                 {
                     Copy(pedometer, existingTran);
-                    _pedometerRepo.Update(existingTran);
+                    _dal.Update(existingTran);
                 }
                 else if (existingTran == null)
                 {
-                    _pedometerRepo.Insert(pedometer);
+                    _dal.Insert(pedometer);
+                    _commonService.LogActivity(pedometer);
                 }
             }
-            _pedometerRepo.Save();
+            _dal.SavePedometer();
 
             key.last_update = DateTime.UtcNow;
             _commonService.UpdateAPIKey(key);
         }
 
-        private void Copy(Pedometer from, Pedometer to)
+        public void Copy(Pedometer from, Pedometer to)
         {
             to.bodyfat = from.bodyfat;
             to.sleep = from.sleep;
@@ -170,7 +164,7 @@ namespace BitsmackGTAPI.Models
             to.lastupdateddate = DateTime.UtcNow;
         }
 
-        private IEnumerable<Pedometer> GetFitBitData(APIKeys key, DateTime startDate, DateTime endDate)
+        public IEnumerable<Pedometer> GetFitBitData(APIKeys key, DateTime startDate, DateTime endDate)
         {          
             var list = new List<Pedometer>();
             try
@@ -197,8 +191,8 @@ namespace BitsmackGTAPI.Models
             }
             catch (Exception ex)
             {
-                //Logger
-                Logger.WriteLog(EventLogSeverity.Error, ex.Message);
+                //_commonService
+                _commonService.WriteLog(EventLogSeverity.Error,MethodBase.GetCurrentMethod().Name, ex.Message);
 
                 //Update Last Modified Date
                 if (key != null)
@@ -210,12 +204,7 @@ namespace BitsmackGTAPI.Models
             return list;
         }
 
-        private IEnumerable<Pedometer> GetPedometerRecords()
-        {
-            return _pedometerRepo.AllForRead();
-        }
-
-        private FitbitClient GetFitbitClient(APIKeys key)
+        public IFitbitClient GetFitbitClient(APIKeys key)
         {
             return new FitbitClient(key.consumer_key, key.consumer_secret, key.user_token, key.user_secret);
         }

@@ -36,6 +36,10 @@
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Fitbit, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\BitsmackGTAPI\bin\Fitbit.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Moq">
@@ -55,12 +59,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\CommonHelper.cs" />
     <Compile Include="Helpers\DateSequencer.cs" />
     <Compile Include="Helpers\IdSequencer.cs" />
     <Compile Include="Helpers\PedometerHelper.cs" />
     <Compile Include="Helpers\ShortGuid.cs" />
+    <Compile Include="Models\TimeHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Controllers\PedometerServiceTest.cs" />
+    <Compile Include="Models\PedometerServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />

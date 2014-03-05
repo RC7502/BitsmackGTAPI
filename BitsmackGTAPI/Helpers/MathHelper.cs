@@ -66,5 +66,10 @@ namespace BitsmackGTAPI.Helpers
             }
             return 0;
         }
+
+        public static double Adj5KPace(double time, double distance)
+        {
+            return time*(Math.Pow(3.1/MetersToMiles(distance), 1.06));
+        }
     }
 }

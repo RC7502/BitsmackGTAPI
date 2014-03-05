@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Reflection;
 using BitsmackGTAPI.Constants;
 using BitsmackGTAPI.Helpers;
 using BitsmackGTAPI.Interfaces;
 using HealthGraphNet;
-using HealthGraphNet.Models;
 
 namespace BitsmackGTAPI.Models
 {
     public class CardioService : ICardioService
     {
-        private readonly IGTRepository<Cardio> _cardioRepo;
+        private readonly IDAL _dal;
         private readonly ICommonService _commonService;
 
-        public CardioService(IGTRepository<Cardio> cardioRepo, ICommonService commonService)
+        public CardioService(IDAL dal, ICommonService commonService)
         {
-            _cardioRepo = cardioRepo;
+            _dal = dal;
             _commonService = commonService;
         }
 
@@ -26,56 +25,64 @@ namespace BitsmackGTAPI.Models
             var model = new CardioSummaryViewModel();
             try
             {
-                var key = _commonService.GetAPIKeys().FirstOrDefault(x => x.service_name == "RunKeeper");
-                if (key != null)
-                {
-                    if ((DateTime.UtcNow - key.last_update).TotalMinutes > 20)
+                RefreshData(false, DateTime.UtcNow.AddDays(-7), DateTime.UtcNow);
+                var cardioRecs = _dal.GetCardioRecords().Where(x => x.activity == "Running").ToList();
+                model = new CardioSummaryViewModel
                     {
-                        var existingRecs = GetCardioRecords().ToList();
-                        var startDate = existingRecs.Any() ? existingRecs.Max(x => x.trandate) : key.start_date;
-                        RefreshData(false, startDate, DateTime.UtcNow);
-                        key.last_update = DateTime.UtcNow;
-                        _commonService.UpdateAPIKey(key);
-                    }
-
-                    var cardioRecs = GetCardioRecords().Where(x => x.activity == "Running").ToList();
-                    model = new CardioSummaryViewModel()
-                        {
-                            TotalRuns = cardioRecs.Count,
-                            AvgMilesPerRun = MathHelper.MetersToMiles(cardioRecs.Average(x => x.distance)),
-                            AvgAdj5KPace = CalcAvgAdj5KPace(cardioRecs)
-                        };
-                }
+                        TotalRuns = cardioRecs.Count,
+                        AvgMilesPerRun = MathHelper.MetersToMiles(cardioRecs.Average(x => x.distance)),
+                        AvgAdj5KPace = CalcAvgAdj5KPace(cardioRecs)
+                    };
             }
             catch (Exception ex)
             {
-                Logger.WriteLog(EventLogSeverity.Error, ex.Message);
+                _commonService.WriteLog(EventLogSeverity.Error, MethodBase.GetCurrentMethod().Name,ex.Message);
             }
             return model;
         }
 
         private int CalcAvgAdj5KPace(IEnumerable<Cardio> cardioRecs)
         {
-            var adj5KPaces = cardioRecs.Where(x=>x.distance > 0).Select(cardio => cardio.time*(Math.Pow(3.1/MathHelper.MetersToMiles(cardio.distance), 1.06))).ToList();
+            var adj5KPaces = cardioRecs.Where(x=>x.distance > 0).ToList().Select(cardio => MathHelper.Adj5KPace(cardio.time, cardio.distance));
             return (int) Math.Round(adj5KPaces.Average(), 0);
         }
 
         private void RefreshData(bool overwrite, DateTime startDate, DateTime endDate)
         {
-            var list = GetRunKeeperData(overwrite, startDate, endDate);
+            var key = _commonService.GetAPIKeyByName(APINames.RUNKEEPER);
+            if (key == null || ((DateTime.UtcNow - key.last_update).TotalMinutes < 60)) return;
+            var list = GetRunKeeperData(key, startDate, endDate);
             foreach (var cardio in list)
             {
-                var existingTran = _cardioRepo.AllForRead().FirstOrDefault(x => x.trandate == cardio.trandate);
-                if (existingTran != null)
-                    _cardioRepo.Delete(existingTran);
-                _cardioRepo.Insert(cardio);
+                var existingTran = _dal.GetCardioRecords().FirstOrDefault(x => x.trandate == cardio.trandate);
+                if (existingTran != null && overwrite)
+                {
+                    Copy(cardio, existingTran);
+                    _dal.Update(existingTran);
+                }
+                else if (existingTran == null)
+                {
+                    _dal.Insert(cardio);
+                    _commonService.LogActivity(cardio);
+                }
+                
             }
-            _cardioRepo.Save();
+            _dal.SaveCardio();
+            key.last_update = DateTime.UtcNow;
+            _commonService.UpdateAPIKey(key);
         }
 
-        private IEnumerable<Cardio> GetRunKeeperData(bool overwrite, DateTime startDate, DateTime endDate)
+        private void Copy(Cardio cardio, Cardio existingTran)
         {
-            var key = _commonService.GetAPIKeys().FirstOrDefault(x => x.service_name == "RunKeeper");
+            existingTran.activity = cardio.activity;
+            existingTran.distance = cardio.distance;
+            existingTran.time = cardio.time;
+            existingTran.trandate = cardio.trandate;
+            
+        }
+
+        private IEnumerable<Cardio> GetRunKeeperData(APIKeys key, DateTime startDate, DateTime endDate)
+        {
             var list = new List<Cardio>();
             if (key != null)
             {
@@ -100,8 +107,8 @@ namespace BitsmackGTAPI.Models
                 }
                 catch (Exception ex)
                 {
-                    //Logger
-                    Logger.WriteLog(EventLogSeverity.Error, ex.Message);
+                    //_commonService
+                    _commonService.WriteLog(EventLogSeverity.Error,MethodBase.GetCurrentMethod().Name, ex.Message);
 
                     //Update Last Modified Date
                     key.last_update = DateTime.UtcNow;
@@ -111,10 +118,6 @@ namespace BitsmackGTAPI.Models
             return list;
         }
 
-        private IEnumerable<Cardio> GetCardioRecords()
-        {
-            return _cardioRepo.AllForRead();
-        }
     }
 
 

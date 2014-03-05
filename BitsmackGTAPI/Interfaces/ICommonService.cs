@@ -8,5 +8,9 @@ namespace BitsmackGTAPI.Interfaces
         IEnumerable<APIKeys> GetAPIKeys();
         void UpdateAPIKey(APIKeys key);
         APIKeys GetAPIKeyByName(string name);
+        void WriteLog(EventLogSeverity error, string name, string message);
+        void LogActivity(Cardio cardio);
+        void LogActivity(TimedActivities newRec);
+        void LogActivity(Pedometer newRec);
     }
 }
