@@ -7,5 +7,6 @@ namespace BitsmackGTAPI.Interfaces
     {
         PedometerSummaryViewModel GetSummary();
         PedometerDetailViewModel GetDetail(DateTime start, DateTime end);
+        ColumnChartModel GetMonthAverages();
     }
 }

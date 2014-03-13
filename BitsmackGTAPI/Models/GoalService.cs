@@ -28,9 +28,9 @@ namespace BitsmackGTAPI.Models
         public GoalsSummaryViewModel GetSummary()
         {
             var model = new GoalsSummaryViewModel();
-            RefreshToggl(false, DateTime.Now.Date.AddDays(-14), DateTime.Now.Date);
-            model.Items.Add(CalcStandingDeskGoal());
-            model.Items.Add(CalcWeightGoal());
+            //RefreshToggl(false, DateTime.Now.Date.AddDays(-14), DateTime.Now.Date);
+            //model.Items.Add(CalcStandingDeskGoal());
+            //model.Items.Add(CalcWeightGoal());
             
             return model;
         }

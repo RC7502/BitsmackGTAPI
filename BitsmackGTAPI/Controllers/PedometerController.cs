@@ -41,7 +41,11 @@ namespace BitsmackGTAPI.Controllers
             var list = model.Details.Select(item => new[] { item.trandate,item.steps.ToString(), item.sleep.ToString(), item.createddate, item.lastupdateddate  }).ToList();
 
             return Json(new {aaData = list}, JsonRequestBehavior.AllowGet);
+        }
 
+        public ActionResult MonthAverages()
+        {
+            return Json(_service.GetMonthAverages(), JsonRequestBehavior.AllowGet);
         }
 
     }

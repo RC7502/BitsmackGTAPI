@@ -45,6 +45,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Fitbit.NET\Fitbit.dll</HintPath>
     </Reference>
+    <Reference Include="HabitRPG.NET">
+      <HintPath>..\packages\HabitRPG.NET\HabitRPG.NET.dll</HintPath>
+    </Reference>
     <Reference Include="HealthGraphNet">
       <HintPath>..\packages\HealthGraphNet.1.0.0\lib\net40\HealthGraphNet.dll</HintPath>
     </Reference>
@@ -174,6 +177,7 @@
     <Compile Include="Models\BudgetService.cs" />
     <Compile Include="Models\CardioService.cs" />
     <Compile Include="Models\CardioSummaryViewModel.cs" />
+    <Compile Include="Models\ColumnChartModel.cs" />
     <Compile Include="Models\CommonService.cs" />
     <Compile Include="Interfaces\ICommonService.cs" />
     <Compile Include="Interfaces\ICardioService.cs" />

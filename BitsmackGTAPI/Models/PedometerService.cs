@@ -115,6 +115,35 @@ namespace BitsmackGTAPI.Models
             return model;
         }
 
+        public ColumnChartModel GetMonthAverages()
+        {
+            var model = new ColumnChartModel();
+            var allRecords = _dal.GetPedometerRecords().ToList();
+            var key = _commonService.GetAPIKeyByName(APINames.FITBIT);
+            if (key != null)
+            {
+                var categories = new List<string>();
+                var values = new List<double>();
+                var iDate = new DateTime(key.start_date.Year, key.start_date.Month, 1);
+                var now = DateTime.UtcNow;
+                var currentMonth = new DateTime(now.Year, now.Month, 1);
+                while (iDate < currentMonth)
+                {
+                    categories.Add(iDate.Month + "-" + iDate.Year);
+                    values.Add((int) allRecords.Where(x=>x.trandate.Month == iDate.Month && x.trandate.Year == iDate.Year).Average(x=>x.steps));
+                    iDate = iDate.AddMonths(1);
+                }
+                model.PlotLine = (int)values.Average();
+                //add this months value
+                categories.Add(currentMonth.Month + "-" + currentMonth.Year);
+                values.Add((int)allRecords.Where(x => x.trandate.Month == currentMonth.Month && x.trandate.Year == currentMonth.Year).Average(x => x.steps));
+
+                model.Categories = categories.ToArray();
+                model.SeriesData = values.ToArray();
+            }
+            return model;
+        }
+
         public void SetFitbitNewGoal(int newStepGoal)
         {
             try
