@@ -191,6 +191,7 @@ namespace BitsmackGTAPI.Models
             to.trandate = from.trandate;
             to.weight = from.weight;
             to.lastupdateddate = DateTime.UtcNow;
+            to.calconsumed = from.calconsumed;
         }
 
         public IEnumerable<Pedometer> GetFitBitData(APIKeys key, DateTime startDate, DateTime endDate)
@@ -198,19 +199,20 @@ namespace BitsmackGTAPI.Models
             var list = new List<Pedometer>();
             try
             {           
-                var fbClient = GetFitbitClient(key);
-                
+                var fbClient = GetFitbitClient(key);               
                 var weightlog = fbClient.GetWeight(startDate, startDate.AddDays(30));
                 for (var d = startDate; d <= endDate && list.Count < 30; d = d.AddDays(1))
                 {                                       
                     var activity = fbClient.GetDayActivitySummary(d);
                     var sleep = fbClient.GetSleep(d);
+                    var calLog = fbClient.GetFood(d);
                     var newrec = new Pedometer
                         {
                             trandate = d,
                             steps = activity.Steps,
                             sleep = sleep.Summary.TotalMinutesAsleep,
-                            createddate = DateTime.UtcNow
+                            createddate = DateTime.UtcNow,
+                            calconsumed = (int?) calLog.Summary.Calories
                         };
                     var dayWeight = weightlog.Weights.FirstOrDefault(x => x.Date == d);
                     newrec.weight = dayWeight != null ? dayWeight.Weight*2.20462 : 0;
