@@ -9,6 +9,16 @@
           <EntitySet Name="APIKeys" EntityType="BSGTModel.Store.APIKeys" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Cardio" EntityType="BSGTModel.Store.Cardio" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="EventLog" EntityType="BSGTModel.Store.EventLog" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="HabitTags" EntityType="BSGTModel.Store.HabitTags" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="HabitTaskHistory" EntityType="BSGTModel.Store.HabitTaskHistory" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="HabitTasks" EntityType="BSGTModel.Store.HabitTasks" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="HabitTaskTags" EntityType="BSGTModel.Store.HabitTaskTags" store:Type="Tables" store:Schema="dbo" store:Name="HabitTaskTags">
+            <DefiningQuery>SELECT 
+      [HabitTaskTags].[taskID] AS [taskID], 
+      [HabitTaskTags].[tagID] AS [tagID], 
+      [HabitTaskTags].[attached] AS [attached]
+      FROM [dbo].[HabitTaskTags] AS [HabitTaskTags]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="Mint" EntityType="BSGTModel.Store.Mint" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Pedometer" EntityType="BSGTModel.Store.Pedometer" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="TimedActivities" EntityType="BSGTModel.Store.TimedActivities" store:Type="Tables" Schema="dbo" />
@@ -47,6 +57,50 @@
           <Property Name="message" Type="varchar" Nullable="false" MaxLength="500" />
           <Property Name="eventdate" Type="smalldatetime" />
         </EntityType>
+        <EntityType Name="HabitTags">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+          <Property Name="challenge" Type="smallint" />
+        </EntityType>
+        <EntityType Name="HabitTaskHistory">
+          <Key>
+            <PropertyRef Name="taskID" />
+            <PropertyRef Name="historyDate" />
+          </Key>
+          <Property Name="taskID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="historyDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="value" Type="float" />
+        </EntityType>
+        <EntityType Name="HabitTasks">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="text" Type="varchar" MaxLength="200" />
+          <Property Name="attribute" Type="varchar" MaxLength="10" />
+          <Property Name="priority" Type="float" />
+          <Property Name="value" Type="float" />
+          <Property Name="notes" Type="varchar(max)" />
+          <Property Name="dateCreated" Type="smalldatetime" />
+          <Property Name="down" Type="smallint" />
+          <Property Name="up" Type="smallint" />
+          <Property Name="type" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'db322d3d94909445799f73a2ae006638c9.dbo.HabitTaskTags' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="HabitTaskTags">
+          <Key>
+            <PropertyRef Name="taskID" />
+            <PropertyRef Name="tagID" />
+          </Key>
+          <Property Name="taskID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="tagID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="attached" Type="smallint" />
+        </EntityType>
         <EntityType Name="Mint">
           <Key>
             <PropertyRef Name="id" />
@@ -74,6 +128,7 @@
           <Property Name="bodyfat" Type="float" Nullable="false" />
           <Property Name="createddate" Type="smalldatetime" />
           <Property Name="lastupdateddate" Type="smalldatetime" />
+          <Property Name="calconsumed" Type="int" />
         </EntityType>
         <EntityType Name="TimedActivities">
           <Key>
@@ -96,6 +151,10 @@
           <EntitySet Name="EventLog" EntityType="BSGTModel.EventLog" />
           <EntitySet Name="TimedActivities" EntityType="BSGTModel.TimedActivities" />
           <EntitySet Name="Mint" EntityType="BSGTModel.Mint" />
+          <EntitySet Name="HabitTags" EntityType="BSGTModel.HabitTags" />
+          <EntitySet Name="HabitTaskHistory" EntityType="BSGTModel.HabitTaskHistory" />
+          <EntitySet Name="HabitTasks" EntityType="BSGTModel.HabitTasks" />
+          <EntitySet Name="HabitTaskTags" EntityType="BSGTModel.HabitTaskTags" />
         </EntityContainer>
         <EntityType Name="Cardio">
           <Key>
@@ -120,6 +179,7 @@
           <Property Name="bodyfat" Type="Double" Nullable="false" />
           <Property Type="DateTime" Name="createddate" Precision="0" />
           <Property Type="DateTime" Name="lastupdateddate" Precision="0" />
+          <Property Type="Int32" Name="calconsumed" />
         </EntityType>
         <EntityType Name="APIKeys">
           <Key>
@@ -169,6 +229,47 @@
           <Property Type="String" Name="Labels" MaxLength="5" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Notes" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="HabitTags">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Guid" Name="id" Nullable="false" />
+          <Property Type="String" Name="name" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="challenge" />
+        </EntityType>
+        <EntityType Name="HabitTaskHistory">
+          <Key>
+            <PropertyRef Name="taskID" />
+            <PropertyRef Name="historyDate" />
+          </Key>
+          <Property Type="Guid" Name="taskID" Nullable="false" />
+          <Property Type="DateTime" Name="historyDate" Nullable="false" Precision="0" />
+          <Property Type="Double" Name="value" />
+        </EntityType>
+        <EntityType Name="HabitTasks">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Guid" Name="id" Nullable="false" />
+          <Property Type="String" Name="text" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="attribute" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="priority" />
+          <Property Type="Double" Name="value" />
+          <Property Type="String" Name="notes" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="dateCreated" Precision="0" />
+          <Property Type="Int16" Name="down" />
+          <Property Type="Int16" Name="up" />
+          <Property Type="String" Name="type" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="HabitTaskTags">
+          <Key>
+            <PropertyRef Name="taskID" />
+            <PropertyRef Name="tagID" />
+          </Key>
+          <Property Type="Guid" Name="taskID" Nullable="false" />
+          <Property Type="Guid" Name="tagID" Nullable="false" />
+          <Property Type="Int16" Name="attached" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -190,6 +291,7 @@
           <EntitySetMapping Name="Pedometer">
             <EntityTypeMapping TypeName="BSGTModel.Pedometer">
               <MappingFragment StoreEntitySet="Pedometer">
+                <ScalarProperty Name="calconsumed" ColumnName="calconsumed" />
                 <ScalarProperty Name="lastupdateddate" ColumnName="lastupdateddate" />
                 <ScalarProperty Name="createddate" ColumnName="createddate" />
                 <ScalarProperty Name="id" ColumnName="id" />
@@ -250,6 +352,49 @@
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HabitTags">
+            <EntityTypeMapping TypeName="BSGTModel.HabitTags">
+              <MappingFragment StoreEntitySet="HabitTags">
+                <ScalarProperty Name="challenge" ColumnName="challenge" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HabitTaskHistory">
+            <EntityTypeMapping TypeName="BSGTModel.HabitTaskHistory">
+              <MappingFragment StoreEntitySet="HabitTaskHistory">
+                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="historyDate" ColumnName="historyDate" />
+                <ScalarProperty Name="taskID" ColumnName="taskID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HabitTasks">
+            <EntityTypeMapping TypeName="BSGTModel.HabitTasks">
+              <MappingFragment StoreEntitySet="HabitTasks">
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="up" ColumnName="up" />
+                <ScalarProperty Name="down" ColumnName="down" />
+                <ScalarProperty Name="dateCreated" ColumnName="dateCreated" />
+                <ScalarProperty Name="notes" ColumnName="notes" />
+                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="priority" ColumnName="priority" />
+                <ScalarProperty Name="attribute" ColumnName="attribute" />
+                <ScalarProperty Name="text" ColumnName="text" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HabitTaskTags">
+            <EntityTypeMapping TypeName="BSGTModel.HabitTaskTags">
+              <MappingFragment StoreEntitySet="HabitTaskTags">
+                <ScalarProperty Name="attached" ColumnName="attached" />
+                <ScalarProperty Name="tagID" ColumnName="tagID" />
+                <ScalarProperty Name="taskID" ColumnName="taskID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

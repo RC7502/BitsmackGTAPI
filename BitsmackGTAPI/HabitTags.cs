@@ -12,16 +12,10 @@ namespace BitsmackGTAPI
     using System;
     using System.Collections.Generic;
     
-    public partial class Pedometer
+    public partial class HabitTags
     {
-        public int id { get; set; }
-        public int steps { get; set; }
-        public int sleep { get; set; }
-        public System.DateTime trandate { get; set; }
-        public double weight { get; set; }
-        public double bodyfat { get; set; }
-        public Nullable<System.DateTime> createddate { get; set; }
-        public Nullable<System.DateTime> lastupdateddate { get; set; }
-        public Nullable<int> calconsumed { get; set; }
+        public System.Guid id { get; set; }
+        public string name { get; set; }
+        public Nullable<short> challenge { get; set; }
     }
 }

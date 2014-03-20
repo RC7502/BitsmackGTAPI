@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using BitsmackGTAPI.DAL;
 using BitsmackGTAPI.Interfaces;
 using BitsmackGTAPI.Models;
 using Fitbit.Api;
@@ -51,8 +52,8 @@ namespace BitsmackGTAPI
                 x.For<ICommonService>().Use<CommonService>();
                 x.For<IGoalService>().Use<GoalService>();
                 x.For<IBudgetService>().Use<BudgetService>();
-                x.For<IDAL>().Use<DAL>();
-                
+                x.For<IDAL>().Use<DAL.DAL>();
+                x.For<IHabitDAL>().Use<HabitDAL>();
                 x.For(typeof(IGTRepository<>)).Use(typeof(GTRepository<>));
             });
 

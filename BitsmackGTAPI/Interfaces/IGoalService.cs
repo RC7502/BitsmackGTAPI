@@ -9,5 +9,7 @@ namespace BitsmackGTAPI.Interfaces
     public interface IGoalService
     {
         GoalsSummaryViewModel GetSummary();
+        List<HabitDetailViewModel> GetHabitDetail();
+        IEnumerable<string[]> GetWeightCalDetail();
     }
 }

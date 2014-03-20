@@ -56,5 +56,13 @@ namespace BitsmackGTAPI.Helpers
         {
             return TimeSpan.FromSeconds(seconds).ToString(@"hh\:mm\:ss");
         }
+
+        public static DateTime MillisecondsToDate(long milli)
+        {
+            var time = TimeSpan.FromMilliseconds(milli);
+            var result = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            return result.Add(time);
+
+        }
     }
 }

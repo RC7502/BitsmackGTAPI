@@ -31,5 +31,9 @@ namespace BitsmackGTAPI
         public DbSet<EventLog> EventLog { get; set; }
         public DbSet<TimedActivities> TimedActivities { get; set; }
         public DbSet<Mint> Mint { get; set; }
+        public DbSet<HabitTags> HabitTags { get; set; }
+        public DbSet<HabitTaskHistory> HabitTaskHistory { get; set; }
+        public DbSet<HabitTasks> HabitTasks { get; set; }
+        public DbSet<HabitTaskTags> HabitTaskTags { get; set; }
     }
 }

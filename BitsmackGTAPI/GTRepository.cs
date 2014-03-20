@@ -18,9 +18,9 @@ namespace BitsmackGTAPI
             this.dbSet = context.Set<T>();
         }
 
-        public virtual IEnumerable<T> AllForRead()
+        public IQueryable<T> AllForRead()
         {
-            IQueryable<T> query = dbSet;
+            IQueryable<T> query = dbSet.AsQueryable();
             return query;
         }
 

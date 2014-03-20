@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace BitsmackGTAPI
 {
     public interface IGTRepository<T> where T : class
     {
-        IEnumerable<T> AllForRead();
+        IQueryable<T> AllForRead();
         void Update(T key);
         void Insert(T log);
         void Delete(T existingTran);

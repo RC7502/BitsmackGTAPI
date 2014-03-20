@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using BitsmackGTAPI.Interfaces;
 
-namespace BitsmackGTAPI.Models
+namespace BitsmackGTAPI.DAL
 {
     public class DAL : IDAL
     {
@@ -13,7 +12,7 @@ namespace BitsmackGTAPI.Models
         private readonly IGTRepository<TimedActivities> _timedRepo;
         private readonly IGTRepository<Mint> _mintRepo;
         private readonly IGTRepository<APIKeys> _apiKeysRepo;
-        private readonly IGTRepository<EventLog> _logRepo; 
+        private readonly IGTRepository<EventLog> _logRepo;
  
         public DAL(IGTRepository<Pedometer> pedometerRepo, IGTRepository<Cardio> cardioRepo, 
             IGTRepository<TimedActivities> timedRepo, IGTRepository<Mint> mintRepo, IGTRepository<APIKeys> apiRepo,

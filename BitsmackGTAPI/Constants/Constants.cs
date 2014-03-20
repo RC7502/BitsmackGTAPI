@@ -5,6 +5,7 @@
         public const string FITBIT = "Fitbit";
         public const string TOGGL = "Toggl";
         public const string RUNKEEPER = "RunKeeper";
+        public const string HABITRPG = "HabitRPG";
     }
 
     public class EventLogAreas

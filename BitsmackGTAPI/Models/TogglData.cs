@@ -11,7 +11,7 @@ namespace BitsmackGTAPI.Models
     {
     }
 
-    public class Task
+    public class TogglTask
     {
         [JsonProperty(PropertyName = "start")]
         [JsonConverter(typeof(IsoDateTimeConverter))]

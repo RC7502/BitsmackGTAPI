@@ -55,8 +55,9 @@
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.2.1312.1622\lib\net40\Moq.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="RestSharp, Version=103.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -162,9 +163,23 @@
     </Compile>
     <Compile Include="GTRepository.cs" />
     <Compile Include="Constants\Constants.cs" />
+    <Compile Include="DAL\HabitDAL.cs" />
+    <Compile Include="HabitTags.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HabitTaskHistory.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HabitTasks.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HabitTaskTags.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Helpers\TimeHelper.cs" />
     <Compile Include="IGTRepository.cs" />
+    <Compile Include="Interfaces\IHabitDAL.cs" />
     <Compile Include="Interfaces\IBSGTEntities.cs" />
     <Compile Include="Interfaces\IDAL.cs" />
     <Compile Include="Interfaces\IGoalService.cs" />
@@ -181,10 +196,12 @@
     <Compile Include="Models\CommonService.cs" />
     <Compile Include="Interfaces\ICommonService.cs" />
     <Compile Include="Interfaces\ICardioService.cs" />
-    <Compile Include="Models\DAL.cs" />
+    <Compile Include="DAL\DAL.cs" />
     <Compile Include="Models\GoalService.cs" />
     <Compile Include="Models\GoalsSummaryViewModel.cs" />
     <Compile Include="Interfaces\IBudgetService.cs" />
+    <Compile Include="Models\HabitDetailViewModel.cs" />
+    <Compile Include="Models\HabitRPGDataModel.cs" />
     <Compile Include="Models\PedometerDetailViewModel.cs" />
     <Compile Include="Models\PedometerRepository.cs" />
     <Compile Include="Models\AccountModels.cs" />
