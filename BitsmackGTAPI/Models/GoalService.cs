@@ -40,9 +40,9 @@ namespace BitsmackGTAPI.Models
             return model;
         }
 
-        public IEnumerable<string[]> GetWeightCalDetail()
+        public IEnumerable<WeightCalDetailModel> GetWeightCalDetail()
         {
-            var list = new List<string[]>();
+            var list = new List<WeightCalDetailModel>();
             var pedoRecs = _dal.GetPedometerRecords().OrderBy(x => x.trandate).ToList();
             decimal trendAvg = 0;
             for (var i = 0; i < pedoRecs.Count; i++)
@@ -54,22 +54,44 @@ namespace BitsmackGTAPI.Models
                 }
                 else
                 {
-                    if(rec.weight > 0)
+                    if (rec.weight > 0)
                         trendAvg = trendAvg + (0.1m*(decimal) (rec.weight - (double) trendAvg));
                 }
 
-                list.Add(new[]
+                list.Add(new WeightCalDetailModel
                     {
-                        rec.trandate.ToShortDateString(),
-                        Math.Round(rec.weight,1).ToString(),
-                        Math.Round(trendAvg,1).ToString(),
-                        rec.calconsumed == null ? string.Empty: rec.calconsumed.ToString()
+                        TranDate = rec.trandate,
+                        Weight = Math.Round(rec.weight, 1),
+                        Trend = Math.Round(trendAvg, 1),
+                        CalConsumed = rec.calconsumed ?? 0
                     });
 
             }
 
-
             return list;
+        }
+
+        public WeightCalSummaryModel GetWeightCalSummary()
+        {
+            var model = new WeightCalSummaryModel();
+            var detail = GetWeightCalDetail().ToList();
+            var firstRec = detail.OrderBy(x => x.TranDate).First(x => x.CalConsumed > 0);
+            var lastRec = detail.OrderBy(x => x.TranDate).Last();
+            var newDetail = detail.Where(x => x.TranDate >= firstRec.TranDate).ToList();
+
+            var numDays = newDetail.Count();
+            model.DateRange = string.Format("{0} - {1} ({2})", firstRec.TranDate.ToShortDateString(),
+                                            lastRec.TranDate.ToShortDateString(), numDays);
+            var weightLoss = firstRec.Trend - lastRec.Trend;
+            model.WeightTrendChange = weightLoss + " lbs.";
+            var totalCal = newDetail.Sum(x => x.CalConsumed);
+            model.CalConsumedPerDay = (totalCal/numDays).ToString();
+            var totalBurned = (weightLoss*3500) + totalCal;
+            var burnPerDay = totalBurned/numDays;
+            model.CalBurnedPerDay = burnPerDay.ToString();
+            model.NewDailyCalorieGoal = (burnPerDay - 500).ToString();
+
+            return model;
         }
 
         public List<HabitDetailViewModel> GetHabitDetail()

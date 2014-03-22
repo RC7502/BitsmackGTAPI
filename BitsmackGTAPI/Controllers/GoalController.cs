@@ -30,9 +30,22 @@ namespace BitsmackGTAPI.Controllers
             return Json(new {aaData = list}, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult WeightSummary()
+        {
+            return Json(_service.GetWeightCalSummary(), JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult WeightDetail()
         {
-            return Json(new {aaData = _service.GetWeightCalDetail()}, JsonRequestBehavior.AllowGet);
+            var list = _service.GetWeightCalDetail().Select(item => new[]
+                {
+                    item.TranDate.ToShortDateString(),
+                    item.Weight.ToString(),
+                    item.Trend.ToString(),
+                    item.CalConsumed.ToString()
+                });
+
+            return Json(new {aaData = list}, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult HabitDetail()

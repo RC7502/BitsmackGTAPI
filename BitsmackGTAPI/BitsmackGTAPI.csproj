@@ -209,6 +209,8 @@
     <Compile Include="Models\PedometerService.cs" />
     <Compile Include="Models\PedometerSummaryViewModel.cs" />
     <Compile Include="Models\TogglData.cs" />
+    <Compile Include="Models\WeightCalDetailModel.cs" />
+    <Compile Include="Models\WeightCalSummaryModel.cs" />
     <Compile Include="Pedometer.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>

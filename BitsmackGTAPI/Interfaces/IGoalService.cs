@@ -10,6 +10,7 @@ namespace BitsmackGTAPI.Interfaces
     {
         GoalsSummaryViewModel GetSummary();
         List<HabitDetailViewModel> GetHabitDetail();
-        IEnumerable<string[]> GetWeightCalDetail();
+        IEnumerable<WeightCalDetailModel> GetWeightCalDetail();
+        WeightCalSummaryModel GetWeightCalSummary();
     }
 }
