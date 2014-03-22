@@ -26,10 +26,9 @@ namespace BitsmackGTAPI.Models
         public PedometerSummaryViewModel GetSummary()
         {
             RefreshData(true, DateTime.Today.Date.AddDays(-14), DateTime.Today.Date);
-            var pedometerRecs = _dal.GetPedometerRecords().ToList();
-            var stepList = pedometerRecs.Select(x => x.steps).ToList();
-            //store this in a table
-            //var wakeuptime = TimeHelper.ConvertUtcToLocal(DateTime.UtcNow.Date).Date.AddDays(1).AddHours(5).AddMinutes(50);
+            var pedometerRecs = _dal.GetPedometerRecords().ToList();       
+            var stepList = pedometerRecs.Where(x=>x.trandate < DateTime.Today.Date).Select(x => x.steps).ToList();
+
             var wakeuptime = GetNextAlarm();
 
             var model = new PedometerSummaryViewModel()
