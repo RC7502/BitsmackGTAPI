@@ -57,7 +57,7 @@ namespace BitsmackGTAPI.Models
             //first add the current conditions
             list.Add(new WeatherForecastViewModel
                 {
-                    ForecastDate = TimeHelper.SecondsToDate(response.currently.time, response.offset).ToString("g"),
+                    ForecastDate = TimeHelper.SecondsToDate(response.currently.time, response.offset).ToString("f"),
                     Summary = response.currently.summary,
                     ChanceOfPrecip = (response.currently.precipProbability * 100) + "%",
                     Temperature = Math.Round(response.currently.temperature, 0) + "°",
@@ -72,7 +72,7 @@ namespace BitsmackGTAPI.Models
                     {
                         list.Add(new WeatherForecastViewModel
                             {
-                                ForecastDate = fcDate.ToString("g"),
+                                ForecastDate = fcDate.ToString("f"),
                                 Summary = hour.summary,
                                 ChanceOfPrecip = (hour.precipProbability * 100) + "%",
                                 Temperature = Math.Round(hour.temperature, 0) + "°",
@@ -86,7 +86,7 @@ namespace BitsmackGTAPI.Models
                     {
                         list.Add(new WeatherForecastViewModel
                         {
-                            ForecastDate = fcDate.ToString("g"),
+                            ForecastDate = fcDate.ToString("f"),
                             Summary = hour.summary,
                             ChanceOfPrecip = (hour.precipProbability * 100) + "%",
                             Temperature = Math.Round(hour.temperature, 0) + "°",
