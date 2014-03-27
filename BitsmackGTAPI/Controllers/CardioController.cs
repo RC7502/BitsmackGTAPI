@@ -9,8 +9,7 @@ namespace BitsmackGTAPI.Controllers
 {
     public class CardioController : Controller
     {
-        //
-        // GET: /Cardio/
+        private readonly ICardioService _service = StructureMap.ObjectFactory.GetInstance<ICardioService>();
 
         public ActionResult Index()
         {
@@ -19,10 +18,13 @@ namespace BitsmackGTAPI.Controllers
 
         public ActionResult Summary()
         {
-            var service = StructureMap.ObjectFactory.GetInstance<ICardioService>();
-
             //refresh data
-            return Json(service.GetSummary(), JsonRequestBehavior.AllowGet);
+            return Json(_service.GetSummary(), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult WeatherForecast()
+        {
+            return Json(_service.GetWeatherForecast(), JsonRequestBehavior.AllowGet);
         }
 
     }

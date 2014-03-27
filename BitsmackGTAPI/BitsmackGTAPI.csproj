@@ -45,6 +45,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Fitbit.NET\Fitbit.dll</HintPath>
     </Reference>
+    <Reference Include="Forecast.io.45">
+      <HintPath>..\packages\Forecast.io.1.0.8\lib\net45\Forecast.io.45.dll</HintPath>
+    </Reference>
     <Reference Include="HabitRPG.NET">
       <HintPath>..\packages\HabitRPG.NET\HabitRPG.NET.dll</HintPath>
     </Reference>
@@ -209,6 +212,7 @@
     <Compile Include="Models\PedometerService.cs" />
     <Compile Include="Models\PedometerSummaryViewModel.cs" />
     <Compile Include="Models\TogglData.cs" />
+    <Compile Include="Models\WeatherForecastViewModel.cs" />
     <Compile Include="Models\WeightCalDetailModel.cs" />
     <Compile Include="Models\WeightCalSummaryModel.cs" />
     <Compile Include="Pedometer.cs">

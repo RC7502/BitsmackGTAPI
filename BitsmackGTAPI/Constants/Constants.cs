@@ -2,6 +2,7 @@
 {
     public class APINames
     {
+        public const string FORECAST = "Forecast.io";
         public const string FITBIT = "Fitbit";
         public const string TOGGL = "Toggl";
         public const string RUNKEEPER = "RunKeeper";

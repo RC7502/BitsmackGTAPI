@@ -5,6 +5,7 @@ using System.Reflection;
 using BitsmackGTAPI.Constants;
 using BitsmackGTAPI.Helpers;
 using BitsmackGTAPI.Interfaces;
+using ForecastIO;
 using HealthGraphNet;
 
 namespace BitsmackGTAPI.Models
@@ -39,6 +40,62 @@ namespace BitsmackGTAPI.Models
                 _commonService.WriteLog(EventLogSeverity.Error, MethodBase.GetCurrentMethod().Name,ex.Message);
             }
             return model;
+        }
+
+        public List<WeatherForecastViewModel> GetWeatherForecast()
+        {
+            var list = new List<WeatherForecastViewModel>();
+            var key = _commonService.GetAPIKeyByName(APINames.FORECAST);
+            if (key == null) return list;
+
+            var extendBlocks = new[] 
+            {
+                Extend.hourly
+            };
+            var request = new ForecastIORequest(key.user_token, 40.083404f, -83.104852f, Unit.us, extendBlocks);
+            var response = request.Get();
+            //first add the current conditions
+            list.Add(new WeatherForecastViewModel
+                {
+                    ForecastDate = TimeHelper.SecondsToDate(response.currently.time, response.offset).ToString("g"),
+                    Summary = response.currently.summary,
+                    ChanceOfPrecip = (response.currently.precipProbability * 100) + "%",
+                    Temperature = Math.Round(response.currently.temperature, 0) + "°",
+                    WindSpeed = Math.Round(response.currently.windSpeed, 0) + " mph"
+                });
+            foreach (var hour in response.hourly.data)
+            {
+                var fcDate = TimeHelper.SecondsToDate(hour.time, response.offset);
+                if (TimeHelper.IsWeekDay(fcDate))
+                {
+                    if (fcDate.Hour == 5 || fcDate.Hour == 16)
+                    {
+                        list.Add(new WeatherForecastViewModel
+                            {
+                                ForecastDate = fcDate.ToString("g"),
+                                Summary = hour.summary,
+                                ChanceOfPrecip = (hour.precipProbability * 100) + "%",
+                                Temperature = Math.Round(hour.temperature, 0) + "°",
+                                WindSpeed = Math.Round(hour.windSpeed, 0) + " mph"
+                            });
+                    }
+                }
+                else
+                {
+                    if (fcDate.Hour >= 6 && fcDate.Hour <= 14)
+                    {
+                        list.Add(new WeatherForecastViewModel
+                        {
+                            ForecastDate = fcDate.ToString("g"),
+                            Summary = hour.summary,
+                            ChanceOfPrecip = (hour.precipProbability * 100) + "%",
+                            Temperature = Math.Round(hour.temperature, 0) + "°",
+                            WindSpeed = Math.Round(hour.windSpeed, 0) + " mph"
+                        });
+                    }
+                }
+            }
+            return list;
         }
 
         private int CalcAvgAdj5KPace(IEnumerable<Cardio> cardioRecs)

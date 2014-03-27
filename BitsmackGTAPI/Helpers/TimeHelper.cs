@@ -64,5 +64,20 @@ namespace BitsmackGTAPI.Helpers
             return result.Add(time);
 
         }
+
+        public static DateTime SecondsToDate(long seconds)
+        {
+            return MillisecondsToDate(seconds*1000);
+        }
+
+        public static DateTime SecondsToDate(long seconds, float offset)
+        {
+            return SecondsToDate(seconds).AddHours(offset);
+        }
+
+        public static bool IsWeekDay(DateTime fcDate)
+        {
+            return !(fcDate.DayOfWeek == DayOfWeek.Saturday || fcDate.DayOfWeek == DayOfWeek.Sunday);
+        }
     }
 }
