@@ -80,10 +80,11 @@ namespace BitsmackGTAPI.Models
             var newDetail = detail.Where(x => x.TranDate >= firstRec.TranDate).ToList();
 
             var numDays = newDetail.Count()-1;
+            model.NumDays = numDays;
             model.DateRange = string.Format("{0} - {1} ({2})", firstRec.TranDate.ToShortDateString(),
                                             lastRec.TranDate.ToShortDateString(), numDays);
             var weightLoss = firstRec.Trend - lastRec.Trend;
-            model.WeightTrendChange = weightLoss + " lbs.";
+            model.WeightTrendChange = weightLoss.ToString();
             var totalCal = newDetail.Sum(x => x.CalConsumed) - lastRec.CalConsumed;
             model.CalConsumedPerDay = (totalCal/numDays).ToString();
             var totalBurned = (weightLoss*3500) + totalCal;
