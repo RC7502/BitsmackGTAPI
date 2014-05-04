@@ -143,6 +143,11 @@ namespace BitsmackGTAPI.Models
             return model;
         }
 
+        public IEnumerable<MonthSummaryViewModel> GetMonthSummary()
+        {
+            return new List<MonthSummaryViewModel>();
+        }
+
         public void SetFitbitNewGoal(int newStepGoal)
         {
             try

@@ -48,5 +48,9 @@ namespace BitsmackGTAPI.Controllers
             return Json(_service.GetMonthAverages(), JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult MonthSummary()
+        {
+            return Json(_service.GetMonthSummary(), JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BitsmackGTAPI.Models;
 
 namespace BitsmackGTAPI.Interfaces
@@ -8,5 +9,6 @@ namespace BitsmackGTAPI.Interfaces
         PedometerSummaryViewModel GetSummary();
         PedometerDetailViewModel GetDetail(DateTime start, DateTime end);
         ColumnChartModel GetMonthAverages();
+        IEnumerable<MonthSummaryViewModel> GetMonthSummary();
     }
 }
