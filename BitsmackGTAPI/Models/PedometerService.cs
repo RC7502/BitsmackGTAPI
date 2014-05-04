@@ -145,11 +145,12 @@ namespace BitsmackGTAPI.Models
 
         public IEnumerable<MonthSummaryViewModel> GetMonthSummary()
         {
+            var localNow = TimeHelper.ConvertUtcToLocal(DateTime.UtcNow);
             var list = new List<MonthSummaryViewModel>();
-            RefreshData(true, DateTime.Now.AddDays(-14), DateTime.Now);
+            RefreshData(true, localNow.Date.AddDays(-14), DateTime.Now);
             var pedometerRecs = _dal.GetPedometerRecords().OrderBy(x => x.trandate);
 
-            var localNow = TimeHelper.ConvertUtcToLocal(DateTime.UtcNow);
+            
             var currentMonth = new DateTime(localNow.Year, localNow.Month, 1);
             var dayInCurrentMonth = DateTime.DaysInMonth(currentMonth.Year, currentMonth.Month);
             var remainingDays = dayInCurrentMonth - localNow.Day + 1;
