@@ -145,7 +145,57 @@ namespace BitsmackGTAPI.Models
 
         public IEnumerable<MonthSummaryViewModel> GetMonthSummary()
         {
-            return new List<MonthSummaryViewModel>();
+            var list = new List<MonthSummaryViewModel>();
+            RefreshData(true, DateTime.Now.AddDays(-14), DateTime.Now);
+            var pedometerRecs = _dal.GetPedometerRecords().OrderBy(x => x.trandate);
+
+            var localNow = TimeHelper.ConvertUtcToLocal(DateTime.UtcNow);
+            var currentMonth = new DateTime(localNow.Year, localNow.Month, 1);
+            var dayInCurrentMonth = DateTime.DaysInMonth(currentMonth.Year, currentMonth.Month);
+            var remainingDays = dayInCurrentMonth - localNow.Day + 1;
+
+            //pedometer 
+            var stepModel = new MonthSummaryViewModel();
+            var stepList = new List<int>();
+            for (var monthCounter = new DateTime(2013, 3, 1);
+                 monthCounter < currentMonth;
+                 monthCounter = monthCounter.AddMonths(1))
+            {
+                stepList.Add(pedometerRecs.Where(x=>x.trandate.Year == monthCounter.Year && x.trandate.Month == monthCounter.Month).Sum(x=>x.steps));
+            }
+
+            stepModel.Name = "Steps";
+            stepModel.Reverse = 0;
+            stepModel.BestMonth = stepList.Max();
+            stepModel.MonthlyAverage = (int) stepList.Average();
+            stepModel.CurrentMonth = pedometerRecs.Where(x=>x.trandate.Year == currentMonth.Year && x.trandate.Month == currentMonth.Month).Sum(x=>x.steps);
+            stepModel.Expected = (int) (stepModel.MonthlyAverage*(Decimal.Divide(localNow.Day,dayInCurrentMonth)));
+            stepModel.GoalPerDay = (stepModel.MonthlyAverage - stepModel.CurrentMonth)/remainingDays;
+            list.Add(stepModel);
+
+            SetFitbitNewGoal(stepModel.GoalPerDay);
+
+            //calories
+            var calModel = new MonthSummaryViewModel();
+            var calList = new List<int>();
+            for (var monthCounter = new DateTime(2014, 4, 1);
+                 monthCounter < currentMonth;
+                 monthCounter = monthCounter.AddMonths(1))
+            {
+                calList.Add(pedometerRecs.Where(x => x.trandate.Year == monthCounter.Year && x.trandate.Month == monthCounter.Month).Sum(x => x.calconsumed ?? 0));
+            }
+
+            calModel.Name = "Calories";
+            calModel.Reverse = 1;
+            calModel.BestMonth = calList.Min();
+            calModel.MonthlyAverage = (int)calList.Average();
+            calModel.CurrentMonth = pedometerRecs.Where(x => x.trandate.Year == currentMonth.Year && x.trandate.Month == currentMonth.Month).Sum(x => x.calconsumed ?? 0);
+            calModel.Expected = (int)(calModel.MonthlyAverage * (Decimal.Divide(localNow.Day, dayInCurrentMonth)));
+            calModel.GoalPerDay = (calModel.MonthlyAverage - calModel.CurrentMonth) / remainingDays;
+            list.Add(calModel);
+
+
+            return list;
         }
 
         public void SetFitbitNewGoal(int newStepGoal)
