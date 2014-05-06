@@ -54,6 +54,7 @@ namespace BitsmackGTAPI
                 x.For<IBudgetService>().Use<BudgetService>();
                 x.For<IDAL>().Use<DAL.DAL>();
                 x.For<IHabitDAL>().Use<HabitDAL>();
+                x.For<IDashboardService>().Use<DashboardService>();
                 x.For(typeof(IGTRepository<>)).Use(typeof(GTRepository<>));
             });
 

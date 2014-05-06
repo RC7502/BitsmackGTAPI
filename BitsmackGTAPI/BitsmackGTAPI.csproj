@@ -151,6 +151,7 @@
     <Compile Include="Cardio.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Constants\DashboardItemStatusEnum.cs" />
     <Compile Include="Constants\EventLogSeverity.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BudgetController.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="Controllers\GoalController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PedometerController.cs" />
+    <Compile Include="DashboardController.cs" />
     <Compile Include="DbEntities.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -198,6 +200,7 @@
     <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Helpers\TimeHelper.cs" />
     <Compile Include="IGTRepository.cs" />
+    <Compile Include="Interfaces\IDashboardService.cs" />
     <Compile Include="Interfaces\IHabitDAL.cs" />
     <Compile Include="Interfaces\IBSGTEntities.cs" />
     <Compile Include="Interfaces\IDAL.cs" />
@@ -216,6 +219,8 @@
     <Compile Include="Interfaces\ICommonService.cs" />
     <Compile Include="Interfaces\ICardioService.cs" />
     <Compile Include="DAL\DAL.cs" />
+    <Compile Include="Models\DashboardService.cs" />
+    <Compile Include="Models\DashboardViewModel.cs" />
     <Compile Include="Models\GoalService.cs" />
     <Compile Include="Models\GoalsSummaryViewModel.cs" />
     <Compile Include="Interfaces\IBudgetService.cs" />
@@ -228,6 +233,7 @@
     <Compile Include="Interfaces\IPedometerService.cs" />
     <Compile Include="Models\PedometerService.cs" />
     <Compile Include="Models\PedometerSummaryViewModel.cs" />
+    <Compile Include="Models\ProgressBarModel.cs" />
     <Compile Include="Models\TogglData.cs" />
     <Compile Include="Models\WeatherForecastViewModel.cs" />
     <Compile Include="Models\WeightCalDetailModel.cs" />

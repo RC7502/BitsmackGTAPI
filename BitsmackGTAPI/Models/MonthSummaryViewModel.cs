@@ -14,5 +14,6 @@ namespace BitsmackGTAPI.Models
         public int CurrentMonth;
         public int Expected;
         public int GoalPerDay;
+        public int CurrentDay;
     }
 }

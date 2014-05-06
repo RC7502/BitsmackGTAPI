@@ -154,6 +154,7 @@ namespace BitsmackGTAPI.Models
             var currentMonth = new DateTime(localNow.Year, localNow.Month, 1);
             var dayInCurrentMonth = DateTime.DaysInMonth(currentMonth.Year, currentMonth.Month);
             var remainingDays = dayInCurrentMonth - localNow.Day + 1;
+            var todaysRecord = pedometerRecs.FirstOrDefault(x => x.trandate == localNow.Date);
 
             //pedometer 
             var stepModel = new MonthSummaryViewModel();
@@ -171,7 +172,8 @@ namespace BitsmackGTAPI.Models
             stepModel.MonthlyAverage = (int) stepList.Average();
             stepModel.CurrentMonth = pedometerRecs.Where(x=>x.trandate.Year == currentMonth.Year && x.trandate.Month == currentMonth.Month).Sum(x=>x.steps);
             stepModel.Expected = (int) (stepModel.MonthlyAverage*(Decimal.Divide(localNow.Day,dayInCurrentMonth)));
-            stepModel.GoalPerDay = (stepModel.MonthlyAverage - stepModel.CurrentMonth)/remainingDays;
+            stepModel.GoalPerDay = (stepModel.MonthlyAverage - stepModel.CurrentMonth)/remainingDays;           
+            stepModel.CurrentDay = todaysRecord != null ? todaysRecord.steps : 0; 
             list.Add(stepModel);
 
             SetFitbitNewGoal(stepModel.GoalPerDay);
@@ -193,6 +195,7 @@ namespace BitsmackGTAPI.Models
             calModel.CurrentMonth = pedometerRecs.Where(x => x.trandate.Year == currentMonth.Year && x.trandate.Month == currentMonth.Month).Sum(x => x.calconsumed ?? 0);
             calModel.Expected = (int)(calModel.MonthlyAverage * (Decimal.Divide(localNow.Day, dayInCurrentMonth)));
             calModel.GoalPerDay = (calModel.MonthlyAverage - calModel.CurrentMonth) / remainingDays;
+            calModel.CurrentDay = todaysRecord != null && todaysRecord.calconsumed.HasValue ? todaysRecord.calconsumed.Value : 0; 
             list.Add(calModel);
 
 
