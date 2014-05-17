@@ -10,5 +10,7 @@ namespace BitsmackGTAPI.Interfaces
         PedometerDetailViewModel GetDetail(DateTime start, DateTime end);
         ColumnChartModel GetMonthAverages();
         IEnumerable<MonthSummaryViewModel> GetMonthSummary();
+        void RefreshData(bool b, DateTime addDays, DateTime date);
+        void SetFitbitNewGoal(int goalPerDay);
     }
 }

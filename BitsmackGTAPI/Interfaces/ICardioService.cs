@@ -6,5 +6,7 @@ namespace BitsmackGTAPI.Models
     {
         CardioSummaryViewModel GetSummary();
         List<WeatherForecastViewModel> GetWeatherForecast();
+        MonthSummaryViewModel GetMonthSummary();
+
     }
 }

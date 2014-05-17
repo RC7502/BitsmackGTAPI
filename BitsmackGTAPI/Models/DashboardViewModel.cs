@@ -17,9 +17,11 @@ namespace BitsmackGTAPI.Models
 
     public class DashboardCategoryViewModel
     {
+        public string ID;
+        public string Title;
+        public string Text;
         public List<DashboardItemViewModel> Items;
-        public string Name;
-
+        
         public DashboardCategoryViewModel()
         {
             Items = new List<DashboardItemViewModel>();
@@ -29,11 +31,7 @@ namespace BitsmackGTAPI.Models
 
     public class DashboardItemViewModel
     {
-        public string Status;
-        public int BarActual;
-        public int BarMax;
-        public int BarMin;
-        public string ItemType;
+        public string Title;
         public string Text;
     }
 }

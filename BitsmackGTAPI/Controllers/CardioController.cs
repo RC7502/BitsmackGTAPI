@@ -27,5 +27,10 @@ namespace BitsmackGTAPI.Controllers
             return Json(_service.GetWeatherForecast(), JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult MonthSummary()
+        {
+            return Json(_service.GetMonthSummary(), JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

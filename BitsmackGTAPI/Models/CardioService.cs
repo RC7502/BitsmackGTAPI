@@ -98,6 +98,36 @@ namespace BitsmackGTAPI.Models
             return list;
         }
 
+        public MonthSummaryViewModel GetMonthSummary()
+        {
+            var localNow = TimeHelper.ConvertUtcToLocal(DateTime.UtcNow);
+            RefreshData(true, localNow.Date.AddDays(-14), DateTime.Now);
+            var cardioRecs = _dal.GetCardioRecords().Where(x=>x.activity=="Running").OrderBy(x => x.trandate);
+
+            var currentMonth = new DateTime(localNow.Year, localNow.Month, 1);
+            var dayInCurrentMonth = DateTime.DaysInMonth(currentMonth.Year, currentMonth.Month);
+            var remainingDays = dayInCurrentMonth - localNow.Day + 1;
+
+            var runModel = new MonthSummaryViewModel();
+            var mileList = new List<double>();
+            for (var monthCounter = new DateTime(2006, 2, 1);
+                 monthCounter < currentMonth;
+                 monthCounter = monthCounter.AddMonths(1))
+            {
+                mileList.Add(cardioRecs.Where(x => x.trandate.Year == monthCounter.Year && x.trandate.Month == monthCounter.Month).ToList().Sum(x => MathHelper.MetersToMiles(x.distance)));
+            }
+
+            runModel.Name = "Miles";
+            runModel.Reverse = 0;
+            runModel.BestMonth = (int) mileList.Max();
+            runModel.MonthlyAverage = (int) mileList.Average();
+            runModel.CurrentMonth = (int) cardioRecs.Where(x => x.trandate.Year == currentMonth.Year && x.trandate.Month == currentMonth.Month).ToList().Sum(x => MathHelper.MetersToMiles(x.distance));
+            runModel.Expected = (int)(runModel.MonthlyAverage * (Decimal.Divide(localNow.Day, dayInCurrentMonth)));
+            runModel.GoalPerDay = (runModel.MonthlyAverage - runModel.CurrentMonth) / remainingDays;
+
+            return runModel;
+        }
+
         private int CalcAvgAdj5KPace(IEnumerable<Cardio> cardioRecs)
         {
             var adj5KPaces = cardioRecs.Where(x=>x.distance > 0).ToList().Select(cardio => MathHelper.Adj5KPace(cardio.time, cardio.distance));

@@ -9,5 +9,6 @@ namespace BitsmackGTAPI.Interfaces
     public interface IDashboardService
     {
         DashboardViewModel GetDashboard();
+        DashboardCategoryViewModel GetSteps();
     }
 }
