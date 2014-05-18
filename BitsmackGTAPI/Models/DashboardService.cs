@@ -97,14 +97,17 @@ namespace BitsmackGTAPI.Models
             if (stepModel.Expected > stepModel.CurrentMonth)
             {
                 stepModel.Remaining = stepModel.MonthlyAverage - stepModel.CurrentMonth;
+                model.Positive = 0;
             }
             else if (stepModel.CurrentMonth > stepModel.BestMonth)
             {
                 stepModel.Remaining = 0;
+                model.Positive = 1;
             }
             else
             {
                 stepModel.Remaining = stepModel.BestMonth - stepModel.CurrentMonth;
+                model.Positive = 1;
             }
             var dayGoal = Math.Max(3000, stepModel.Remaining/remainingDays);
 
@@ -113,19 +116,20 @@ namespace BitsmackGTAPI.Models
 
             model.ID = "steps";
             model.Title = "Steps";
-            model.Text = string.Format("Goal {0} | ", dayGoal);
-            model.Text += string.Format("Actual {0} | ", stepModel.CurrentDay);
-            model.Text += string.Format("Remaining {0}", (dayGoal - stepModel.CurrentDay));
+            model.Texts.Add(string.Format("Goal {0}", dayGoal));
+            model.Texts.Add(string.Format("Actual {0}", stepModel.CurrentDay));
+            model.Texts.Add(string.Format("Remaining {0}", (dayGoal - stepModel.CurrentDay)));
 
 
             var monthly = new DashboardItemViewModel
                 {
-                    Title = localNow.ToString("MMM", CultureInfo.InvariantCulture),
-                    Text = string.Format("Avg {0} | ", stepModel.MonthlyAverage)
+                    Title = localNow.ToString("MMM", CultureInfo.InvariantCulture)
                 };
-            monthly.Text += string.Format("Best {0} | ",stepModel.BestMonth);
-            monthly.Text += string.Format("Actual {0} | ",stepModel.CurrentMonth);
-            monthly.Text += string.Format("Remaining {0}",stepModel.Remaining);
+            monthly.Texts.Add(string.Format("Avg {0}", stepModel.MonthlyAverage));
+            monthly.Texts.Add(string.Format("Best {0}", stepModel.BestMonth));
+            monthly.Texts.Add(string.Format("Actual {0}",stepModel.CurrentMonth));
+            monthly.Texts.Add(string.Format("Remaining {0}",stepModel.Remaining));
+            monthly.Positive = model.Positive;
             model.Items.Add(monthly);
 
             return model;

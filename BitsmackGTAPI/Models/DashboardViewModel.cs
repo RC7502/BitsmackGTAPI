@@ -19,12 +19,14 @@ namespace BitsmackGTAPI.Models
     {
         public string ID;
         public string Title;
-        public string Text;
+        public List<string> Texts;
         public List<DashboardItemViewModel> Items;
-        
+        public int Positive;
+
         public DashboardCategoryViewModel()
         {
             Items = new List<DashboardItemViewModel>();
+            Texts = new List<string>();
         }
 
     }
@@ -32,6 +34,12 @@ namespace BitsmackGTAPI.Models
     public class DashboardItemViewModel
     {
         public string Title;
-        public string Text;
+        public List<string> Texts;
+        public int Positive;
+
+        public DashboardItemViewModel()
+        {
+            Texts = new List<string>();
+        }
     }
 }
