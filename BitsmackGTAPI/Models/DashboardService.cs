@@ -111,26 +111,22 @@ namespace BitsmackGTAPI.Models
             }
             var dayGoal = Math.Max(3000, stepModel.Remaining/remainingDays);
 
-
             _pedometerService.SetFitbitNewGoal(dayGoal);
+            var remaining = (dayGoal - stepModel.CurrentDay);
 
             model.ID = "steps";
-            model.Title = "Steps";
-            model.Texts.Add(string.Format("Goal {0}", dayGoal));
-            model.Texts.Add(string.Format("Actual {0}", stepModel.CurrentDay));
-            model.Texts.Add(string.Format("Remaining {0}", (dayGoal - stepModel.CurrentDay)));
+            model.Title = string.Format("Steps - {0}", remaining);
+            model.Texts.Add(string.Format("Day Goal {0}", dayGoal));
+            model.Texts.Add(string.Format("Day Actual {0}", stepModel.CurrentDay));
+            model.Texts.Add(string.Format("Day Remaining {0}", remaining));
+            var currentMonthName = localNow.ToString("MMM", CultureInfo.InvariantCulture);
 
+            model.Texts.Add(string.Format("Month Avg {0}", stepModel.MonthlyAverage));
+            model.Texts.Add(string.Format("Month Best {0}", stepModel.BestMonth));
+            model.Texts.Add(string.Format("{1} Actual {0}", stepModel.CurrentMonth, currentMonthName));
+            model.Texts.Add(string.Format("{1} Remaining {0}", stepModel.Remaining, currentMonthName));
+            model.Positive = model.Positive;
 
-            var monthly = new DashboardItemViewModel
-                {
-                    Title = localNow.ToString("MMM", CultureInfo.InvariantCulture)
-                };
-            monthly.Texts.Add(string.Format("Avg {0}", stepModel.MonthlyAverage));
-            monthly.Texts.Add(string.Format("Best {0}", stepModel.BestMonth));
-            monthly.Texts.Add(string.Format("Actual {0}",stepModel.CurrentMonth));
-            monthly.Texts.Add(string.Format("Remaining {0}",stepModel.Remaining));
-            monthly.Positive = model.Positive;
-            model.Items.Add(monthly);
 
             return model;
         }
