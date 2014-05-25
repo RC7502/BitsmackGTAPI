@@ -26,5 +26,10 @@ namespace BitsmackGTAPI
             return Json(_service.GetSteps(), JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult Calories()
+        {
+            return Json(_service.GetCalories(), JsonRequestBehavior.AllowGet);
+        }
+
     }
 }
