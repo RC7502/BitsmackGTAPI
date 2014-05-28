@@ -96,7 +96,7 @@ namespace BitsmackGTAPI.Models
             stepModel.CurrentDay = todaysRecord != null ? todaysRecord.steps : 0;
             if (stepModel.Expected > stepModel.CurrentMonth)
             {
-                stepModel.Remaining = stepModel.MonthlyAverage - stepModel.CurrentMonth;
+                stepModel.Remaining = stepModel.MonthlyAverage - stepModel.CurrentMonth - stepModel.CurrentDay;
                 model.Positive = 0;
             }
             else if (stepModel.CurrentMonth > stepModel.BestMonth)
@@ -106,7 +106,7 @@ namespace BitsmackGTAPI.Models
             }
             else
             {
-                stepModel.Remaining = stepModel.BestMonth - stepModel.CurrentMonth;
+                stepModel.Remaining = stepModel.BestMonth - stepModel.CurrentMonth - stepModel.CurrentDay;
                 model.Positive = 1;
             }
             var dayGoal = Math.Max(3000, stepModel.Remaining/remainingDays);
@@ -162,12 +162,12 @@ namespace BitsmackGTAPI.Models
             calModel.CurrentDay = todaysRecord != null && todaysRecord.calconsumed.HasValue ? todaysRecord.calconsumed.Value : 0;
             if (calModel.Expected < calModel.CurrentMonth)
             {
-                calModel.Remaining = calModel.MonthlyAverage - calModel.CurrentMonth;
+                calModel.Remaining = calModel.MonthlyAverage - calModel.CurrentMonth - calModel.CurrentDay;
                 model.Positive = 0;
             }
             else
             {
-                calModel.Remaining = calModel.BestMonth - calModel.CurrentMonth;
+                calModel.Remaining = calModel.BestMonth - calModel.CurrentMonth - calModel.CurrentDay;
                 model.Positive = 1;
             }
             var dayGoal = Math.Max(1500, calModel.Remaining / remainingDays);
