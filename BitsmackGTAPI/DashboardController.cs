@@ -31,5 +31,10 @@ namespace BitsmackGTAPI
             return Json(_service.GetCalories(), JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult Todos()
+        {
+            return Json(_service.GetTodos(), JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

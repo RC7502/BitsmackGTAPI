@@ -6,6 +6,7 @@ using System.Web;
 using BitsmackGTAPI.Constants;
 using BitsmackGTAPI.Helpers;
 using BitsmackGTAPI.Interfaces;
+using TogglApi.Entities;
 
 namespace BitsmackGTAPI.Models
 {
@@ -63,7 +64,7 @@ namespace BitsmackGTAPI.Models
             return model;
         }
 
-        public DashboardCategoryViewModel GetSteps()
+        public DashboardCategoryViewModel GetStepsOld()
         {
             var model = new DashboardCategoryViewModel();
 
@@ -129,6 +130,65 @@ namespace BitsmackGTAPI.Models
             return model;
         }
 
+        public GoalMonthlyViewModel GetSteps()
+        {
+            var model = new GoalMonthlyViewModel();
+
+            var localNow = TimeHelper.ConvertUtcToLocal(DateTime.UtcNow);
+            _pedometerService.RefreshData(true, localNow.Date.AddDays(-14), DateTime.Now);
+            var pedometerRecs = _dal.GetPedometerRecords().OrderBy(x => x.trandate);
+
+            var currentMonth = new DateTime(localNow.Year, localNow.Month, 1);
+            var dayInCurrentMonth = DateTime.DaysInMonth(currentMonth.Year, currentMonth.Month);
+            var remainingDays = dayInCurrentMonth - localNow.Day + 1;
+            var todaysRecord = pedometerRecs.FirstOrDefault(x => x.trandate == localNow.Date);
+
+            //pedometer 
+            var stepModel = new MonthSummaryViewModel();
+            var stepList = new List<int>();
+            for (var monthCounter = new DateTime(2013, 3, 1);
+                 monthCounter < currentMonth;
+                 monthCounter = monthCounter.AddMonths(1))
+            {
+                stepList.Add(pedometerRecs.Where(x => x.trandate.Year == monthCounter.Year && x.trandate.Month == monthCounter.Month).Sum(x => x.steps));
+            }
+
+            stepModel.Name = "Steps";
+            stepModel.Reverse = 0;
+            stepModel.BestMonth = stepList.Max();
+            stepModel.MonthlyAverage = (int)stepList.Average();
+            stepModel.CurrentMonth = pedometerRecs.Where(x => x.trandate.Year == currentMonth.Year && x.trandate.Month == currentMonth.Month).Sum(x => x.steps);
+            stepModel.Expected = (int)(stepModel.MonthlyAverage * (Decimal.Divide(localNow.Day, dayInCurrentMonth)));
+            stepModel.GoalPerDay = (stepModel.MonthlyAverage - stepModel.CurrentMonth) / remainingDays;
+            stepModel.CurrentDay = todaysRecord != null ? todaysRecord.steps : 0;
+            if (stepModel.Expected > stepModel.CurrentMonth)
+            {
+                stepModel.Remaining = stepModel.MonthlyAverage - stepModel.CurrentMonth - stepModel.CurrentDay;
+            }
+            else if (stepModel.CurrentMonth > stepModel.BestMonth)
+            {
+                stepModel.Remaining = 0;
+            }
+            else
+            {
+                stepModel.Remaining = stepModel.BestMonth - stepModel.CurrentMonth - stepModel.CurrentDay;
+            }
+
+            var dayGoal = Math.Max(3000, stepModel.Remaining / remainingDays);
+
+            //_pedometerService.SetFitbitNewGoal(dayGoal);
+            var remaining = (dayGoal - stepModel.CurrentDay);
+
+            model.Name = "Steps";
+            model.GoalPerDay = dayGoal.ToString();
+            model.MonthlyAvg = stepModel.MonthlyAverage.ToString();
+            model.BestMonth = stepModel.BestMonth.ToString();
+            model.Expected = stepModel.Expected.ToString();
+            model.Actual = stepModel.CurrentMonth.ToString();
+
+            return model;
+        }
+
         public DashboardCategoryViewModel GetCalories()
         {
             var model = new DashboardCategoryViewModel();
@@ -185,6 +245,15 @@ namespace BitsmackGTAPI.Models
             model.Texts.Add(string.Format("Month Best {0}", calModel.BestMonth));
             model.Texts.Add(string.Format("{1} Actual {0}", calModel.CurrentMonth, currentMonthName));
             model.Texts.Add(string.Format("{1} Remaining {0}", calModel.Remaining, currentMonthName));
+
+            return model;
+        }
+
+        public DashboardCategoryViewModel GetTodos()
+        {
+            var model = new DashboardCategoryViewModel();
+
+            
 
             return model;
         }

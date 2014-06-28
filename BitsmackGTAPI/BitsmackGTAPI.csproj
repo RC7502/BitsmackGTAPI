@@ -143,6 +143,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\togglnet\TogglApi.dll</HintPath>
     </Reference>
+    <Reference Include="Toodledo.Model">
+      <HintPath>..\packages\ToodledoAPI\Toodledo.Model.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="APIKeys.cs">
@@ -221,6 +224,7 @@
     <Compile Include="DAL\DAL.cs" />
     <Compile Include="Models\DashboardService.cs" />
     <Compile Include="Models\DashboardViewModel.cs" />
+    <Compile Include="Models\GoalMonthlyViewModel.cs" />
     <Compile Include="Models\GoalService.cs" />
     <Compile Include="Models\GoalsSummaryViewModel.cs" />
     <Compile Include="Interfaces\IBudgetService.cs" />
