@@ -10,7 +10,7 @@ namespace BitsmackGTAPI.Interfaces
     {
         DashboardViewModel GetDashboard();
         GoalMonthlyViewModel GetSteps();
-        DashboardCategoryViewModel GetCalories();
+        GoalMonthlyViewModel GetCalories();
         DashboardCategoryViewModel GetTodos();
     }
 }

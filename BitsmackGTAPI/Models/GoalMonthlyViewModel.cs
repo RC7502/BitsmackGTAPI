@@ -13,5 +13,6 @@ namespace BitsmackGTAPI.Models
         public string BestMonth;
         public string Expected;
         public string Actual;
+        public string Positive;
     }
 }

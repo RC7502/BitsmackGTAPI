@@ -164,14 +164,17 @@ namespace BitsmackGTAPI.Models
             if (stepModel.Expected > stepModel.CurrentMonth)
             {
                 stepModel.Remaining = stepModel.MonthlyAverage - stepModel.CurrentMonth - stepModel.CurrentDay;
+                model.Positive = "0";
             }
             else if (stepModel.CurrentMonth > stepModel.BestMonth)
             {
                 stepModel.Remaining = 0;
+                model.Positive = "0";
             }
             else
             {
                 stepModel.Remaining = stepModel.BestMonth - stepModel.CurrentMonth - stepModel.CurrentDay;
+                model.Positive = "1";
             }
 
             var dayGoal = Math.Max(3000, stepModel.Remaining / remainingDays);
@@ -189,7 +192,7 @@ namespace BitsmackGTAPI.Models
             return model;
         }
 
-        public DashboardCategoryViewModel GetCalories()
+        public DashboardCategoryViewModel GetCaloriesOld()
         {
             var model = new DashboardCategoryViewModel();
 
@@ -245,6 +248,61 @@ namespace BitsmackGTAPI.Models
             model.Texts.Add(string.Format("Month Best {0}", calModel.BestMonth));
             model.Texts.Add(string.Format("{1} Actual {0}", calModel.CurrentMonth, currentMonthName));
             model.Texts.Add(string.Format("{1} Remaining {0}", calModel.Remaining, currentMonthName));
+
+            return model;
+        }
+
+        public GoalMonthlyViewModel GetCalories()
+        {
+            var model = new GoalMonthlyViewModel();
+
+            var localNow = TimeHelper.ConvertUtcToLocal(DateTime.UtcNow);
+            _pedometerService.RefreshData(true, localNow.Date.AddDays(-14), DateTime.Now);
+            var pedometerRecs = _dal.GetPedometerRecords().OrderBy(x => x.trandate);
+
+            var currentMonth = new DateTime(localNow.Year, localNow.Month, 1);
+            var dayInCurrentMonth = DateTime.DaysInMonth(currentMonth.Year, currentMonth.Month);
+            var remainingDays = dayInCurrentMonth - localNow.Day + 1;
+            var todaysRecord = pedometerRecs.FirstOrDefault(x => x.trandate == localNow.Date);
+
+            //pedometer 
+            var calModel = new MonthSummaryViewModel();
+            var calList = new List<int>();
+            for (var monthCounter = new DateTime(2014, 4, 1);
+                 monthCounter < currentMonth;
+                 monthCounter = monthCounter.AddMonths(1))
+            {
+                calList.Add(pedometerRecs.Where(x => x.trandate.Year == monthCounter.Year && x.trandate.Month == monthCounter.Month).Sum(x => x.calconsumed ?? 0));
+            }
+
+            calModel.Name = "Calories";
+            calModel.Reverse = 1;
+            calModel.BestMonth = calList.Min();
+            calModel.MonthlyAverage = (int)calList.Average();
+            calModel.CurrentMonth = pedometerRecs.Where(x => x.trandate.Year == currentMonth.Year && x.trandate.Month == currentMonth.Month).Sum(x => x.calconsumed ?? 0);
+            calModel.Expected = (int)(calModel.MonthlyAverage * (Decimal.Divide(localNow.Day, dayInCurrentMonth)));
+            calModel.GoalPerDay = (calModel.MonthlyAverage - calModel.CurrentMonth) / remainingDays;
+            calModel.CurrentDay = todaysRecord != null && todaysRecord.calconsumed.HasValue ? todaysRecord.calconsumed.Value : 0;
+            if (calModel.Expected < calModel.CurrentMonth)
+            {
+                calModel.Remaining = calModel.MonthlyAverage - calModel.CurrentMonth - calModel.CurrentDay;
+                model.Positive = "0";
+            }
+            else
+            {
+                calModel.Remaining = calModel.BestMonth - calModel.CurrentMonth - calModel.CurrentDay;
+                model.Positive = "1";
+            }
+            var dayGoal = Math.Max(1500, calModel.Remaining / remainingDays);
+
+            var remaining = (dayGoal - calModel.CurrentDay);
+
+            model.Name = "Calories";
+            model.GoalPerDay = dayGoal.ToString();
+            model.MonthlyAvg = calModel.MonthlyAverage.ToString();
+            model.BestMonth = calModel.BestMonth.ToString();
+            model.Expected = calModel.Expected.ToString();
+            model.Actual = calModel.CurrentMonth.ToString();
 
             return model;
         }
