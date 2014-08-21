@@ -25,7 +25,8 @@ namespace BitsmackGTAPI.Models
 
         public PedometerSummaryViewModel GetSummary()
         {
-            RefreshData(true, DateTime.Today.Date.AddDays(-14), DateTime.Today.Date);
+            //RefreshData(true, DateTime.Today.Date.AddDays(-14), DateTime.Today.Date);
+            RefreshData(true, DateTime.Today.Date.AddDays(-40), DateTime.Today.Date);
             var pedometerRecs = _dal.GetPedometerRecords().ToList();       
             var stepList = pedometerRecs.Where(x=>x.trandate < DateTime.Today.Date).Select(x => x.steps).ToList();
 

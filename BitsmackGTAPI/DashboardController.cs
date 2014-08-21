@@ -36,5 +36,10 @@ namespace BitsmackGTAPI
             return Json(_service.GetTodos(), JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult BurnRate()
+        {
+            return Json(_service.GetBurnRate(), JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

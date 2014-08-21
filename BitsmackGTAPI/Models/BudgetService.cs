@@ -32,8 +32,8 @@ namespace BitsmackGTAPI.Models
                                 .Select(y => new BudgetCategoryViewModel()
                                     {
                                         Name = y.Key.Category,
-                                        Credit = y.Where(z => z.Transaction_Type == "credit").Sum(z => z.Amount),
-                                        Debit = y.Where(z => z.Transaction_Type == "debit").Sum(z => z.Amount),                                      
+                                        Credit = y.Where(z => z.TransactionType == "credit").Sum(z => z.Amount),
+                                        Debit = y.Where(z => z.TransactionType == "debit").Sum(z => z.Amount),                                      
                                         YearMonth = TimeHelper.DateToMonthYear(counter)
                                     }));
             }

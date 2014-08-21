@@ -13,11 +13,13 @@ namespace BitsmackGTAPI.Models
     public class DashboardService : IDashboardService
     {
         private readonly IPedometerService _pedometerService;
+        private readonly ITodoService _todoService;
         private readonly IDAL _dal;
 
-        public DashboardService(IPedometerService pedometerService, IDAL dal)
+        public DashboardService(IPedometerService pedometerService, IDAL dal, ITodoService todoService)
         {
             _pedometerService = pedometerService;
+            _todoService = todoService;
             _dal = dal;
         }
 
@@ -307,11 +309,37 @@ namespace BitsmackGTAPI.Models
             return model;
         }
 
-        public DashboardCategoryViewModel GetTodos()
+        public GoalMonthlyViewModel GetTodos()
         {
-            var model = new DashboardCategoryViewModel();
-
+            var model = new GoalMonthlyViewModel();
+            var localNow = TimeHelper.ConvertUtcToLocal(DateTime.UtcNow);
+            _todoService.RefreshData(true, new DateTime(2014, 6, 1), DateTime.Now);
             
+
+            return model;
+        }
+
+        public BurnRateViewModel GetBurnRate()
+        {
+            var model = new BurnRateViewModel();
+            var startDate = new DateTime(2014, 8, 18);
+        
+            _pedometerService.RefreshData(true, DateTime.Now.Date.AddDays(-14), DateTime.Now);
+            var pedometerRecs = _dal.GetPedometerRecords().Where(x => x.trandate >= startDate).OrderBy(x=>x.trandate).ToList();
+            var startRec = pedometerRecs.First();
+            var mostCurrent = pedometerRecs.Last(x => x.weight > 0);
+            var calConsumed = pedometerRecs.Where(x => x.trandate < mostCurrent.trandate).Sum(x => x.calconsumed);
+            var todayConsumed = pedometerRecs.Where(x => x.trandate >= mostCurrent.trandate).Sum(x => x.calconsumed);
+            model.CalBurnedPerMinute = (double) ((((startRec.weight - mostCurrent.weight)*3500) + calConsumed)/
+                                                 (mostCurrent.trandate - startRec.trandate).TotalMinutes);
+            model.CalAvailable = (int) Math.Round((double) (((model.CalBurnedPerMinute - .3752)*(DateTime.Now - mostCurrent.trandate).TotalMinutes) -
+                                                            todayConsumed), 0);
+            if (model.CalAvailable < 0)
+            {
+                model.TimeUntilGoalRate = DateTime.Now.AddMinutes((int) Math.Round(model.CalAvailable/model.CalBurnedPerMinute, 0)).ToString();
+            }
+
+            model.CalGoalPerDay = (int) ((model.CalBurnedPerMinute*1440) - 500);
 
             return model;
         }

@@ -13,10 +13,11 @@ namespace BitsmackGTAPI.DAL
         private readonly IGTRepository<Mint> _mintRepo;
         private readonly IGTRepository<APIKeys> _apiKeysRepo;
         private readonly IGTRepository<EventLog> _logRepo;
+        private readonly IGTRepository<Todos> _todoRepo;
  
         public DAL(IGTRepository<Pedometer> pedometerRepo, IGTRepository<Cardio> cardioRepo, 
             IGTRepository<TimedActivities> timedRepo, IGTRepository<Mint> mintRepo, IGTRepository<APIKeys> apiRepo,
-            IGTRepository<EventLog> logRepo )
+            IGTRepository<EventLog> logRepo, IGTRepository<Todos> todoRepo  )
         {
             _pedometerRepo = pedometerRepo;
             _cardioRepo = cardioRepo;
@@ -24,6 +25,7 @@ namespace BitsmackGTAPI.DAL
             _mintRepo = mintRepo;
             _apiKeysRepo = apiRepo;
             _logRepo = logRepo;
+            _todoRepo = todoRepo;
         }
 
         public IEnumerable<Pedometer> GetPedometerRecords(DateTime start, DateTime end)
@@ -94,6 +96,26 @@ namespace BitsmackGTAPI.DAL
         public void SaveLog()
         {
             _logRepo.Save();
+        }
+
+        public IEnumerable<Todos> GetTodoRecords()
+        {
+            return _todoRepo.AllForRead();
+        }
+
+        public void Update(Todos existingTran)
+        {
+            _todoRepo.Update(existingTran);
+        }
+
+        public void Insert(Todos todoDay)
+        {
+            _todoRepo.Insert(todoDay);
+        }
+
+        public void SaveTodos()
+        {
+            _todoRepo.Save();
         }
 
         public IEnumerable<Pedometer> GetPedometerRecords()

@@ -2,6 +2,7 @@
 {
     public class APINames
     {
+        public const string TOODLEDO = "Toodledo";
         public const string FORECAST = "Forecast.io";
         public const string FITBIT = "Fitbit";
         public const string TOGGL = "Toggl";

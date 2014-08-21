@@ -25,5 +25,9 @@ namespace BitsmackGTAPI.Interfaces
         void SaveAPIKey();
         void Insert(EventLog newRec);
         void SaveLog();
+        IEnumerable<Todos> GetTodoRecords();
+        void Update(Todos existingTran);
+        void Insert(Todos todoDay);
+        void SaveTodos();
     }
 }

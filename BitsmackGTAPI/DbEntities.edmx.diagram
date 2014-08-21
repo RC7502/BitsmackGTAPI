@@ -15,6 +15,7 @@
         <EntityTypeShape EntityType="BSGTModel.HabitTaskHistory" Width="1.5" PointX="6.75" PointY="3.75" />
         <EntityTypeShape EntityType="BSGTModel.HabitTasks" Width="1.5" PointX="6.75" PointY="6.75" />
         <EntityTypeShape EntityType="BSGTModel.HabitTaskTags" Width="1.5" PointX="0.75" PointY="7.75" />
+        <EntityTypeShape EntityType="BSGTModel.Todos" Width="1.5" PointX="9.8532978025513227" PointY="30.075327425298898" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

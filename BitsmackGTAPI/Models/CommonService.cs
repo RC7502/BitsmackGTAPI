@@ -58,6 +58,11 @@ namespace BitsmackGTAPI.Models
             WriteLog(EventLogSeverity.Activity, EventLogAreas.PEDOMETER, string.Format("Weigh in of {0} on {1}", pedometer.weight, pedometer.trandate.ToShortDateString()));
         }
 
+        public void LogActivity(Todos todoDay)
+        {
+            WriteLog(EventLogSeverity.Activity, EventLogAreas.TODO, "Message goes here.");
+        }
+
         public void LogActivity(Cardio cardio)
         {
             switch (cardio.activity)

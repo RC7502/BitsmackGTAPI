@@ -12,17 +12,12 @@ namespace BitsmackGTAPI
     using System;
     using System.Collections.Generic;
     
-    public partial class Mint
+    public partial class Todos
     {
         public int id { get; set; }
-        public Nullable<System.DateTime> Date { get; set; }
-        public string Description { get; set; }
-        public Nullable<float> Amount { get; set; }
-        public string Category { get; set; }
-        public string Labels { get; set; }
-        public string Notes { get; set; }
-        public string OriginalDescription { get; set; }
-        public string TransactionType { get; set; }
-        public string AccountName { get; set; }
+        public System.DateTime trandate { get; set; }
+        public int numcompleted { get; set; }
+        public int numadded { get; set; }
+        public string foldername { get; set; }
     }
 }

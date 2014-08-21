@@ -22,6 +22,7 @@
           <EntitySet Name="Mint" EntityType="BSGTModel.Store.Mint" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Pedometer" EntityType="BSGTModel.Store.Pedometer" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="TimedActivities" EntityType="BSGTModel.Store.TimedActivities" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Todos" EntityType="BSGTModel.Store.Todos" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="APIKeys">
           <Key>
@@ -108,11 +109,11 @@
           <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Date" Type="smalldatetime" />
           <Property Name="Description" Type="varchar" MaxLength="78" />
-          <Property Name="Original Description" Type="varchar" MaxLength="124" />
+          <Property Name="OriginalDescription" Type="varchar" MaxLength="124" />
           <Property Name="Amount" Type="real" />
-          <Property Name="Transaction Type" Type="varchar" MaxLength="6" />
+          <Property Name="TransactionType" Type="varchar" MaxLength="6" />
           <Property Name="Category" Type="varchar" MaxLength="22" />
-          <Property Name="Account Name" Type="varchar" MaxLength="29" />
+          <Property Name="AccountName" Type="varchar" MaxLength="29" />
           <Property Name="Labels" Type="varchar" MaxLength="5" />
           <Property Name="Notes" Type="varchar(max)" />
         </EntityType>
@@ -140,6 +141,16 @@
           <Property Name="startdate" Type="smalldatetime" Nullable="false" />
           <Property Name="enddate" Type="smalldatetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="Todos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="trandate" Type="smalldatetime" Nullable="false" />
+          <Property Name="numcompleted" Type="int" Nullable="false" />
+          <Property Name="numadded" Type="int" Nullable="false" />
+          <Property Name="foldername" Type="varchar" Nullable="false" MaxLength="100" />
+        </EntityType>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -155,6 +166,7 @@
           <EntitySet Name="HabitTaskHistory" EntityType="BSGTModel.HabitTaskHistory" />
           <EntitySet Name="HabitTasks" EntityType="BSGTModel.HabitTasks" />
           <EntitySet Name="HabitTaskTags" EntityType="BSGTModel.HabitTaskTags" />
+          <EntitySet Name="Todos" EntityType="BSGTModel.Todos" />
         </EntityContainer>
         <EntityType Name="Cardio">
           <Key>
@@ -221,13 +233,13 @@
           <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="DateTime" Name="Date" Precision="0" />
           <Property Type="String" Name="Description" MaxLength="78" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Original_Description" MaxLength="124" FixedLength="false" Unicode="false" />
           <Property Type="Single" Name="Amount" />
-          <Property Type="String" Name="Transaction_Type" MaxLength="6" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Category" MaxLength="22" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Account_Name" MaxLength="29" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Labels" MaxLength="5" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Notes" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="OriginalDescription" MaxLength="124" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TransactionType" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="AccountName" MaxLength="29" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="HabitTags">
           <Key>
@@ -269,6 +281,16 @@
           <Property Type="Guid" Name="taskID" Nullable="false" />
           <Property Type="Guid" Name="tagID" Nullable="false" />
           <Property Type="Int16" Name="attached" />
+        </EntityType>
+        <EntityType Name="Todos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="DateTime" Name="trandate" Nullable="false" Precision="0" />
+          <Property Type="Int32" Name="numcompleted" Nullable="false" />
+          <Property Type="Int32" Name="numadded" Nullable="false" />
+          <Property Type="String" Name="foldername" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -342,13 +364,13 @@
           <EntitySetMapping Name="Mint">
             <EntityTypeMapping TypeName="BSGTModel.Mint">
               <MappingFragment StoreEntitySet="Mint">
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="TransactionType" ColumnName="TransactionType" />
+                <ScalarProperty Name="OriginalDescription" ColumnName="OriginalDescription" />
                 <ScalarProperty Name="Notes" ColumnName="Notes" />
                 <ScalarProperty Name="Labels" ColumnName="Labels" />
-                <ScalarProperty Name="Account_Name" ColumnName="Account Name" />
                 <ScalarProperty Name="Category" ColumnName="Category" />
-                <ScalarProperty Name="Transaction_Type" ColumnName="Transaction Type" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Original_Description" ColumnName="Original Description" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="id" ColumnName="id" />
@@ -395,6 +417,17 @@
                 <ScalarProperty Name="attached" ColumnName="attached" />
                 <ScalarProperty Name="tagID" ColumnName="tagID" />
                 <ScalarProperty Name="taskID" ColumnName="taskID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Todos">
+            <EntityTypeMapping TypeName="BSGTModel.Todos">
+              <MappingFragment StoreEntitySet="Todos">
+                <ScalarProperty Name="foldername" ColumnName="foldername" />
+                <ScalarProperty Name="numadded" ColumnName="numadded" />
+                <ScalarProperty Name="numcompleted" ColumnName="numcompleted" />
+                <ScalarProperty Name="trandate" ColumnName="trandate" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

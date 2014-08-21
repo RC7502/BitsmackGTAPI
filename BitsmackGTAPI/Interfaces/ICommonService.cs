@@ -12,5 +12,6 @@ namespace BitsmackGTAPI.Interfaces
         void LogActivity(Cardio cardio);
         void LogActivity(TimedActivities newRec);
         void LogActivity(Pedometer newRec);
+        void LogActivity(Todos todoDay);
     }
 }

@@ -35,5 +35,6 @@ namespace BitsmackGTAPI
         public DbSet<HabitTaskHistory> HabitTaskHistory { get; set; }
         public DbSet<HabitTasks> HabitTasks { get; set; }
         public DbSet<HabitTaskTags> HabitTaskTags { get; set; }
+        public DbSet<Todos> Todos { get; set; }
     }
 }

@@ -143,6 +143,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\togglnet\TogglApi.dll</HintPath>
     </Reference>
+    <Reference Include="Toodledo.Client">
+      <HintPath>..\packages\ToodledoAPI\Toodledo.Client.dll</HintPath>
+    </Reference>
     <Reference Include="Toodledo.Model">
       <HintPath>..\packages\ToodledoAPI\Toodledo.Model.dll</HintPath>
     </Reference>
@@ -209,12 +212,14 @@
     <Compile Include="Interfaces\IDAL.cs" />
     <Compile Include="Interfaces\IGoalService.cs" />
     <Compile Include="Interfaces\IPedometerRepository.cs" />
+    <Compile Include="Interfaces\ITodoService.cs" />
     <Compile Include="Mint.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\BudgetCategoryViewModel.cs" />
     <Compile Include="Models\BudgetMonthCategoryViewModel.cs" />
     <Compile Include="Models\BudgetService.cs" />
+    <Compile Include="Models\BurnRateViewModel.cs" />
     <Compile Include="Models\CardioService.cs" />
     <Compile Include="Models\CardioSummaryViewModel.cs" />
     <Compile Include="Models\ColumnChartModel.cs" />
@@ -238,6 +243,7 @@
     <Compile Include="Models\PedometerService.cs" />
     <Compile Include="Models\PedometerSummaryViewModel.cs" />
     <Compile Include="Models\ProgressBarModel.cs" />
+    <Compile Include="Models\TodoService.cs" />
     <Compile Include="Models\TogglData.cs" />
     <Compile Include="Models\WeatherForecastViewModel.cs" />
     <Compile Include="Models\WeightCalDetailModel.cs" />
@@ -247,6 +253,9 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimedActivities.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Todos.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
   </ItemGroup>
