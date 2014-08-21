@@ -323,6 +323,7 @@ namespace BitsmackGTAPI.Models
         {
             var model = new BurnRateViewModel();
             var startDate = new DateTime(2014, 8, 18);
+            var dateNow = TimeHelper.ConvertUtcToLocal(DateTime.UtcNow);
         
             _pedometerService.RefreshData(true, DateTime.Now.Date.AddDays(-14), DateTime.Now);
             var pedometerRecs = _dal.GetPedometerRecords().Where(x => x.trandate >= startDate).OrderBy(x=>x.trandate).ToList();
@@ -332,11 +333,11 @@ namespace BitsmackGTAPI.Models
             var todayConsumed = pedometerRecs.Where(x => x.trandate >= mostCurrent.trandate).Sum(x => x.calconsumed);
             model.CalBurnedPerMinute = (double) ((((startRec.weight - mostCurrent.weight)*3500) + calConsumed)/
                                                  (mostCurrent.trandate - startRec.trandate).TotalMinutes);
-            model.CalAvailable = (int) Math.Round((double) (((model.CalBurnedPerMinute - .3752)*(DateTime.Now - mostCurrent.trandate).TotalMinutes) -
+            model.CalAvailable = (int) Math.Round((double) (((model.CalBurnedPerMinute - .3752)*(dateNow - mostCurrent.trandate).TotalMinutes) -
                                                             todayConsumed), 0);
             if (model.CalAvailable < 0)
             {
-                model.TimeUntilGoalRate = DateTime.Now.AddMinutes((int) Math.Round(model.CalAvailable/model.CalBurnedPerMinute, 0)).ToString();
+                model.TimeUntilGoalRate = dateNow.AddMinutes((int) Math.Round(model.CalAvailable/model.CalBurnedPerMinute, 0)).ToString();
             }
 
             model.CalGoalPerDay = (int) ((model.CalBurnedPerMinute*1440) - 500);
