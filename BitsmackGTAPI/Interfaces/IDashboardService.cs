@@ -13,5 +13,6 @@ namespace BitsmackGTAPI.Interfaces
         GoalMonthlyViewModel GetCalories();
         GoalMonthlyViewModel GetTodos();
         BurnRateViewModel GetBurnRate();
+        double CalBurnedPerMinute(Pedometer startRec, Pedometer mostCurrent, int? calConsumed);
     }
 }

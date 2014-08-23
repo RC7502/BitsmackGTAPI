@@ -331,18 +331,27 @@ namespace BitsmackGTAPI.Models
             var mostCurrent = pedometerRecs.Last(x => x.weight > 0);
             var calConsumed = pedometerRecs.Where(x => x.trandate < mostCurrent.trandate).Sum(x => x.calconsumed);
             var todayConsumed = pedometerRecs.Where(x => x.trandate >= mostCurrent.trandate).Sum(x => x.calconsumed);
-            model.CalBurnedPerMinute = (double) ((((startRec.weight - mostCurrent.weight)*3500) + calConsumed)/
-                                                 (mostCurrent.trandate - startRec.trandate).TotalMinutes);
+            model.CalBurnedPerMinute = CalBurnedPerMinute(startRec, mostCurrent, calConsumed);
             model.CalAvailable = (int) Math.Round((double) (((model.CalBurnedPerMinute - .3752)*(dateNow - mostCurrent.trandate).TotalMinutes) -
                                                             todayConsumed), 0);
             if (model.CalAvailable < 0)
             {
-                model.TimeUntilGoalRate = dateNow.AddMinutes((int) Math.Round(model.CalAvailable/model.CalBurnedPerMinute, 0)).ToString();
+                var calAvail = Math.Abs(model.CalAvailable);
+                model.TimeUntilGoalRate = dateNow.AddMinutes((int)Math.Round(calAvail / model.CalBurnedPerMinute, 0)).ToString();
             }
 
-            model.CalGoalPerDay = (int) ((model.CalBurnedPerMinute*1440) - 500);
+            model.CalGoalPerDay = Math.Max((int) ((model.CalBurnedPerMinute*1440) - 500), 1500);
 
             return model;
+        }
+
+        public double CalBurnedPerMinute(Pedometer startRec, Pedometer mostCurrent, int? calConsumed)
+        {
+            var d = (((startRec.weight - mostCurrent.weight)*3500) + calConsumed)/(mostCurrent.trandate - startRec.trandate).TotalMinutes;
+            if (d != null)
+                return (double)d;
+
+            return 0;
         }
     }
 }
