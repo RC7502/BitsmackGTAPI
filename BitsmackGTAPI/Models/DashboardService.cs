@@ -332,8 +332,7 @@ namespace BitsmackGTAPI.Models
             var calConsumed = pedometerRecs.Where(x => x.trandate < mostCurrent.trandate).Sum(x => x.calconsumed);
             var todayConsumed = pedometerRecs.Where(x => x.trandate >= mostCurrent.trandate).Sum(x => x.calconsumed);
             model.CalBurnedPerMinute = CalBurnedPerMinute(startRec, mostCurrent, calConsumed);
-            model.CalAvailable = (int) Math.Round((double) (((model.CalBurnedPerMinute - .3752)*(dateNow - mostCurrent.trandate).TotalMinutes) -
-                                                            todayConsumed), 0);
+            //model.CalAvailable = (int) Math.Round((double) (((model.CalBurnedPerMinute - .3752)*(dateNow - mostCurrent.trandate).TotalMinutes) -todayConsumed), 0);
             if (model.CalAvailable < 0)
             {
                 var calAvail = Math.Abs(model.CalAvailable);
@@ -347,11 +346,9 @@ namespace BitsmackGTAPI.Models
 
         public double CalBurnedPerMinute(Pedometer startRec, Pedometer mostCurrent, int? calConsumed)
         {
-            var d = (((startRec.weight - mostCurrent.weight)*3500) + calConsumed)/(mostCurrent.trandate - startRec.trandate).TotalMinutes;
-            if (d != null)
-                return (double)d;
-
-            return 0;
+            var calBurned = (((startRec.weight - mostCurrent.weight)*3500) + calConsumed);
+            var timePassed = (mostCurrent.trandate - startRec.trandate).TotalMinutes;
+            return (calBurned/timePassed).GetValueOrDefault();
         }
     }
 }

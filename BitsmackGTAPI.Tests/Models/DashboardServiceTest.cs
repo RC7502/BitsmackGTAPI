@@ -1,7 +1,6 @@
 ﻿using System;
 using BitsmackGTAPI.Interfaces;
 using BitsmackGTAPI.Models;
-using Fitbit.Api;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -10,7 +9,7 @@ namespace BitsmackGTAPI.Tests.Models
     [TestClass]
     public class DashboardServiceTest
     {
-        private DashboardService _service;
+        private readonly DashboardService _service;
         private readonly Mock<IDAL> _dal;
         private readonly Mock<IPedometerService> _pedometerService;
         private readonly Mock<ITodoService> _todoService;
@@ -44,7 +43,7 @@ namespace BitsmackGTAPI.Tests.Models
             var result = _service.CalBurnedPerMinute(startRec, mostCurrent, calConsumed);
 
             //Assert
-            Assert.AreEqual((55000/14400), result);
+            Assert.AreEqual((55000d/12960d), result);
 
         }
 
