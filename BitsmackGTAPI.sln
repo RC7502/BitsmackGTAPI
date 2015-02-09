@@ -1,16 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitsmackGTAPI", "BitsmackGTAPI\BitsmackGTAPI.csproj", "{52A5FFB3-A1F5-4D0E-9C79-BFAE71F69F4B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitsmackGTAPI", "BitsmackGTAPI\BitsmackGTAPI.csproj", "{BA7D9FE4-E1B3-4AEA-8187-2C02A0108168}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitsmackGTAPI.Tests", "BitsmackGTAPI.Tests\BitsmackGTAPI.Tests.csproj", "{1274B2E7-E340-4E7E-9833-F1A67B0B128C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitsmackGTServer", "..\BitsmackGTServer\BitsmackGTServer\BitsmackGTServer.csproj", "{38DC35E5-CF17-428B-8B9B-0BD2FB5ECCE3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{FA0C5894-23A3-4E8F-84B4-0F9F9CF614A0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A5BE86CE-D272-409E-A797-877CE35EC952}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fitbit", "..\Fitbit.NET\Fitbit\Fitbit.csproj", "{D2C08C58-269F-45DE-8A25-C5492BC625F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,18 +21,24 @@ Global
 		TrialRelease|Any CPU = TrialRelease|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{52A5FFB3-A1F5-4D0E-9C79-BFAE71F69F4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{52A5FFB3-A1F5-4D0E-9C79-BFAE71F69F4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{52A5FFB3-A1F5-4D0E-9C79-BFAE71F69F4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{52A5FFB3-A1F5-4D0E-9C79-BFAE71F69F4B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{52A5FFB3-A1F5-4D0E-9C79-BFAE71F69F4B}.TrialRelease|Any CPU.ActiveCfg = Release|Any CPU
-		{52A5FFB3-A1F5-4D0E-9C79-BFAE71F69F4B}.TrialRelease|Any CPU.Build.0 = Release|Any CPU
-		{1274B2E7-E340-4E7E-9833-F1A67B0B128C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1274B2E7-E340-4E7E-9833-F1A67B0B128C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1274B2E7-E340-4E7E-9833-F1A67B0B128C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1274B2E7-E340-4E7E-9833-F1A67B0B128C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1274B2E7-E340-4E7E-9833-F1A67B0B128C}.TrialRelease|Any CPU.ActiveCfg = Release|Any CPU
-		{1274B2E7-E340-4E7E-9833-F1A67B0B128C}.TrialRelease|Any CPU.Build.0 = Release|Any CPU
+		{BA7D9FE4-E1B3-4AEA-8187-2C02A0108168}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA7D9FE4-E1B3-4AEA-8187-2C02A0108168}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA7D9FE4-E1B3-4AEA-8187-2C02A0108168}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA7D9FE4-E1B3-4AEA-8187-2C02A0108168}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA7D9FE4-E1B3-4AEA-8187-2C02A0108168}.TrialRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{BA7D9FE4-E1B3-4AEA-8187-2C02A0108168}.TrialRelease|Any CPU.Build.0 = Release|Any CPU
+		{38DC35E5-CF17-428B-8B9B-0BD2FB5ECCE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38DC35E5-CF17-428B-8B9B-0BD2FB5ECCE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38DC35E5-CF17-428B-8B9B-0BD2FB5ECCE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38DC35E5-CF17-428B-8B9B-0BD2FB5ECCE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38DC35E5-CF17-428B-8B9B-0BD2FB5ECCE3}.TrialRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{38DC35E5-CF17-428B-8B9B-0BD2FB5ECCE3}.TrialRelease|Any CPU.Build.0 = Release|Any CPU
+		{D2C08C58-269F-45DE-8A25-C5492BC625F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2C08C58-269F-45DE-8A25-C5492BC625F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2C08C58-269F-45DE-8A25-C5492BC625F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2C08C58-269F-45DE-8A25-C5492BC625F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2C08C58-269F-45DE-8A25-C5492BC625F8}.TrialRelease|Any CPU.ActiveCfg = TrialRelease|Any CPU
+		{D2C08C58-269F-45DE-8A25-C5492BC625F8}.TrialRelease|Any CPU.Build.0 = TrialRelease|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

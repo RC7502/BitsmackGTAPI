@@ -1,4 +1,5 @@
 param($installPath, $toolsPath, $package, $project)
+
 try {
     # Set up variables
     $timestamp = (Get-Date).ToString('yyyyMMddHHmmss')
@@ -7,11 +8,11 @@ try {
     $connectionString ="Data Source=(LocalDb)\v11.0;Initial Catalog=$catalogName;Integrated Security=SSPI;AttachDBFilename=|DataDirectory|\$catalogName.mdf"
     $connectionStringToken = 'Data Source=(LocalDb)\v11.0;'
     $config = $project.ProjectItems | Where-Object { $_.Name -eq "Web.config" }    
-    $fileName = $config.Properties | Where-Object { $_.Name -eq "FullPath" }
+    $configPath = ($config.Properties | Where-Object { $_.Name -eq "FullPath" }).Value
     
     #Load the Config File
     $xml = New-Object System.Xml.XmlDocument
-    $xml.Load($fileName.Value)
+    $xml.Load($configPath)
     
     function CommentNode($node) {
         if (!$node) {
@@ -20,8 +21,8 @@ try {
         
         $commentNode = $xml.CreateComment($node.OuterXml)
         $parent = $node.ParentNode
-        $parent.InsertBefore($commentNode, $node)
-        $parent.RemoveChild($node)
+        $parent.InsertBefore($commentNode, $node) | Out-Null
+        $parent.RemoveChild($node) | Out-Null
     }
     
     # Comment out older providers
@@ -45,7 +46,7 @@ try {
     $connectionStrings = $xml.SelectSingleNode("/configuration/connectionStrings")
     if (!$connectionStrings) {
         $connectionStrings = $xml.CreateElement("connectionStrings")
-        $xml.configuration.AppendChild($connectionStrings)
+        $xml.configuration.AppendChild($connectionStrings) | Out-Null
     }
     
     if (!($connectionStrings.SelectNodes("add[@name='DefaultConnection']") | Where { $_.connectionString.StartsWith($connectionStringToken, 'OrdinalIgnoreCase') })) {
@@ -55,21 +56,21 @@ try {
         $newConnectionNode.SetAttribute("providerName", "System.Data.SqlClient")
         $newConnectionNode.SetAttribute("connectionString", $connectionString)
         
-        $connectionStrings.AppendChild($newConnectionNode)
+        $connectionStrings.AppendChild($newConnectionNode) | Out-Null
     }
     
     # Save the Config File 
-    $xml.Save($fileName.Value)
+    $xml.Save($configPath)
     
 } catch {
-    Write-Output "You will need to manually, change the 'Initial Catalog' in the 'DefaultConnection' to a unique name."
+    Write-Error "Unable to update the web.config file at $configPath. Add the following connection string to your config: <add name=`"DefaultConnection`" providerName=`"System.Data.SqlClient`" connectionString=`"$connectionString`" />"
 }
 
 # SIG # Begin signature block
 # MIIaRAYJKoZIhvcNAQcCoIIaNTCCGjECAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUgf9e3xFZJUxs40YJd4rwwoO+
-# HOigghUtMIIEoDCCA4igAwIBAgIKYRnMkwABAAAAZjANBgkqhkiG9w0BAQUFADB5
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUCI4oa6SQz5TLmVruHOoK6N6p
+# eUqgghUtMIIEoDCCA4igAwIBAgIKYRnMkwABAAAAZjANBgkqhkiG9w0BAQUFADB5
 # MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVk
 # bW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpN
 # aWNyb3NvZnQgQ29kZSBTaWduaW5nIFBDQTAeFw0xMTEwMTAyMDMyMjVaFw0xMzAx
@@ -187,24 +188,24 @@ try {
 # b3JhdGlvbjEjMCEGA1UEAxMaTWljcm9zb2Z0IENvZGUgU2lnbmluZyBQQ0ECCmEZ
 # zJMAAQAAAGYwCQYFKw4DAhoFAKCBrjAZBgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIB
 # BDAcBgorBgEEAYI3AgELMQ4wDAYKKwYBBAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQU
-# 4YYXugrPBTWDAQpBvdGd0vIfejwwTgYKKwYBBAGCNwIBDDFAMD6gJIAiAE0AaQBj
+# 37K+vJ1jnPxK8vpkRCAPo9DnSWcwTgYKKwYBBAGCNwIBDDFAMD6gJIAiAE0AaQBj
 # AHIAbwBzAG8AZgB0ACAAQQBTAFAALgBOAEUAVKEWgBRodHRwOi8vd3d3LmFzcC5u
-# ZXQvIDANBgkqhkiG9w0BAQEFAASCAQARGTaw8bW+F/fOnj7i22pdXsJmn3yT7m3l
-# PYq03q4w4Aj3t+tSLCv9kYaAjafqiQn6Iz6pYRPaoMuoye2yAl6alh3UQjfpseHZ
-# fDEaxLeUv/WlbMFT1FiqADJJHKcAFNzx+eZyMChH8lkmKy3Lo+Q2hx6OFAxpLfTR
-# 0/rwnfUVrq8Amnfn0JikPQA6Nzp7gQnrTBjbCoYLzuDa+coX1MUa/I6U/5Yl5hLZ
-# Y6qe0ZZFF2Ueoajkw++swT7djUAV2KOQ7AxspQ/8/Dl7OakVn7j6FNqKX1Dj9Ly4
-# uc5i95WtOBVFjWl3/kXPDec21b7Z8V0dmT9onZgP4sQla0hpOTRVoYICHTCCAhkG
+# ZXQvIDANBgkqhkiG9w0BAQEFAASCAQAch73cCOyClYPbCbF4q17gXzOFADhQ2A8/
+# +brHMZd9c5vDdUB7LXjLdNOYtsXXSR5sqjfFmotLgY+w5nQd85/pHjR+/F+cAo/R
+# aralmkgTPQpfN/qdo4tH/zCzgB+ytdVVBkcwm3tMTwCws7yj5daMsOOx3fawGo20
+# sr/3C3lZpp/vB6tqX4sFPVNxYD48Rhx3VEgu0pfbwqbJJaVw2aJPwN1S+LSh6hpa
+# HxCgm6tzuMY42k/vGZKtvuXOpalK86S8VnJKwEyXtfMZUuybZUAgVRp1zg2/+cjO
+# b9u1WCQ+eMw04zsy1OTpNHjzfGDe0qJPgjz3OOWbeTEEhBQqCb21oYICHTCCAhkG
 # CSqGSIb3DQEJBjGCAgowggIGAgEBMIGFMHcxCzAJBgNVBAYTAlVTMRMwEQYDVQQI
 # EwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3Nv
 # ZnQgQ29ycG9yYXRpb24xITAfBgNVBAMTGE1pY3Jvc29mdCBUaW1lLVN0YW1wIFBD
 # QQIKYQUTNgAAAAAAGjAHBgUrDgMCGqBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0B
-# BwEwHAYJKoZIhvcNAQkFMQ8XDTEyMDQxMjIzMTAwMVowIwYJKoZIhvcNAQkEMRYE
-# FITBruHvuVB9K6o3uVZM6nxO+eQvMA0GCSqGSIb3DQEBBQUABIIBAFQ5S5RYeI9I
-# HlJz7lMB2uOg6AGmGTOcmH38GQ08t0Y94bzhQ7YkAVIKcwIAmr0hjkDwOtlHoVh3
-# lyhrq1KudBByqnAYSSPJD4sTcBNzAU2hX4eLp3t09bL0314s7sItDwrnI+LOb1HP
-# 5PvZ1ZN8uLsds0XaQeTbFFxZ05than+YX9FI34GIy330n3+jfhSitRQJw7FK+Tng
-# aQLnBzY+D94zKmCQGlUVyRxVcCiZrtOevFNGlnXD0CySQGdbpaz7+c6V3d+ZYaim
-# YL42YdDT8g2Gs6Q9QmeRtYBp94alIxejcMde1XmkxKmPy06+OgPsCbTFLWHeGidi
-# Ccfaqu4af48=
+# BwEwHAYJKoZIhvcNAQkFMQ8XDTEyMDUyMjE5NDE1M1owIwYJKoZIhvcNAQkEMRYE
+# FJdEhK3IY0sOuO94jDHTXmesWLHdMA0GCSqGSIb3DQEBBQUABIIBAA1fOCfslUgv
+# l9f/HtpuO02C0hSKnBkSGbD2rh9lFY4hL4rpwQksPDLtRcuZzcPtwq48YXbDMg+I
+# Xe2SI6nUGkuk2PScgvYlLQ2PdODyLfI591wMwGfcBxmoU3kXyqyMLccIUBAi8lQV
+# Bb8q5JZc6+YDrb1pDB7LZzIPQ29JZfUi/0jnIel/FPEE9hRirsztkaI8BD5YFTlt
+# JtG4xdcR2qzOvPkhBqnnU19oJZ7359KSUstW3N2ndvOXtBBn/yoxcivbXOZE3190
+# PHsxuwpbiDIzsrASHJLWtD7ctufmuT+7hrr+6JL39iQB36E9s7ufmZVSIdvJzZkQ
+# gWbUsIzSSbA=
 # SIG # End signature block

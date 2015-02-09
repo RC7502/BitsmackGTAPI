@@ -1,56 +1,125 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
+using System.Data;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web;
-using System.Web.Mvc;
-using BitsmackGTAPI.Interfaces;
+using System.Web.Http;
 using BitsmackGTAPI.Models;
 
 namespace BitsmackGTAPI.Controllers
 {
-    public class PedometerController : Controller
+    public class PedometerController : ApiController
     {
-        private readonly IPedometerService _service;
+        private GTDbContext db = new GTDbContext();
 
-        public PedometerController()
+        // GET api/Pedometer
+        [AuthorizeFilter]
+        public IEnumerable<Pedometer> GetPedometers()
         {
-            _service = StructureMap.ObjectFactory.GetInstance<IPedometerService>();
+            try
+            {
+                return db.Pedometers.AsEnumerable();
+            }
+            catch(Exception ex)
+            {
+                return new List<Pedometer>();
+
+            }
+
         }
 
-
-        //
-        // GET: /Pedometer/
-
-        public ActionResult Index()
+        // GET api/Pedometer/5
+        [AuthorizeFilter]
+        public Pedometer GetPedometer(int id)
         {
-            return View();
+            Pedometer pedometer = db.Pedometers.Find(id);
+            if (pedometer == null)
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            }
+
+            return pedometer;
         }
 
-        public ActionResult Summary()
+        // PUT api/Pedometer/5
+        [AuthorizeFilter]
+        public HttpResponseMessage PutPedometer(int id, Pedometer pedometer)
         {
-            return Json(_service.GetSummary(), JsonRequestBehavior.AllowGet);
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
+
+            if (id != pedometer.id)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+
+            db.Entry(pedometer).State = EntityState.Modified;
+
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
 
-        public ActionResult Detail()
+        // POST api/Pedometer
+        [AuthorizeFilter]
+        public HttpResponseMessage PostPedometer(Pedometer pedometer)
         {
-            var start = (DateTime)SqlDateTime.MinValue;
-            var end = (DateTime)SqlDateTime.MaxValue;
+            if (ModelState.IsValid)
+            {
+                db.Pedometers.Add(pedometer);
+                db.SaveChanges();
 
-            var model = _service.GetDetail(start, end);
-            var list = model.Details.Select(item => new[] { item.trandate,item.steps.ToString(), item.sleep.ToString(), item.createddate, item.lastupdateddate  }).ToList();
-
-            return Json(new {aaData = list}, JsonRequestBehavior.AllowGet);
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, pedometer);
+                response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = pedometer.id }));
+                return response;
+            }
+            else
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
         }
 
-        public ActionResult MonthAverages()
+        // DELETE api/Pedometer/5
+        [AuthorizeFilter]
+        public HttpResponseMessage DeletePedometer(int id)
         {
-            return Json(_service.GetMonthAverages(), JsonRequestBehavior.AllowGet);
+            Pedometer pedometer = db.Pedometers.Find(id);
+            if (pedometer == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+            db.Pedometers.Remove(pedometer);
+
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, pedometer);
         }
 
-        public ActionResult MonthSummary()
+        protected override void Dispose(bool disposing)
         {
-            return Json(_service.GetMonthSummary(), JsonRequestBehavior.AllowGet);
+            db.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

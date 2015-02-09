@@ -1,64 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web;
+using System.Web.Http;
+using System.Web.Http.Controllers;
+using System.Web.Http.Filters;
 using System.Web.Mvc;
+using System.Web.Optimization;
 using System.Web.Routing;
-using BitsmackGTAPI.DAL;
-using BitsmackGTAPI.Interfaces;
-using BitsmackGTAPI.Models;
-using Fitbit.Api;
-using StructureMap;
+using ActionFilterAttribute = System.Web.Mvc.ActionFilterAttribute;
 
 namespace BitsmackGTAPI
 {
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
 
-    public class MvcApplication : System.Web.HttpApplication
+    public class WebApiApplication : System.Web.HttpApplication
     {
-        public static void RegisterGlobalFilters(GlobalFilterCollection filters)
-        {
-            filters.Add(new HandleErrorAttribute());
-        }
-
-        public static void RegisterRoutes(RouteCollection routes)
-        {
-            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
-            routes.MapRoute(
-                "Default", // Route name
-                "{controller}/{action}/{id}", // URL with parameters
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
-            );
-
-        }
-
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
 
-            // Use LocalDB for Entity Framework by default
-            Database.DefaultConnectionFactory = new SqlConnectionFactory(@"Data Source=(localdb)\v11.0; Integrated Security=True; MultipleActiveResultSets=True");
+            WebApiConfig.Register(GlobalConfiguration.Configuration);
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
+        }
+    }
 
-            RegisterGlobalFilters(GlobalFilters.Filters);
-            RegisterRoutes(RouteTable.Routes);
-            ObjectFactory.Initialize(x =>
-            {
-                x.For<IPedometerService>().Use<PedometerService>();
-                x.For<ICardioService>().Use<CardioService>();
-                x.For<ICommonService>().Use<CommonService>();
-                x.For<IGoalService>().Use<GoalService>();
-                x.For<IBudgetService>().Use<BudgetService>();
-                x.For<IDAL>().Use<DAL.DAL>();
-                x.For<IHabitDAL>().Use<HabitDAL>();
-                x.For<IDashboardService>().Use<DashboardService>();
-                x.For<ITodoService>().Use<TodoService>();
-                x.For(typeof(IGTRepository<>)).Use(typeof(GTRepository<>));
-            });
+    public class AuthorizeFilter : System.Web.Http.Filters.ActionFilterAttribute
+    {
+        public override void OnActionExecuting(HttpActionContext actionContext)
+        {
+            var token = actionContext.Request.Headers.GetValues("token").FirstOrDefault();
+            if(token != "df5a867c-b7a0-4d70-b15d-5fb92627ce56")
+                throw new HttpException((int)HttpStatusCode.Unauthorized, "Forbidden");
 
         }
+
+
     }
 }

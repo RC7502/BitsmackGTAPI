@@ -1,0 +1,500 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="BitsmackGTAPI.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="BitsmackGTAPIStoreContainer">
+          <EntitySet Name="APIKeys" EntityType="BitsmackGTAPI.Store.APIKeys" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Cardio" EntityType="BitsmackGTAPI.Store.Cardio" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="EventLog" EntityType="BitsmackGTAPI.Store.EventLog" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="HabitTags" EntityType="BitsmackGTAPI.Store.HabitTags" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="HabitTaskHistory" EntityType="BitsmackGTAPI.Store.HabitTaskHistory" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="HabitTasks" EntityType="BitsmackGTAPI.Store.HabitTasks" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="HabitTaskTags" EntityType="BitsmackGTAPI.Store.HabitTaskTags" store:Type="Tables" store:Schema="dbo" store:Name="HabitTaskTags" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator">
+            <DefiningQuery>SELECT 
+      [HabitTaskTags].[taskID] AS [taskID], 
+      [HabitTaskTags].[tagID] AS [tagID], 
+      [HabitTaskTags].[attached] AS [attached]
+      FROM [dbo].[HabitTaskTags] AS [HabitTaskTags]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Mint" EntityType="BitsmackGTAPI.Store.Mint" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Pedometer" EntityType="BitsmackGTAPI.Store.Pedometer" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="TimedActivities" EntityType="BitsmackGTAPI.Store.TimedActivities" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Todos" EntityType="BitsmackGTAPI.Store.Todos" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+        </EntityContainer>
+        <EntityType Name="APIKeys">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="service_name" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="consumer_key" Type="varchar" MaxLength="100" />
+          <Property Name="consumer_secret" Type="varchar" MaxLength="100" />
+          <Property Name="user_token" Type="varchar" MaxLength="100" />
+          <Property Name="user_secret" Type="varchar" MaxLength="100" />
+          <Property Name="last_update" Type="smalldatetime" Nullable="false" />
+          <Property Name="start_date" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Cardio">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="userid" Type="int" Nullable="false" />
+          <Property Name="trandate" Type="smalldatetime" Nullable="false" />
+          <Property Name="activity" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="distance" Type="float" Nullable="false" />
+          <Property Name="time" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EventLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="severity" Type="int" Nullable="false" />
+          <Property Name="area" Type="varchar" MaxLength="100" />
+          <Property Name="message" Type="varchar" Nullable="false" MaxLength="500" />
+          <Property Name="eventdate" Type="smalldatetime" />
+        </EntityType>
+        <EntityType Name="HabitTags">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+          <Property Name="challenge" Type="smallint" />
+        </EntityType>
+        <EntityType Name="HabitTaskHistory">
+          <Key>
+            <PropertyRef Name="taskID" />
+            <PropertyRef Name="historyDate" />
+          </Key>
+          <Property Name="taskID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="historyDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="value" Type="float" />
+        </EntityType>
+        <EntityType Name="HabitTasks">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="text" Type="varchar" MaxLength="200" />
+          <Property Name="attribute" Type="varchar" MaxLength="10" />
+          <Property Name="priority" Type="float" />
+          <Property Name="value" Type="float" />
+          <Property Name="notes" Type="varchar(max)" />
+          <Property Name="dateCreated" Type="smalldatetime" />
+          <Property Name="down" Type="smallint" />
+          <Property Name="up" Type="smallint" />
+          <Property Name="type" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'db322d3d94909445799f73a2ae006638c9.dbo.HabitTaskTags' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="HabitTaskTags">
+          <Key>
+            <PropertyRef Name="taskID" />
+            <PropertyRef Name="tagID" />
+          </Key>
+          <Property Name="taskID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="tagID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="attached" Type="smallint" />
+        </EntityType>
+        <EntityType Name="Mint">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="smalldatetime" />
+          <Property Name="Description" Type="varchar" MaxLength="78" />
+          <Property Name="OriginalDescription" Type="varchar" MaxLength="124" />
+          <Property Name="Amount" Type="real" />
+          <Property Name="TransactionType" Type="varchar" MaxLength="6" />
+          <Property Name="Category" Type="varchar" MaxLength="22" />
+          <Property Name="AccountName" Type="varchar" MaxLength="29" />
+          <Property Name="Labels" Type="varchar" MaxLength="5" />
+          <Property Name="Notes" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="Pedometer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="steps" Type="int" Nullable="false" />
+          <Property Name="sleep" Type="int" Nullable="false" />
+          <Property Name="trandate" Type="smalldatetime" Nullable="false" />
+          <Property Name="weight" Type="float" Nullable="false" />
+          <Property Name="bodyfat" Type="float" Nullable="false" />
+          <Property Name="createddate" Type="smalldatetime" />
+          <Property Name="lastupdateddate" Type="smalldatetime" />
+          <Property Name="calconsumed" Type="int" />
+        </EntityType>
+        <EntityType Name="TimedActivities">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="description" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="duration" Type="int" Nullable="false" />
+          <Property Name="startdate" Type="smalldatetime" Nullable="false" />
+          <Property Name="enddate" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Todos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="trandate" Type="smalldatetime" Nullable="false" />
+          <Property Name="numcompleted" Type="int" Nullable="false" />
+          <Property Name="numadded" Type="int" Nullable="false" />
+          <Property Name="foldername" Type="varchar" Nullable="false" MaxLength="100" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6013: The table/view 'db322d3d94909445799f73a2ae006638c9.dbo.RunningAhead' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+      
+      <EntityType Name="RunningAhead">
+        <Property Name="Date" Type="smalldatetime" />
+        <Property Name="TimeOfDay" Type="varchar" MaxLength="50" />
+        <Property Name="Type" Type="varchar" MaxLength="50" />
+        <Property Name="SubType" Type="varchar" MaxLength="50" />
+        <Property Name="Distance" Type="float" />
+        <Property Name="DistanceUnit" Type="varchar" MaxLength="50" />
+        <Property Name="Duration" Type="varchar" MaxLength="50" />
+        <Property Name="Weight" Type="varchar" MaxLength="50" />
+        <Property Name="WeightUnit" Type="varchar" MaxLength="50" />
+        <Property Name="RestHR" Type="varchar" MaxLength="50" />
+        <Property Name="AvgHR" Type="varchar" MaxLength="50" />
+        <Property Name="MaxHR" Type="varchar" MaxLength="50" />
+        <Property Name="Sleep" Type="varchar" MaxLength="50" />
+        <Property Name="Calories" Type="varchar" MaxLength="50" />
+        <Property Name="Quality" Type="varchar" MaxLength="50" />
+        <Property Name="Effort" Type="varchar" MaxLength="50" />
+        <Property Name="Weather" Type="varchar" MaxLength="50" />
+        <Property Name="Temperature" Type="varchar" MaxLength="50" />
+        <Property Name="TempUnit" Type="varchar" MaxLength="50" />
+        <Property Name="Notes" Type="varchar" MaxLength="50" />
+        <Property Name="Course" Type="varchar" MaxLength="50" />
+        <Property Name="CourseSurface" Type="varchar" MaxLength="50" />
+        <Property Name="CourseNotes" Type="varchar" MaxLength="50" />
+        <Property Name="ShoeMake" Type="varchar" MaxLength="50" />
+        <Property Name="ShoeModel" Type="varchar" MaxLength="50" />
+        <Property Name="Size" Type="varchar" MaxLength="50" />
+        <Property Name="System" Type="varchar" MaxLength="50" />
+        <Property Name="ShoeSerial" Type="varchar" MaxLength="50" />
+        <Property Name="ShoePrice" Type="varchar" MaxLength="50" />
+        <Property Name="OverallPlace" Type="varchar" MaxLength="50" />
+        <Property Name="FieldSize" Type="varchar" MaxLength="50" />
+        <Property Name="GroupMinAge" Type="varchar" MaxLength="50" />
+        <Property Name="GroupMaxAge" Type="varchar" MaxLength="50" />
+        <Property Name="GroupPlace" Type="varchar" MaxLength="50" />
+        <Property Name="GroupSize" Type="varchar" MaxLength="50" />
+        <Property Name="GenderPlace" Type="varchar" MaxLength="50" />
+        <Property Name="GenderSize" Type="varchar" MaxLength="50" />
+        <Property Name="Column 37" Type="varchar" MaxLength="50" />
+      </EntityType>-->
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BitsmackGTAPI" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="db322d3d94909445799f73a2ae006638c9Entities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+          <EntitySet Name="APIKeys" EntityType="BitsmackGTAPI.APIKeys" />
+          <EntitySet Name="Cardio" EntityType="BitsmackGTAPI.Cardio" />
+          <EntitySet Name="EventLog" EntityType="BitsmackGTAPI.EventLog" />
+          <EntitySet Name="HabitTags" EntityType="BitsmackGTAPI.HabitTags" />
+          <EntitySet Name="HabitTaskHistory" EntityType="BitsmackGTAPI.HabitTaskHistory" />
+          <EntitySet Name="HabitTasks" EntityType="BitsmackGTAPI.HabitTasks" />
+          <EntitySet Name="HabitTaskTags" EntityType="BitsmackGTAPI.HabitTaskTags" />
+          <EntitySet Name="Mint" EntityType="BitsmackGTAPI.Mint" />
+          <EntitySet Name="Pedometer" EntityType="BitsmackGTAPI.Pedometer" />
+          <EntitySet Name="TimedActivities" EntityType="BitsmackGTAPI.TimedActivities" />
+          <EntitySet Name="Todos" EntityType="BitsmackGTAPI.Todos" />
+        </EntityContainer>
+        <EntityType Name="APIKeys">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="service_name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="consumer_key" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="consumer_secret" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="user_token" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="user_secret" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="last_update" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="start_date" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="Cardio">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="userid" Type="Int32" Nullable="false" />
+          <Property Name="trandate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="activity" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="distance" Type="Double" Nullable="false" />
+          <Property Name="time" Type="Double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EventLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="severity" Type="Int32" Nullable="false" />
+          <Property Name="area" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="message" Type="String" Nullable="false" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="eventdate" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="HabitTags">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="challenge" Type="Int16" />
+        </EntityType>
+        <EntityType Name="HabitTaskHistory">
+          <Key>
+            <PropertyRef Name="taskID" />
+            <PropertyRef Name="historyDate" />
+          </Key>
+          <Property Name="taskID" Type="Guid" Nullable="false" />
+          <Property Name="historyDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="value" Type="Double" />
+        </EntityType>
+        <EntityType Name="HabitTasks">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="text" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="attribute" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="priority" Type="Double" />
+          <Property Name="value" Type="Double" />
+          <Property Name="notes" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="dateCreated" Type="DateTime" Precision="0" />
+          <Property Name="down" Type="Int16" />
+          <Property Name="up" Type="Int16" />
+          <Property Name="type" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="HabitTaskTags">
+          <Key>
+            <PropertyRef Name="taskID" />
+            <PropertyRef Name="tagID" />
+          </Key>
+          <Property Name="taskID" Type="Guid" Nullable="false" />
+          <Property Name="tagID" Type="Guid" Nullable="false" />
+          <Property Name="attached" Type="Int16" />
+        </EntityType>
+        <EntityType Name="Mint">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="Description" Type="String" MaxLength="78" Unicode="false" FixedLength="false" />
+          <Property Name="OriginalDescription" Type="String" MaxLength="124" Unicode="false" FixedLength="false" />
+          <Property Name="Amount" Type="Single" />
+          <Property Name="TransactionType" Type="String" MaxLength="6" Unicode="false" FixedLength="false" />
+          <Property Name="Category" Type="String" MaxLength="22" Unicode="false" FixedLength="false" />
+          <Property Name="AccountName" Type="String" MaxLength="29" Unicode="false" FixedLength="false" />
+          <Property Name="Labels" Type="String" MaxLength="5" Unicode="false" FixedLength="false" />
+          <Property Name="Notes" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Pedometer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="steps" Type="Int32" Nullable="false" />
+          <Property Name="sleep" Type="Int32" Nullable="false" />
+          <Property Name="trandate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="weight" Type="Double" Nullable="false" />
+          <Property Name="bodyfat" Type="Double" Nullable="false" />
+          <Property Name="createddate" Type="DateTime" Precision="0" />
+          <Property Name="lastupdateddate" Type="DateTime" Precision="0" />
+          <Property Name="calconsumed" Type="Int32" />
+        </EntityType>
+        <EntityType Name="TimedActivities">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="description" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="duration" Type="Int32" Nullable="false" />
+          <Property Name="startdate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="enddate" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="Todos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="trandate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="numcompleted" Type="Int32" Nullable="false" />
+          <Property Name="numadded" Type="Int32" Nullable="false" />
+          <Property Name="foldername" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BitsmackGTAPIStoreContainer" CdmEntityContainer="db322d3d94909445799f73a2ae006638c9Entities">
+          <EntitySetMapping Name="APIKeys">
+            <EntityTypeMapping TypeName="BitsmackGTAPI.APIKeys">
+              <MappingFragment StoreEntitySet="APIKeys">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="service_name" ColumnName="service_name" />
+                <ScalarProperty Name="consumer_key" ColumnName="consumer_key" />
+                <ScalarProperty Name="consumer_secret" ColumnName="consumer_secret" />
+                <ScalarProperty Name="user_token" ColumnName="user_token" />
+                <ScalarProperty Name="user_secret" ColumnName="user_secret" />
+                <ScalarProperty Name="last_update" ColumnName="last_update" />
+                <ScalarProperty Name="start_date" ColumnName="start_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cardio">
+            <EntityTypeMapping TypeName="BitsmackGTAPI.Cardio">
+              <MappingFragment StoreEntitySet="Cardio">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="userid" ColumnName="userid" />
+                <ScalarProperty Name="trandate" ColumnName="trandate" />
+                <ScalarProperty Name="activity" ColumnName="activity" />
+                <ScalarProperty Name="distance" ColumnName="distance" />
+                <ScalarProperty Name="time" ColumnName="time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EventLog">
+            <EntityTypeMapping TypeName="BitsmackGTAPI.EventLog">
+              <MappingFragment StoreEntitySet="EventLog">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="severity" ColumnName="severity" />
+                <ScalarProperty Name="area" ColumnName="area" />
+                <ScalarProperty Name="message" ColumnName="message" />
+                <ScalarProperty Name="eventdate" ColumnName="eventdate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HabitTags">
+            <EntityTypeMapping TypeName="BitsmackGTAPI.HabitTags">
+              <MappingFragment StoreEntitySet="HabitTags">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="challenge" ColumnName="challenge" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HabitTaskHistory">
+            <EntityTypeMapping TypeName="BitsmackGTAPI.HabitTaskHistory">
+              <MappingFragment StoreEntitySet="HabitTaskHistory">
+                <ScalarProperty Name="taskID" ColumnName="taskID" />
+                <ScalarProperty Name="historyDate" ColumnName="historyDate" />
+                <ScalarProperty Name="value" ColumnName="value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HabitTasks">
+            <EntityTypeMapping TypeName="BitsmackGTAPI.HabitTasks">
+              <MappingFragment StoreEntitySet="HabitTasks">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="text" ColumnName="text" />
+                <ScalarProperty Name="attribute" ColumnName="attribute" />
+                <ScalarProperty Name="priority" ColumnName="priority" />
+                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="notes" ColumnName="notes" />
+                <ScalarProperty Name="dateCreated" ColumnName="dateCreated" />
+                <ScalarProperty Name="down" ColumnName="down" />
+                <ScalarProperty Name="up" ColumnName="up" />
+                <ScalarProperty Name="type" ColumnName="type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HabitTaskTags">
+            <EntityTypeMapping TypeName="BitsmackGTAPI.HabitTaskTags">
+              <MappingFragment StoreEntitySet="HabitTaskTags">
+                <ScalarProperty Name="taskID" ColumnName="taskID" />
+                <ScalarProperty Name="tagID" ColumnName="tagID" />
+                <ScalarProperty Name="attached" ColumnName="attached" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mint">
+            <EntityTypeMapping TypeName="BitsmackGTAPI.Mint">
+              <MappingFragment StoreEntitySet="Mint">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="OriginalDescription" ColumnName="OriginalDescription" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="TransactionType" ColumnName="TransactionType" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="Labels" ColumnName="Labels" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pedometer">
+            <EntityTypeMapping TypeName="BitsmackGTAPI.Pedometer">
+              <MappingFragment StoreEntitySet="Pedometer">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="steps" ColumnName="steps" />
+                <ScalarProperty Name="sleep" ColumnName="sleep" />
+                <ScalarProperty Name="trandate" ColumnName="trandate" />
+                <ScalarProperty Name="weight" ColumnName="weight" />
+                <ScalarProperty Name="bodyfat" ColumnName="bodyfat" />
+                <ScalarProperty Name="createddate" ColumnName="createddate" />
+                <ScalarProperty Name="lastupdateddate" ColumnName="lastupdateddate" />
+                <ScalarProperty Name="calconsumed" ColumnName="calconsumed" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TimedActivities">
+            <EntityTypeMapping TypeName="BitsmackGTAPI.TimedActivities">
+              <MappingFragment StoreEntitySet="TimedActivities">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="duration" ColumnName="duration" />
+                <ScalarProperty Name="startdate" ColumnName="startdate" />
+                <ScalarProperty Name="enddate" ColumnName="enddate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Todos">
+            <EntityTypeMapping TypeName="BitsmackGTAPI.Todos">
+              <MappingFragment StoreEntitySet="Todos">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="trandate" ColumnName="trandate" />
+                <ScalarProperty Name="numcompleted" ColumnName="numcompleted" />
+                <ScalarProperty Name="numadded" ColumnName="numadded" />
+                <ScalarProperty Name="foldername" ColumnName="foldername" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer>
+    <edmx:Connection>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <edmx:DesignerProperty Name="EnablePluralization" Value="True" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams />
+  </edmx:Designer>
+</edmx:Edmx>
