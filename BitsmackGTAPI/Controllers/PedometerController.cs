@@ -24,7 +24,7 @@ namespace BitsmackGTAPI.Controllers
             {
                 return db.Pedometers.AsEnumerable();
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 return new List<Pedometer>();
 
