@@ -129,8 +129,11 @@ publish/
 *.pubxml
 
 # NuGet Packages Directory
-## TODO: If you have NuGet Package Restore enabled, uncomment the next line
-packages/
+## TODO: If you have NuGet Package Restore enabled, uncomment the next line#
+#packages/
+!/packages/*/lib/*.dll
+!/packages/*/lib/net45/*.dll
+!/packages/*/lib/net40/*.dll
 
 # Windows Azure Build Output
 csx
