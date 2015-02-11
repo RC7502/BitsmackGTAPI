@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -35,7 +36,7 @@ namespace BitsmackGTAPI
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
             var token = actionContext.Request.Headers.GetValues("token").FirstOrDefault();
-            if(token != "df5a867c-b7a0-4d70-b15d-5fb92627ce56")
+            if(token != ConfigurationManager.AppSettings["SecurityToken"])
                 throw new HttpException((int)HttpStatusCode.Unauthorized, "Forbidden");
 
         }
