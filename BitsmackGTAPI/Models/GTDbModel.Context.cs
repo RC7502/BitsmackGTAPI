@@ -28,7 +28,6 @@ namespace BitsmackGTAPI.Models
         public DbSet<APIKeys> APIKeys { get; set; }
         public DbSet<Cardio> Cardio { get; set; }
         public DbSet<EventLog> EventLog { get; set; }
-        public DbSet<HabitTags> HabitTags { get; set; }
         public DbSet<HabitTaskHistory> HabitTaskHistory { get; set; }
         public DbSet<HabitTasks> HabitTasks { get; set; }
         public DbSet<HabitTaskTags> HabitTaskTags { get; set; }
@@ -36,5 +35,6 @@ namespace BitsmackGTAPI.Models
         public DbSet<Pedometer> Pedometer { get; set; }
         public DbSet<TimedActivities> TimedActivities { get; set; }
         public DbSet<Todos> Todos { get; set; }
+        public DbSet<HabitTags> HabitTags { get; set; }
     }
 }

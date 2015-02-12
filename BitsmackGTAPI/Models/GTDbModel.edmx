@@ -4,25 +4,25 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="BitsmackGTAPI.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="BitsmackGTAPI.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="BitsmackGTAPIStoreContainer">
-          <EntitySet Name="APIKeys" EntityType="BitsmackGTAPI.Store.APIKeys" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="Cardio" EntityType="BitsmackGTAPI.Store.Cardio" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="EventLog" EntityType="BitsmackGTAPI.Store.EventLog" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="HabitTags" EntityType="BitsmackGTAPI.Store.HabitTags" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="HabitTaskHistory" EntityType="BitsmackGTAPI.Store.HabitTaskHistory" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="HabitTasks" EntityType="BitsmackGTAPI.Store.HabitTasks" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="HabitTaskTags" EntityType="BitsmackGTAPI.Store.HabitTaskTags" store:Type="Tables" store:Schema="dbo" store:Name="HabitTaskTags" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator">
+          <EntitySet Name="APIKeys" EntityType="BitsmackGTAPI.Store.APIKeys" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Cardio" EntityType="BitsmackGTAPI.Store.Cardio" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="EventLog" EntityType="BitsmackGTAPI.Store.EventLog" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="HabitTags" EntityType="BitsmackGTAPI.Store.HabitTags" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="HabitTaskHistory" EntityType="BitsmackGTAPI.Store.HabitTaskHistory" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="HabitTasks" EntityType="BitsmackGTAPI.Store.HabitTasks" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="HabitTaskTags" EntityType="BitsmackGTAPI.Store.HabitTaskTags" store:Type="Tables" store:Schema="dbo" store:Name="HabitTaskTags">
             <DefiningQuery>SELECT 
       [HabitTaskTags].[taskID] AS [taskID], 
       [HabitTaskTags].[tagID] AS [tagID], 
       [HabitTaskTags].[attached] AS [attached]
       FROM [dbo].[HabitTaskTags] AS [HabitTaskTags]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="Mint" EntityType="BitsmackGTAPI.Store.Mint" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="Pedometer" EntityType="BitsmackGTAPI.Store.Pedometer" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="TimedActivities" EntityType="BitsmackGTAPI.Store.TimedActivities" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="Todos" EntityType="BitsmackGTAPI.Store.Todos" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Mint" EntityType="BitsmackGTAPI.Store.Mint" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Pedometer" EntityType="BitsmackGTAPI.Store.Pedometer" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="TimedActivities" EntityType="BitsmackGTAPI.Store.TimedActivities" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Todos" EntityType="BitsmackGTAPI.Store.Todos" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="APIKeys">
           <Key>
@@ -194,8 +194,7 @@
         <Property Name="GenderSize" Type="varchar" MaxLength="50" />
         <Property Name="Column 37" Type="varchar" MaxLength="50" />
       </EntityType>-->
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="BitsmackGTAPI" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -203,7 +202,6 @@
           <EntitySet Name="APIKeys" EntityType="BitsmackGTAPI.APIKeys" />
           <EntitySet Name="Cardio" EntityType="BitsmackGTAPI.Cardio" />
           <EntitySet Name="EventLog" EntityType="BitsmackGTAPI.EventLog" />
-          <EntitySet Name="HabitTags" EntityType="BitsmackGTAPI.HabitTags" />
           <EntitySet Name="HabitTaskHistory" EntityType="BitsmackGTAPI.HabitTaskHistory" />
           <EntitySet Name="HabitTasks" EntityType="BitsmackGTAPI.HabitTasks" />
           <EntitySet Name="HabitTaskTags" EntityType="BitsmackGTAPI.HabitTaskTags" />
@@ -211,6 +209,7 @@
           <EntitySet Name="Pedometer" EntityType="BitsmackGTAPI.Pedometer" />
           <EntitySet Name="TimedActivities" EntityType="BitsmackGTAPI.TimedActivities" />
           <EntitySet Name="Todos" EntityType="BitsmackGTAPI.Todos" />
+          <EntitySet Name="HabitTags" EntityType="BitsmackGTAPI.HabitTags" />
         </EntityContainer>
         <EntityType Name="APIKeys">
           <Key>
@@ -245,14 +244,6 @@
           <Property Name="area" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
           <Property Name="message" Type="String" Nullable="false" MaxLength="500" Unicode="false" FixedLength="false" />
           <Property Name="eventdate" Type="DateTime" Precision="0" />
-        </EntityType>
-        <EntityType Name="HabitTags">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Guid" Nullable="false" />
-          <Property Name="name" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
-          <Property Name="challenge" Type="Int16" />
         </EntityType>
         <EntityType Name="HabitTaskHistory">
           <Key>
@@ -336,6 +327,14 @@
           <Property Name="numadded" Type="Int32" Nullable="false" />
           <Property Name="foldername" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
         </EntityType>
+        <EntityType Name="HabitTags">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Guid" Name="id" Nullable="false" />
+          <Property Type="String" Name="name" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="challenge" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -376,15 +375,6 @@
                 <ScalarProperty Name="area" ColumnName="area" />
                 <ScalarProperty Name="message" ColumnName="message" />
                 <ScalarProperty Name="eventdate" ColumnName="eventdate" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="HabitTags">
-            <EntityTypeMapping TypeName="BitsmackGTAPI.HabitTags">
-              <MappingFragment StoreEntitySet="HabitTags">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="challenge" ColumnName="challenge" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -475,6 +465,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="HabitTags">
+            <EntityTypeMapping TypeName="BitsmackGTAPI.HabitTags">
+              <MappingFragment StoreEntitySet="HabitTags">
+                <ScalarProperty Name="challenge" ColumnName="challenge" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -489,7 +488,7 @@
     <edmx:Options>
       <edmx:DesignerInfoPropertySet>
         <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <edmx:DesignerProperty Name="EnablePluralization" Value="True" />
+        <edmx:DesignerProperty Name="EnablePluralization" Value="False" />
         <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </edmx:DesignerInfoPropertySet>
