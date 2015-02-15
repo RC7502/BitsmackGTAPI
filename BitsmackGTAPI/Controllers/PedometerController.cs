@@ -63,6 +63,7 @@ namespace BitsmackGTAPI.Controllers
 
             try
             {
+                pedometer.trandate = DateTime.SpecifyKind(pedometer.trandate, DateTimeKind.Utc);
                 db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException ex)
