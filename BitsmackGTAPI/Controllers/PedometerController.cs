@@ -58,12 +58,11 @@ namespace BitsmackGTAPI.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
-
+            pedometer.trandate = new DateTime(pedometer.trandate.Year, pedometer.trandate.Month, pedometer.trandate.Day, 0, 0, 0, DateTimeKind.Utc);
             db.Entry(pedometer).State = EntityState.Modified;
 
             try
-            {
-                pedometer.trandate = DateTime.SpecifyKind(pedometer.trandate, DateTimeKind.Utc);
+            {                
                 db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException ex)
